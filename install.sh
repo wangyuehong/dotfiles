@@ -30,5 +30,6 @@ ln -sf $cwd/_bashrc ~/.bashrc
 ln -sf $cwd/_bash_profile ~/.bash_profile
 ln -sf $cwd/_gitconfig ~/.gitconfig
 ln -sf $cwd/_gitignore ~/.gitignore
+ln -sf $cwd/_gemrc ~/.gemrc
 
 exit 0
