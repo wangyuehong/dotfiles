@@ -4,6 +4,9 @@ cwd=$(pwd)
 
 if [ ! -d $HOME/.zz ]; then
     git clone git@github.com:rupa/z.git $HOME/.zz
+    if [ ! -f $HOME/.z ]; then
+        touch $HOME/.z
+    fi
 fi
 
 if [ ! -d $HOME/.oh-my-zsh ]; then
@@ -16,6 +19,7 @@ fi
 
 ln -sf $cwd/_tmux.conf $HOME/.tmux.conf
 ln -sf $cwd/_zshrc $HOME/.zshrc
+ln -sf $cwd/_zshrc_alias $HOME/.zshrc_alias
 ln -sf $cwd/_bashrc $HOME/.bashrc
 ln -sf $cwd/_bash_profile $HOME/.bash_profile
 ln -sf $cwd/_gitconfig $HOME/.gitconfig

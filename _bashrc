@@ -1,19 +1,7 @@
-# set path
-export PATH=/usr/local/bin:$PATH
-export PATH=/usr/local/sbin:$PATH
-export PATH=$PATH:$HOME/bin
-
 # rbenv
 export PATH=$HOME/.rbenv/bin:$PATH
 if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
 
-# z
-export PATH=$HOME/.zz:$PATH
-
 if [ -f ~/.bash_custom ]; then
-      . ~/.bash_custom
-fi
-
-if [ -f ~/.aliases ]; then
-      . ~/.aliases
+      source ~/.bash_custom
 fi

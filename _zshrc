@@ -36,7 +36,15 @@ source $ZSH/oh-my-zsh.sh
 # Customize to your needs...
 unsetopt share_history
 
+# set path
+export PATH=/usr/local/bin:$PATH
+export PATH=/usr/local/sbin:$PATH
+export PATH=$PATH:$HOME/bin
+
 # z
 export _Z_CMD=j
-export _Z_DATA=$HOME/.zdata
-export PATH=$HOME/.z:$PATH
+export PATH=$HOME/.zz:$PATH
+
+if [ -f ~/.zshrc_alias ]; then
+      source ~/.zshrc_alias
+fi
