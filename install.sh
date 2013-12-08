@@ -3,18 +3,18 @@
 cwd=$(pwd)
 
 if [ ! -d $HOME/.zz ]; then
-    git clone git@github.com:rupa/z.git $HOME/.zz
+    git clone https://github.com/rupa/z.git $HOME/.zz
     if [ ! -f $HOME/.z ]; then
         touch $HOME/.z
     fi
 fi
 
 if [ ! -d $HOME/.oh-my-zsh ]; then
-    git clone git@github.com:robbyrussell/oh-my-zsh.git $HOME/.oh-my-zsh
+    git clone https://github.com/robbyrussell/oh-my-zsh.git $HOME/.oh-my-zsh
 fi
 
 if [ ! -d $HOME/.rbenv ]; then
-    git clone git@github.com:sstephenson/rbenv.git $HOME/.rbenv
+    git clone https://github.com/sstephenson/rbenv.git $HOME/.rbenv
 fi
 
 ln -sf $cwd/_tmux.conf $HOME/.tmux.conf
