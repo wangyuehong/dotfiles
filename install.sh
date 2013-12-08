@@ -2,27 +2,33 @@
 
 cwd=$(pwd)
 
-if [ ! -d $HOME/.zz ]; then
-    git clone https://github.com/rupa/z.git $HOME/.zz
-    if [ ! -f $HOME/.z ]; then
-        touch $HOME/.z
+if [ ! -f $cwd/_zshrc ]; then
+    echo "run this sh in git folder"
+    exit 1;
+fi
+
+if [ ! -d ~/.zz ]; then
+    git clone https://github.com/rupa/z.git ~/.zz
+    if [ ! -f ~/.z ]; then
+        touch ~/.z
     fi
 fi
 
-if [ ! -d $HOME/.oh-my-zsh ]; then
-    git clone https://github.com/robbyrussell/oh-my-zsh.git $HOME/.oh-my-zsh
+if [ ! -d ~/.oh-my-zsh ]; then
+    git clone https://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh
 fi
 
-if [ ! -d $HOME/.rbenv ]; then
-    git clone https://github.com/sstephenson/rbenv.git $HOME/.rbenv
+if [ ! -d ~/.rbenv ]; then
+    git clone https://github.com/sstephenson/rbenv.git ~/.rbenv
+    git clone https://github.com/sstephenson/ruby-build.git ~/.rbenv/plugins/ruby-build
 fi
 
-ln -sf $cwd/_tmux.conf $HOME/.tmux.conf
-ln -sf $cwd/_zshrc $HOME/.zshrc
-ln -sf $cwd/_zshrc_alias $HOME/.zshrc_alias
-ln -sf $cwd/_bashrc $HOME/.bashrc
-ln -sf $cwd/_bash_profile $HOME/.bash_profile
-ln -sf $cwd/_gitconfig $HOME/.gitconfig
-ln -sf $cwd/_gitignore $HOME/.gitignore
+ln -sf $cwd/_tmux.conf ~/.tmux.conf
+ln -sf $cwd/_zshrc ~/.zshrc
+ln -sf $cwd/_zshrc_alias ~/.zshrc_alias
+ln -sf $cwd/_bashrc ~/.bashrc
+ln -sf $cwd/_bash_profile ~/.bash_profile
+ln -sf $cwd/_gitconfig ~/.gitconfig
+ln -sf $cwd/_gitignore ~/.gitignore
 
 exit 0
