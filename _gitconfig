@@ -1,0 +1,14 @@
+[user]
+	name = wangyuehong
+	email = wangyuehong@gmail.com
+[color]
+        ui = auto
+[alias]
+        b = branch
+        st = status
+        cm = commit
+        co = checkout
+        df = diff
+        dc = diff ->cached
+[core]
+        excludesfile = ~/.gitignore

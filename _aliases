@@ -1,0 +1,8 @@
+alias e='emacs'
+alias ec='emacsclient -t'
+alias v='vim'
+alias ..='cd ..'
+alias ...='cd ../..'
+alias --='cd -'
+alias g='git'
+alias h='history'
