@@ -12,15 +12,24 @@ if [ ! -d ~/.zz ]; then
     if [ ! -f ~/.z ]; then
         touch ~/.z
     fi
+else
+    echo 'update z'
+    cd ~/.zz && git pull
 fi
 
 if [ ! -d ~/.oh-my-zsh ]; then
     git clone https://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh
+else
+    echo 'update oh-my-zsh'
+    cd ~/.oh-my-zsh && git pull
 fi
 
 if [ ! -d ~/.rbenv ]; then
     git clone https://github.com/sstephenson/rbenv.git ~/.rbenv
     git clone https://github.com/sstephenson/ruby-build.git ~/.rbenv/plugins/ruby-build
+else
+    echo 'update rbenv'
+    cd ~/.rbenv && git pull
 fi
 
 ln -sf $cwd/_tmux.conf ~/.tmux.conf
