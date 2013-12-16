@@ -27,6 +27,7 @@ ln -sf $cwd/_tmux.conf ~/.tmux.conf
 ln -sf $cwd/_zshrc ~/.zshrc
 ln -sf $cwd/_zshrc_alias ~/.zshrc_alias
 ln -sf $cwd/_bashrc ~/.bashrc
+ln -sf $cwd/_bash_alias ~/.bash_alias
 ln -sf $cwd/_bash_profile ~/.bash_profile
 ln -sf $cwd/_gitconfig ~/.gitconfig
 ln -sf $cwd/_gitignore ~/.gitignore
