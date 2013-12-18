@@ -43,6 +43,9 @@ export PATH=/usr/local/bin:$PATH
 export PATH=/usr/local/sbin:$PATH
 export PATH=$PATH:$HOME/bin
 
+# utf-8
+export LC_CTYPE='UTF-8'
+
 # z
 export _Z_CMD=j
 export PATH=$HOME/.zz:$PATH
