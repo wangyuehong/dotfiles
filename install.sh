@@ -26,14 +26,31 @@ fi
 
 if [ ! -d ~/.rbenv ]; then
     git clone https://github.com/sstephenson/rbenv.git ~/.rbenv
-    git clone https://github.com/sstephenson/ruby-build.git ~/.rbenv/plugins/ruby-build
-    git clone git://github.com/jamis/rbenv-gemset.git  ~/.rbenv/plugins/rbenv-gemset
-    git clone git://github.com/sstephenson/rbenv-gem-rehash.git ~/.rbenv/plugins/rbenv-gem-rehash
 else
     echo 'update rbenv'
     cd ~/.rbenv && git pull
 fi
 
+if [ ! -d ~/.rbenv/plugins/ruby-build ]; then
+    git clone https://github.com/sstephenson/ruby-build.git ~/.rbenv/plugins/ruby-build
+else
+    echo 'update rbenv ruby-build'
+    cd ~/.rbenv/plugins/ruby-build && git pull
+fi
+
+if [ ! -d ~/.rbenv/plugins/rbenv-gemset ]; then
+    git clone git://github.com/jamis/rbenv-gemset.git  ~/.rbenv/plugins/rbenv-gemset
+else
+    echo 'update rbenv rbenv-gemset'
+    cd ~/.rbenv/plugins/rbenv-gemset && git pull
+fi
+
+if [ ! -d ~/.rbenv/plugins/rbenv-gem-rehash ]; then
+    git clone git://github.com/sstephenson/rbenv-gem-rehash.git ~/.rbenv/plugins/rbenv-gem-rehash
+else
+    echo 'update rbenv rbenv-rehash'
+    cd ~/.rbenv/plugins/rbenv-gem-rehash && git pull
+fi
 ln -sf $cwd/_tmux.conf ~/.tmux.conf
 ln -sf $cwd/_zshrc ~/.zshrc
 ln -sf $cwd/_zshrc_alias ~/.zshrc_alias
