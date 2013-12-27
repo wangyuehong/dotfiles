@@ -6,10 +6,10 @@ cwd=`pwd`
 
 function clone_or_pull {
     if [ ! -d $3 ]; then
-        echo "\nclone $1"
+        echo "clone $1"
         git clone $2 $3
     else
-        echo "\nupdate $1"
+        echo "update $1"
         cd $3 && git pull
     fi
 }
