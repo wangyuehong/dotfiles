@@ -1,5 +1,9 @@
 #!/bin/sh
 
+cd `dirname $0`
+
+cwd=`pwd`
+
 function clone_or_pull {
     if [ ! -d $3 ]; then
         echo "\nclone $1"
@@ -20,8 +24,6 @@ clone_or_pull rbenv https://github.com/sstephenson/rbenv.git ~/.rbenv
 clone_or_pull ruby-build https://github.com/sstephenson/ruby-build.git ~/.rbenv/plugins/ruby-build
 clone_or_pull rbenv-gemset https://github.com/jamis/rbenv-gemset.git  ~/.rbenv/plugins/rbenv-gemset
 clone_or_pull rbenv-gem-rehash https://github.com/sstephenson/rbenv-gem-rehash.git ~/.rbenv/plugins/rbenv-gem-rehash
-
-cwd=`dirname $0`
 
 ln -sf $cwd/_tmux.conf ~/.tmux.conf
 ln -sf $cwd/_zshrc ~/.zshrc
