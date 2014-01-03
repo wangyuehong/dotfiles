@@ -37,10 +37,6 @@ set termencoding=utf-8
 set fileencodings=ucs-bom,utf-8,cp936,gb18030,big5,euc-jp,euc-kr,latin1
 set helplang=cn
 
-set foldenable
-set foldmethod=indent
-set foldlevel=99
-
 set title                " change the terminal's title
 set novisualbell         " don't beep
 set noerrorbells         " don't beep
