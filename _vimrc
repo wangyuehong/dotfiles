@@ -11,7 +11,6 @@ set noswapfile
 
 set nu!
 set ruler
-set cursorline
 
 set autoindent
 set smartindent
