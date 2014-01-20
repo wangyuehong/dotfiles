@@ -1,6 +1,5 @@
 alias e='emacs'
 alias ec='emacsclient -t'
-alias vim='vi'
 alias v='vim'
 alias ..='cd ..'
 alias ...='cd ../..'
