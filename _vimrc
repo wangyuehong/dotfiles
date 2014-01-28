@@ -40,7 +40,7 @@ set formatoptions=tcqmM
 "set textwidth=80
 
 "显示行宽限制提示红线（仅vim7.4支持）
-set colorcolumn=121
+"set colorcolumn=121
 
 "显示行数标示
 set number
