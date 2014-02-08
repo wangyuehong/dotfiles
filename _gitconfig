@@ -1,6 +1,3 @@
-[user]
-	name = wangyuehong
-	email = wangyuehong@gmail.com
 [color]
         ui = auto
 [alias]
@@ -13,3 +10,7 @@
         lg ="log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --"
 [core]
         excludesfile = ~/.gitignore
+
+[include]
+        # for user/name user/email
+        path = ~/.gitlocal
