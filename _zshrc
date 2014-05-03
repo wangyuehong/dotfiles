@@ -30,7 +30,7 @@ DISABLE_UPDATE_PROMPT=true
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git git-extras rbenv gem osx z colored-man tmux history history-substring-search docker)
+plugins=(git git-extras rbenv rake gem osx z colored-man tmux history history-substring-search docker)
 
 source $ZSH/oh-my-zsh.sh
 
