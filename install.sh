@@ -35,5 +35,6 @@ ln -sf $cwd/_gitconfig ~/.gitconfig
 ln -sf $cwd/_gitignore ~/.gitignore
 ln -sf $cwd/_gemrc ~/.gemrc
 ln -sf $cwd/_vimrc ~/.vimrc
+ln -sf $cwd/_tigrc ~/.tigrc
 
 exit 0

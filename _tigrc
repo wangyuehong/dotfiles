@@ -1,0 +1,5 @@
+# http://jonas.nitro.dk/tig/tigrc.5.html
+
+bind main R             reload
+bind generic <Ctrl-f>      move-page-down
+bind generic <Ctrl-b>      move-page-up
