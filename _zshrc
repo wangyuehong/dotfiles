@@ -47,6 +47,10 @@ export PATH=$PATH:$HOME/bin
 export _Z_CMD=j
 export PATH=$HOME/.zz:$PATH
 
+if [ -f ~/perl5/perlbrew/etc/bashrc ]; then
+   source ~/perl5/perlbrew/etc/bashrc
+fi
+
 # rbenv
 if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
 
