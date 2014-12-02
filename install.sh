@@ -20,6 +20,7 @@ fi
 
 clone_or_pull z https://github.com/rupa/z.git ~/.zz
 clone_or_pull oh-my-zsh https://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh
+clone_or_pull zsh-syntax-highlighting https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
 clone_or_pull rbenv https://github.com/sstephenson/rbenv.git ~/.rbenv
 clone_or_pull ruby-build https://github.com/sstephenson/ruby-build.git ~/.rbenv/plugins/ruby-build
 clone_or_pull rbenv-gemset https://github.com/jamis/rbenv-gemset.git  ~/.rbenv/plugins/rbenv-gemset
