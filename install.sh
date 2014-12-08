@@ -38,4 +38,11 @@ ln -sf $cwd/_gemrc ~/.gemrc
 ln -sf $cwd/_vimrc ~/.vimrc
 ln -sf $cwd/_tigrc ~/.tigrc
 
+# peco
+if [ ! -d ~/.peco ]; then
+        mkdir ~/.peco
+fi
+
+ln -sf $cwd/_peco_config.json ~/.peco/config.json
+
 exit 0
