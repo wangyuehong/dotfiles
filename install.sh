@@ -37,12 +37,23 @@ ln -sf $cwd/_gitignore ~/.gitignore
 ln -sf $cwd/_gemrc ~/.gemrc
 ln -sf $cwd/_vimrc ~/.vimrc
 ln -sf $cwd/_tigrc ~/.tigrc
+ln -sf $cwd/_ctags ~/.ctags
 
 # peco
 if [ ! -d ~/.peco ]; then
-        mkdir ~/.peco
+    mkdir ~/.peco
 fi
 
 ln -sf $cwd/_peco_config.json ~/.peco/config.json
+
+# ctags
+langs=(perl ruby)
+for lang in "${langs[@]}"
+do
+    lang_dir=~/.tags/$lang
+    if [ ! -d $lang_dir ]; then
+        mkdir -p $lang_dir
+    fi
+done
 
 exit 0
