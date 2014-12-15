@@ -14,3 +14,6 @@
 [include]
         # for user/name user/email
         path = ~/.gitlocal
+
+[push]
+	default = simple
