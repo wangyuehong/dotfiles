@@ -56,12 +56,4 @@ do
     fi
 done
 
-# tmuxinator
-if [ ! -d ~/.tmuxinator ]; then
-    mkdir ~/.tmuxinator
-    # TODO: udpate tmuxinator.zsh every time
-    wget https://raw.githubusercontent.com/tmuxinator/tmuxinator/master/completion/tmuxinator.zsh
-    mv tmuxinator.zsh ~/.tmuxinator
-fi
-
 exit 0
