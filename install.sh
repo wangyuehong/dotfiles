@@ -25,6 +25,7 @@ clone_or_pull rbenv https://github.com/sstephenson/rbenv.git ~/.rbenv
 clone_or_pull ruby-build https://github.com/sstephenson/ruby-build.git ~/.rbenv/plugins/ruby-build
 clone_or_pull rbenv-gemset https://github.com/jamis/rbenv-gemset.git  ~/.rbenv/plugins/rbenv-gemset
 clone_or_pull rbenv-gem-rehash https://github.com/sstephenson/rbenv-gem-rehash.git ~/.rbenv/plugins/rbenv-gem-rehash
+clone_or_pull rbenv-vars https://github.com/sstephenson/rbenv-vars.git ~/.rbenv/plugins/rbenv-vars
 
 ln -sf $cwd/_tmux.conf ~/.tmux.conf
 ln -sf $cwd/_zshrc ~/.zshrc
