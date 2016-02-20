@@ -40,13 +40,6 @@ ln -sf $cwd/_vimrc ~/.vimrc
 ln -sf $cwd/_tigrc ~/.tigrc
 ln -sf $cwd/_ctags ~/.ctags
 
-# peco
-if [ ! -d ~/.peco ]; then
-    mkdir ~/.peco
-fi
-
-ln -sf $cwd/_peco_config.json ~/.peco/config.json
-
 # ctags
 langs=(perl ruby)
 for lang in "${langs[@]}"
