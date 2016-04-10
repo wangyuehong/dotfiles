@@ -27,6 +27,8 @@ clone_or_pull rbenv-gemset https://github.com/jamis/rbenv-gemset.git  ~/.rbenv/p
 clone_or_pull rbenv-gem-rehash https://github.com/sstephenson/rbenv-gem-rehash.git ~/.rbenv/plugins/rbenv-gem-rehash
 clone_or_pull rbenv-vars https://github.com/sstephenson/rbenv-vars.git ~/.rbenv/plugins/rbenv-vars
 
+clone_or_pull pyenv https://github.com/yyuu/pyenv.git ~/.pyenv
+
 ln -sf $cwd/_tmux.conf ~/.tmux.conf
 ln -sf $cwd/_zshrc ~/.zshrc
 ln -sf $cwd/_zshrc_alias ~/.zshrc_alias

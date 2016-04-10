@@ -30,7 +30,7 @@ DISABLE_UPDATE_PROMPT=true
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git git-extras rbenv rake gem osx z colored-man tmux history history-substring-search docker perl zsh-syntax-highlighting)
+plugins=(git git-extras rake gem osx z colored-man tmux history history-substring-search docker perl zsh-syntax-highlighting)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -46,15 +46,18 @@ export PATH=$PATH:$HOME/bin
 export _Z_CMD=j
 export PATH=$HOME/.zz:$PATH
 
-if [ -f ~/perl5/perlbrew/etc/bashrc ]; then
-   source ~/perl5/perlbrew/etc/bashrc
+#rbenv
+export PATH=$HOME/.rbenv/bin:$PATH
+if [ -d ~/.rbenv ]; then
+    eval "$(rbenv init -)";
 fi
 
-#rbenv
-#export PATH=$HOME/.rbenv/bin:$PATH
-#if [ -d ~/.rbenv ]; then
-#   eval "$(rbenv init -)";
-#fi
+# pyenv
+export PATH=$HOME/.pyenv/bin:$PATH
+
+if [ -d ~/.pyenv ]; then
+    eval "$(pyenv init -)"
+fi
 
 if [ -f ~/.zshrc_alias ]; then
    source ~/.zshrc_alias
