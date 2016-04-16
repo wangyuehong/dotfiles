@@ -48,22 +48,29 @@ source ~/.zz/z.sh
 
 #rbenv
 export PATH=$HOME/.rbenv/bin:$PATH
-if [ -d ~/.rbenv ]; then
-    eval "$(rbenv init -)";
-fi
+[ -d ~/.rbenv ] && eval "$(rbenv init -)"
 
 # pyenv
 export PATH=$HOME/.pyenv/bin:$PATH
-if [ -d ~/.pyenv ]; then
-    eval "$(pyenv init -)"
-fi
+[ -d ~/.pyenv ] && eval "$(pyenv init -)"
 
-if [ -f ~/.zshrc_alias ]; then
-   source ~/.zshrc_alias
-fi
-
-if [ -f ~/.zshrc_custom ]; then
-   source ~/.zshrc_custom
-fi
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# alias
+alias e='emacs'
+alias ec='emacsclient -t'
+alias v='vim'
+alias ..='cd ..'
+alias ...='cd ../..'
+alias g='git'
+alias h='history'
+alias df='df -h'
+alias du='du -h'
+alias su="su -"
+alias sudo='sudo -E'
+alias less='less -r'
+alias tree='tree -C'
+alias f='fzf'
+
+[ -f ~/.zshrc_custom ] source ~/.zshrc_custom

@@ -11,8 +11,7 @@ if [ -f ~/.bash_custom ]; then
       source ~/.bash_custom
 fi
 
-if [ -f ~/.bash_alias ]; then
-      source ~/.bash_alias
-fi
-
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
+
+# alias
+alias tm='tmux att || tmux'
