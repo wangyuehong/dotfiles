@@ -14,4 +14,4 @@ export HISTCONTROL=ignoreboth:erasedups
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 
 # alias
-alias tm='tmux att || tmux'
+alias tm='tmux attach -t base || tmux new -s base'
