@@ -71,6 +71,6 @@ alias su="su -"
 alias sudo='sudo -E'
 alias less='less -r'
 alias tree='tree -C'
-alias f='fzf'
+alias fz='fzf'
 
 [ -f ~/.zshrc_custom ] && source ~/.zshrc_custom
