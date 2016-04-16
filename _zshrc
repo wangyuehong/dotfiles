@@ -73,4 +73,4 @@ alias less='less -r'
 alias tree='tree -C'
 alias f='fzf'
 
-[ -f ~/.zshrc_custom ] source ~/.zshrc_custom
+[ -f ~/.zshrc_custom ] && source ~/.zshrc_custom
