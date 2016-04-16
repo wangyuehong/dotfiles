@@ -1,13 +1,27 @@
+[apply]
+	whitespace = nowarn
+[core]
+        filemode = true
+        ignorecase = false
+        autocrlf = false
+        whitespace = cr-at-eol
+        editor = vim
+        pager = less -x1,5
+        excludesfile = ~/.gitignore
 [color]
+        diff = auto
+        status = auto
+        branch = auto
         ui = auto
 [alias]
         b = branch
         st = status
         cm = commit
         co = checkout
-        df = diff
+        d = diff
         dc = diff --cached
-        lg ="log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --"
+        l ="log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --"
+        ri = rebase -i
 [core]
         excludesfile = ~/.gitignore
 
@@ -16,4 +30,13 @@
         path = ~/.gitlocal
 
 [push]
-	default = simple
+        default = tracking
+[merge]
+        branchdesc = true
+        log = true
+        tool = vimdiff
+[diff]
+        tool = vimdiff
+[mergetool]
+        # no prompt before merge each file
+        prompt = false
