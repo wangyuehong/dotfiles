@@ -43,13 +43,13 @@ ln -sf $cwd/_tigrc ~/.tigrc
 ln -sf $cwd/_ctags ~/.ctags
 
 # ctags
-langs=(perl ruby)
-for lang in "${langs[@]}"
-do
-    lang_dir=~/.tags/$lang
-    if [ ! -d $lang_dir ]; then
-        mkdir -p $lang_dir
-    fi
-done
+# langs=(perl ruby)
+# for lang in "${langs[@]}"
+# do
+#     lang_dir=~/.tags/$lang
+#     if [ ! -d $lang_dir ]; then
+#         mkdir -p $lang_dir
+#     fi
+# done
 
 exit 0
