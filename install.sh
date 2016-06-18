@@ -27,6 +27,10 @@ clone_or_pull rbenv-gem-rehash https://github.com/sstephenson/rbenv-gem-rehash.g
 clone_or_pull rbenv-vars https://github.com/sstephenson/rbenv-vars.git ~/.rbenv/plugins/rbenv-vars
 
 clone_or_pull pyenv https://github.com/yyuu/pyenv.git ~/.pyenv
+
+clone_or_pull plenv https://github.com/tokuhirom/plenv.git ~/.plenv
+clone_or_pull perl-build https://github.com/tokuhirom/Perl-Build.git ~/.plenv/plugins/perl-build
+
 clone_or_pull fzf https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install --all
 
 ln -sf $cwd/_tmux.conf ~/.tmux.conf

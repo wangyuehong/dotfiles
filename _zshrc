@@ -48,7 +48,7 @@ export EDITOR=ec
 _Z_CMD=j
 source ~/.zz/z.sh
 
-#rbenv
+# rbenv
 export PATH=$HOME/.rbenv/bin:$PATH
 [ -d ~/.rbenv ] && eval "$(rbenv init -)"
 
@@ -56,6 +56,9 @@ export PATH=$HOME/.rbenv/bin:$PATH
 export PATH=$HOME/.pyenv/bin:$PATH
 [ -d ~/.pyenv ] && eval "$(pyenv init -)"
 
+# plenv
+export PATH=$HOME/.plenv/bin:$PATH
+[ -d ~/.rbenv ] && eval "$(plenv init - zsh)"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
