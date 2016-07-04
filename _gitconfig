@@ -5,7 +5,7 @@
         ignorecase = false
         autocrlf = false
         whitespace = cr-at-eol
-        editor = "emacsclient -t || vim"
+        editor = vi
         pager = less -x1,5
         excludesfile = ~/.gitignore
 [color]
