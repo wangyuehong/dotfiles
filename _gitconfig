@@ -37,6 +37,7 @@
         tool = vimdiff
 [diff]
         tool = vimdiff
+	compactionHeuristic = true
 [mergetool]
         # no prompt before merge each file
         prompt = false
