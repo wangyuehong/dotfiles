@@ -4,7 +4,7 @@ cd `dirname $0`
 
 cwd=`pwd`
 
-function clone_or_pull {
+clone_or_pull() {
     if [ ! -d $3 ]; then
         echo "clone $1"
         git clone $2 $3
@@ -26,10 +26,10 @@ clone_or_pull ruby-build https://github.com/sstephenson/ruby-build.git ~/.rbenv/
 clone_or_pull rbenv-gem-rehash https://github.com/sstephenson/rbenv-gem-rehash.git ~/.rbenv/plugins/rbenv-gem-rehash
 clone_or_pull rbenv-vars https://github.com/sstephenson/rbenv-vars.git ~/.rbenv/plugins/rbenv-vars
 
-clone_or_pull pyenv https://github.com/yyuu/pyenv.git ~/.pyenv
+# clone_or_pull pyenv https://github.com/yyuu/pyenv.git ~/.pyenv
 
-clone_or_pull plenv https://github.com/tokuhirom/plenv.git ~/.plenv
-clone_or_pull perl-build https://github.com/tokuhirom/Perl-Build.git ~/.plenv/plugins/perl-build
+# clone_or_pull plenv https://github.com/tokuhirom/plenv.git ~/.plenv
+# clone_or_pull perl-build https://github.com/tokuhirom/Perl-Build.git ~/.plenv/plugins/perl-build
 
 clone_or_pull fzf https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install --all
 
