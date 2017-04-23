@@ -34,17 +34,17 @@ clone_or_pull rbenv-vars https://github.com/sstephenson/rbenv-vars.git ~/.rbenv/
 clone_or_pull fzf https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install --all
 
 ln -sf $cwd/_tmux.conf ~/.tmux.conf
-ln -sf $cwd/_zshrc ~/.zshrc
-ln -sf $cwd/_zshrc_alias ~/.zshrc_alias
-ln -sf $cwd/_bashrc ~/.bashrc
-ln -sf $cwd/_bash_alias ~/.bash_alias
-ln -sf $cwd/_bash_profile ~/.bash_profile
-ln -sf $cwd/_gitconfig ~/.gitconfig
-ln -sf $cwd/_gitignore ~/.gitignore
-ln -sf $cwd/_gemrc ~/.gemrc
-ln -sf $cwd/_vimrc ~/.vimrc
-ln -sf $cwd/_tigrc ~/.tigrc
-ln -sf $cwd/_ctags ~/.ctags
+ln -sf $cwd/.zshrc ~/.zshrc
+ln -sf $cwd/.zshrc_alias ~/.zshrc_alias
+ln -sf $cwd/.bashrc ~/.bashrc
+ln -sf $cwd/.bash_alias ~/.bash_alias
+ln -sf $cwd/.bash_profile ~/.bash_profile
+ln -sf $cwd/.gitconfig ~/.gitconfig
+ln -sf $cwd/.gitignore ~/.gitignore
+ln -sf $cwd/.gemrc ~/.gemrc
+ln -sf $cwd/.vimrc ~/.vimrc
+ln -sf $cwd/.tigrc ~/.tigrc
+ln -sf $cwd/.ctags ~/.ctags
 
 # ctags
 # langs=(perl ruby)
