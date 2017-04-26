@@ -33,7 +33,7 @@ clone_or_pull rbenv-vars https://github.com/sstephenson/rbenv-vars.git ~/.rbenv/
 
 clone_or_pull fzf https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install --all
 
-ln -sf $cwd/_tmux.conf ~/.tmux.conf
+ln -sf $cwd/.tmux.conf ~/.tmux.conf
 ln -sf $cwd/.zshrc ~/.zshrc
 ln -sf $cwd/.zshrc_alias ~/.zshrc_alias
 ln -sf $cwd/.bashrc ~/.bashrc
@@ -45,6 +45,7 @@ ln -sf $cwd/.gemrc ~/.gemrc
 ln -sf $cwd/.vimrc ~/.vimrc
 ln -sf $cwd/.tigrc ~/.tigrc
 ln -sf $cwd/.ctags ~/.ctags
+ln -sf $cwd/.agignore ~/.agignore
 
 # ctags
 # langs=(perl ruby)
