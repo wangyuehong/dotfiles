@@ -1,28 +1,38 @@
--- Official docs: http://www.postgresql.org/docs/9.3/static/app-psql.html
--- Unofficial docs: http://robots.thoughtbot.com/improving-the-command-line-postgres-experience
+-- prevent noisy loading of psqlrc file
+\set QUIET yes
 
--- Don't display the "helpful" message on startup.
-\set QUIET 1
-\pset null '[NULL]'
+--customize prompt
+-- http://i-dba.blogspot.se/2014/02/colorizing-psql-prompt-guide.html
+-- %m -> short hostname; %M -> full hostname
+\set PROMPT1 '\n%[%033[1;31m%]->%[%033[2;37m%]%`\! date "+%F %T %z"`%[%033[0m%] %[%033[1;36m%]%n%[%033[34m%]@%[%033[1;36m%]%M:%>%[%033[1;33m%]/%/ %[%033[1;31m%]%x %[%033[K%]%[%033[0m%]\n%[%033[1;33m%]%R%#%[%033[0m%] '
+\set PROMPT2 '%[%033[1;33m%]%R%#%[%033[0m%] '
+-- consider: http://petereisentraut.blogspot.com/2009/09/how-to-set-xterm-titles-in-psql.html
 
--- http://www.postgresql.org/docs/9.3/static/app-psql.html#APP-PSQL-PROMPTING
-\set PROMPT1 '%[%033[1m%]%M %n@%/%R%[%033[0m%]%# '
--- PROMPT2 is printed when the prompt expects more input, like when you type
--- SELECT * FROM<enter>. %R shows what type of input it expects.
-\set PROMPT2 '[more] %R > '
+--host/db specific history files
+\set HISTFILE ~/.psql_history- :HOST - :DBNAME
 
 -- Show how long each query takes to execute
 \timing
 
+--pager settings to support color
+\pset pager always
+
+-- allow pasting of values to avoid stupid indenting
+\set paste
+
+--get kid of duplicates in history
+\set HISTCONTROL ignoredups
+
 -- Use best available output format
 \x auto
 \set VERBOSITY verbose
-\set HISTFILE ~/.psql_history- :DBNAME
-\set HISTCONTROL ignoredups
 \set COMP_KEYWORD_CASE upper
+\pset null '[NULL]'
+
+--set noisyness back to normal
 \unset QUIET
 
 -- psql can't check for a file's existence, so we'll provide an empty local
 -- file that users can override with their custom dotfiles. To set your own
 -- personal settings, place your own file in ~/.psqlrc.local
-\i ~/.psqlrc.local
+-- \i ~/.psqlrc.local
