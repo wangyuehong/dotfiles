@@ -42,7 +42,7 @@ setopt hist_ignore_all_dups
 export PATH=$PATH:/usr/local/sbin
 export PATH=$PATH:$HOME/bin
 
-export EDITOR=ec
+export EDITOR=vi
 
 # z
 _Z_CMD=j
@@ -69,20 +69,8 @@ fi
 
 export FZF_DEFAULT_OPTS="--reverse --inline-info --exact --history-size=999999"
 
-# alias
-alias e='emacs'
-alias ec='emacsclient -t'
-alias v='vim'
-alias ..='cd ..'
-alias ...='cd ../..'
-alias g='git'
-alias h='history'
-alias df='df -h'
-alias du='du -h'
-alias su="su -"
-alias sudo='sudo -E'
-alias less='less -r'
-alias tree='tree -C'
-alias fz='fzf'
+# local config
+[[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
 
-[ -f ~/.zshrc_custom ] && source ~/.zshrc_custom
+# aliases
+[[ -f ~/.aliases ]] && source ~/.aliases
