@@ -35,7 +35,7 @@ clone_or_pull https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install --all
 
 for file in .{agignore,aliases,bashrc,bash_profile,ctags,gemrc,gitconfig,gitignore,psqlrc,tigrc,tmux.conf,vimrc,zshrc}; do
     echo "ln $file"
-    ln -sf $cwd/"$file" ~/$file
+    ln -sf $cwd/$file ~/$file
 done;
 unset file;
 
