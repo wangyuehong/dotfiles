@@ -46,6 +46,10 @@ setopt hist_ignore_all_dups
 [[ "$PATH" == *"/usr/local/sbin"* ]] || export PATH=$PATH:/usr/local/sbin
 [[ "$PATH" == *"$HOME/bin"* ]] || export PATH=$HOME/bin:$PATH
 
+if [ -d ~/.local/bin ]; then # pip install --user will install into ~/.local/
+    [[ "$PATH" == *"$HOME/.local/bin"* ]] || export PATH=$HOME/.local/bin:$PATH
+fi
+
 export EDITOR=vi
 
 # z
@@ -77,6 +81,9 @@ if [ -d ~/.fzf ]; then
         export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
     fi
 fi
+
+# thefuck
+$(command -v thefuck >/dev/null 2>&1) && eval $(thefuck --alias)
 
 # local config
 [[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
