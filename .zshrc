@@ -57,8 +57,8 @@ export PATH=$HOME/.rbenv/bin:$PATH
 [ -d ~/.rbenv ] && eval "$(rbenv init -)"
 
 # pyenv
-# export PATH=$HOME/.pyenv/bin:$PATH
-# [ -d ~/.pyenv ] && eval "$(pyenv init -)"
+export PATH=$HOME/.pyenv/bin:$PATH
+[ -d ~/.pyenv ] && eval "$(pyenv init -)"
 
 # plenv
 # export PATH=$HOME/.plenv/bin:$PATH

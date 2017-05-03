@@ -16,7 +16,7 @@ upclone_all:
 	@make upclone github_repo=sstephenson/rbenv-gem-rehash.git dir=~/.rbenv/plugins/rbenv-gem-rehash
 	@make upclone github_repo=sstephenson/rbenv-vars.git dir=~/.rbenv/plugins/rbenv-vars
 	@make upclone github_repo=junegunn/fzf.git dir=~/.fzf
-	# @make upclone github_repo=yyuu/pyenv.git dir=~/.pyenv
+	@make upclone github_repo=yyuu/pyenv.git dir=~/.pyenv
 	# @make upclone github_repo=tokuhirom/plenv.git dir= ~/.plenv
 	# @make upclone github_repo=tokuhirom/Perl-Build.git dir=~/.plenv/plugins/perl-build
 
