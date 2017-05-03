@@ -43,8 +43,8 @@ unsetopt share_history
 setopt hist_ignore_all_dups
 
 # set path
-export PATH=$PATH:/usr/local/sbin
-export PATH=$PATH:$HOME/bin
+[[ "$PATH" == *"/usr/local/sbin"* ]] || export PATH=$PATH:/usr/local/sbin
+[[ "$PATH" == *"$HOME/bin"* ]] || export PATH=$HOME/bin:$PATH
 
 export EDITOR=vi
 
@@ -53,25 +53,30 @@ _Z_CMD=j
 source ~/.zz/z.sh
 
 # rbenv
-export PATH=$HOME/.rbenv/bin:$PATH
-[ -d ~/.rbenv ] && eval "$(rbenv init -)"
+if [ -d ~/.rbenv ]; then
+    [[ "$PATH" == *"$HOME/.rbenv/bin"* ]] || export PATH=$HOME/.rbenv/bin:$PATH
+    eval "$(rbenv init -)";
+fi
 
 # pyenv
-export PATH=$HOME/.pyenv/bin:$PATH
-[ -d ~/.pyenv ] && eval "$(pyenv init -)"
+if [ -d ~/.pyenv ]; then
+    [[ "$PATH" == *"$HOME/.pyenv/bin"* ]] || export PATH=$HOME/.pyenv/bin:$PATH
+    eval "$(pyenv init -)";
+fi
 
 # plenv
 # export PATH=$HOME/.plenv/bin:$PATH
 # [ -d ~/.rbenv ] && eval "$(plenv init - zsh)"
 
 # fzf
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-if ag --version>/dev/null; then
-  export FZF_DEFAULT_COMMAND='ag -g ""'
-  export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+if [ -d ~/.fzf ]; then
+    [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+    export FZF_DEFAULT_OPTS="--reverse --inline-info --exact --history-size=999999"
+    if command -v ag >/dev/null 2>&1; then
+        export FZF_DEFAULT_COMMAND='ag -g ""'
+        export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+    fi
 fi
-
-export FZF_DEFAULT_OPTS="--reverse --inline-info --exact --history-size=999999"
 
 # local config
 [[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
