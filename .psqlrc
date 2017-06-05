@@ -15,7 +15,7 @@
 \timing
 
 --pager settings to support color
-\pset pager always
+--\pset pager always
 
 -- allow pasting of values to avoid stupid indenting
 \set paste
