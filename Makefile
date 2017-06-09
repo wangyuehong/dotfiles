@@ -24,8 +24,8 @@ upclone_all:
 	  dir=~/.rbenv/plugins/rbenv-gem-rehash
 	@make upclone github_repo=sstephenson/rbenv-vars.git dir=~/.rbenv/plugins/rbenv-vars
 	@make upclone github_repo=yyuu/pyenv.git dir=~/.pyenv
-	# @make upclone github_repo=tokuhirom/plenv.git dir= ~/.plenv
-	# @make upclone github_repo=tokuhirom/Perl-Build.git dir=~/.plenv/plugins/perl-build
+	@make upclone github_repo=tokuhirom/plenv.git dir=~/.plenv
+	@make upclone github_repo=tokuhirom/Perl-Build.git dir=~/.plenv/plugins/perl-build
 
 install_z:
 	@if [ ! -f ~/.z ]; then touch ~/.z; fi
@@ -35,10 +35,10 @@ install_fzf:
 	@make upclone github_repo=junegunn/fzf.git dir=~/.fzf
 	@~/.fzf/install --all
 
-install_fpp: home_bin
-	@make upclone github_repo=facebook/PathPicker.git dir=~/.path_picker
-	@ln -sf ~/.path_picker/fpp ~/bin/fpp
-	@fpp --version
+# install_fpp: home_bin
+# 	@make upclone github_repo=facebook/PathPicker.git dir=~/.path_picker
+# 	@ln -sf ~/.path_picker/fpp ~/bin/fpp
+# 	@fpp --version
 
 ln_dotfiles:
 	@for file in .{agignore,aliases,bashrc,bash_profile,ctags,gemrc,gitconfig,gitignore,psqlrc,\
@@ -52,4 +52,4 @@ setup:
 	@make install_z
 	@make upclone_all
 	@make install_fzf
-	@make install_fpp
+	# @make install_fpp
