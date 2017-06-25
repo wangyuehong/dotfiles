@@ -36,8 +36,8 @@ install_fzf:
 	@~/.fzf/install --all
 
 ln_dotfiles:
-	@for file in .{agignore,aliases,bash_profile,ctags,gemrc,gitconfig,gitignore,psqlrc,tigrc,tmux.conf,vimrc,zshrc}; do \
-	  echo "ln -sf $(CURR_DIR)/$$file ~/$$file" && ln -sf $(CURR_DIR)/$$file ~/$$file; \
+	@for file in agignore aliases bash_profile ctags gemrc gitconfig gitignore psqlrc tigrc tmux.conf vimrc zshrc; do \
+	  echo "ln -sf $(CURR_DIR)/.$$file ~/.$$file" && ln -sf $(CURR_DIR)/.$$file ~/.$$file; \
 	done;
 
 setup:
