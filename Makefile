@@ -35,14 +35,8 @@ install_fzf:
 	@make upclone github_repo=junegunn/fzf.git dir=~/.fzf
 	@~/.fzf/install --all
 
-# install_fpp: home_bin
-# 	@make upclone github_repo=facebook/PathPicker.git dir=~/.path_picker
-# 	@ln -sf ~/.path_picker/fpp ~/bin/fpp
-# 	@fpp --version
-
 ln_dotfiles:
-	@for file in .{agignore,aliases,bashrc,bash_profile,ctags,gemrc,gitconfig,gitignore,psqlrc,\
-	tigrc,tmux.conf,vimrc,zshrc}; do \
+	@for file in .{agignore,aliases,bash_profile,ctags,gemrc,gitconfig,gitignore,psqlrc,tigrc,tmux.conf,vimrc,zshrc}; do \
 	  echo "ln -sf $(CURR_DIR)/$$file ~/$$file" && ln -sf $(CURR_DIR)/$$file ~/$$file; \
 	done;
 
@@ -52,4 +46,3 @@ setup:
 	@make install_z
 	@make upclone_all
 	@make install_fzf
-	# @make install_fpp
