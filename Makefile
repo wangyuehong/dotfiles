@@ -46,3 +46,9 @@ setup:
 	@make install_z
 	@make upclone_all
 	@make install_fzf
+
+brew_install:
+	@ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install)"
+
+brew_update:
+	@brew update && brew upgrade && brew cleanup
