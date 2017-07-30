@@ -92,3 +92,7 @@ $(command -v thefuck >/dev/null 2>&1) && eval $(thefuck --alias)
 
 # aliases
 [[ -f ~/.aliases ]] && source ~/.aliases
+
+export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
+export MANPATH="/home/linuxbrew/.linuxbrew/share/man:$MANPATH"
+export INFOPATH="/home/linuxbrew/.linuxbrew/share/info:$INFOPATH"
