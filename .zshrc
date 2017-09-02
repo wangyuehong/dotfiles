@@ -43,7 +43,7 @@ unsetopt share_history
 setopt hist_ignore_all_dups
 
 # set path
-[[ "$PATH" == *"/usr/local/sbin"* ]] || export PATH=$PATH:/usr/local/sbin
+# [[ "$PATH" == *"/usr/local/sbin"* ]] || export PATH=$PATH:/usr/local/sbin
 [[ "$PATH" == *"$HOME/bin"* ]] || export PATH=$HOME/bin:$PATH
 
 if [ -d ~/.local/bin ]; then # pip install --user will install into ~/.local/
@@ -92,7 +92,3 @@ $(command -v thefuck >/dev/null 2>&1) && eval $(thefuck --alias)
 
 # aliases
 [[ -f ~/.aliases ]] && source ~/.aliases
-
-export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
-export MANPATH="/home/linuxbrew/.linuxbrew/share/man:$MANPATH"
-export INFOPATH="/home/linuxbrew/.linuxbrew/share/info:$INFOPATH"

@@ -6,6 +6,8 @@ export LC_ALL='en_US.UTF-8'
 export HISTCONTROL=ignoreboth:erasedups
 
 export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
+export MANPATH="/home/linuxbrew/.linuxbrew/share/man:$MANPATH"
+export INFOPATH="/home/linuxbrew/.linuxbrew/share/info:$INFOPATH"
 
 # alias
 alias tm='tmux attach -t base || tmux new -s base'
