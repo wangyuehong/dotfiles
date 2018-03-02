@@ -3,8 +3,9 @@ default: setup
 
 CURR_DIR:=$(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 
-home_bin:
+home_dirs:
 	@mkdir -p ~/bin
+	@mkdir -p ~/go
 
 upclone:
 	@echo upclone $(dir)
@@ -41,7 +42,7 @@ ln_dotfiles:
 	done;
 
 setup:
-	@make home_bin
+	@make home_dirs
 	@make ln_dotfiles
 	@make install_z
 	@make upclone_all

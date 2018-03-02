@@ -92,3 +92,5 @@ $(command -v thefuck >/dev/null 2>&1) && eval $(thefuck --alias)
 
 # aliases
 [[ -f ~/.aliases ]] && source ~/.aliases
+
+export GOPATH=$HOME/go
