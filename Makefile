@@ -27,6 +27,7 @@ upclone_all:
 	@make upclone github_repo=yyuu/pyenv.git dir=~/.pyenv
 	@make upclone github_repo=tokuhirom/plenv.git dir=~/.plenv
 	@make upclone github_repo=tokuhirom/Perl-Build.git dir=~/.plenv/plugins/perl-build
+	@make upclone github_repo=syndbg/goenv.git dir=~/.goenv
 
 install_z:
 	@if [ ! -f ~/.z ]; then touch ~/.z; fi

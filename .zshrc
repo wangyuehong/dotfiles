@@ -74,6 +74,14 @@ if [ -d ~/.plenv ]; then
    eval "$(plenv init - zsh)"
 fi
 
+# goenv
+if [ -d ~/.goenv ]; then
+    export GOENV_ROOT="$HOME/.goenv"
+    [[ "$PATH" == *"$GOENV_ROOT/bin"* ]] || export PATH=$GOENV_ROOT/bin:$PATH
+    eval "$(goenv init -)"
+    export GOPATH=$HOME/go
+fi
+
 # fzf
 if [ -d ~/.fzf ]; then
     [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
@@ -85,12 +93,10 @@ if [ -d ~/.fzf ]; then
 fi
 
 # thefuck
-$(command -v thefuck >/dev/null 2>&1) && eval $(thefuck --alias)
+# $(command -v thefuck >/dev/null 2>&1) && eval $(thefuck --alias)
 
 # local config
 [[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
 
 # aliases
 [[ -f ~/.aliases ]] && source ~/.aliases
-
-export GOPATH=$HOME/go
