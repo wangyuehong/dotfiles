@@ -68,12 +68,6 @@ if [ -d ~/.pyenv ]; then
     eval "$(pyenv init -)";
 fi
 
-# plenv
-if [ -d ~/.plenv ]; then
-    [[ "$PATH" == *"$HOME/.plenv/bin"* ]] || export PATH=$HOME/.plenv/bin:$PATH
-   eval "$(plenv init - zsh)"
-fi
-
 # goenv
 if [ -d ~/.goenv ]; then
     export GOENV_ROOT="$HOME/.goenv"
