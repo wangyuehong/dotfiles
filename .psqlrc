@@ -24,7 +24,7 @@
 \set HISTCONTROL ignoredups
 
 -- Use best available output format
-\x auto
+\x off
 \set VERBOSITY verbose
 \set COMP_KEYWORD_CASE upper
 \pset null '[NULL]'
