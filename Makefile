@@ -44,3 +44,7 @@ setup:
 
 brew_up:
 	@brew update && brew upgrade && brew cleanup
+
+fzf:
+	@brew install fzf
+	@/home/linuxbrew/.linuxbrew/opt/fzf/install
