@@ -31,10 +31,6 @@ install_z:
 	@if [ ! -f ~/.z ]; then touch ~/.z; fi
 	@make upclone github_repo=rupa/z.git dir=~/.zz
 
-install_fzf:
-	@make upclone github_repo=junegunn/fzf.git dir=~/.fzf
-	@~/.fzf/install --all
-
 ln_dotfiles:
 	@for file in agignore aliases bash_profile ctags gemrc gitconfig gitignore psqlrc tigrc tmux.conf vimrc zshrc; do \
 	  echo "ln -sf $(CURR_DIR)/.$$file ~/.$$file" && ln -sf $(CURR_DIR)/.$$file ~/.$$file; \
@@ -45,7 +41,6 @@ setup:
 	@make ln_dotfiles
 	@make install_z
 	@make upclone_all
-	@make install_fzf
 
 brew_up:
 	@brew update && brew upgrade && brew cleanup
