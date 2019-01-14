@@ -11,4 +11,4 @@ alias su="su -"
 alias sudo='sudo -E'
 alias less='less -r'
 alias tree='tree -C'
-alias ll='ls -al'
+alias ll='ls -l'
