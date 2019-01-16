@@ -6,7 +6,7 @@ ZSH=$HOME/.oh-my-zsh
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
 if [ -n "$INSIDE_EMACS" ]; then
-    ZSH_THEME="steeef"
+    ZSH_THEME="simple"
 else
     ZSH_THEME="candy"
 fi
