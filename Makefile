@@ -28,6 +28,7 @@ upclone_all:
 	@make upclone github_repo=sstephenson/rbenv-vars.git dir=~/.rbenv/plugins/rbenv-vars
 	@make upclone github_repo=yyuu/pyenv.git dir=~/.pyenv
 	@make upclone github_repo=syndbg/goenv.git dir=~/.goenv
+	@make upclone github_repo=junegunn/fzf.git dir=~/.fzf
 
 install_z:
 	@if [ ! -f ~/.z ]; then touch ~/.z; fi
@@ -43,10 +44,19 @@ setup:
 	@make ln_dotfiles
 	@make install_z
 	@make upclone_all
+	@make update_fzf
 
 brew_up:
 	@brew update && brew upgrade && brew cleanup
 
+update_fzf:
+	@~/.fzf/install --bin
+
 fzf:
-	@brew install fzf
-	@/home/linuxbrew/.linuxbrew/opt/fzf/install
+	@~/.fzf/install --all
+
+go_tools:
+	go get -u github.com/rogpeppe/godef
+	go get -u golang.org/x/tools/cmd/goimports
+	go get -u github.com/cweill/gotests/...
+	go get -u github.com/derekparker/delve/cmd/dlv
