@@ -18,11 +18,13 @@ upclone:
 upclone_all:
 	@make upclone github_repo=robbyrussell/oh-my-zsh.git dir=~/.oh-my-zsh
 	@make upclone github_repo=zsh-users/zsh-syntax-highlighting.git \
-	  dir=~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
+		dir=~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
+	@make upclone github_repo=zsh-users/zsh-autosuggestions.git \
+		dir=~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
 	@make upclone github_repo=sstephenson/rbenv.git dir=~/.rbenv
 	@make upclone github_repo=sstephenson/ruby-build.git dir=~/.rbenv/plugins/ruby-build
 	@make upclone github_repo=sstephenson/rbenv-gem-rehash.git \
-	  dir=~/.rbenv/plugins/rbenv-gem-rehash
+		dir=~/.rbenv/plugins/rbenv-gem-rehash
 	@make upclone github_repo=sstephenson/rbenv-vars.git dir=~/.rbenv/plugins/rbenv-vars
 	@make upclone github_repo=yyuu/pyenv.git dir=~/.pyenv
 	@make upclone github_repo=syndbg/goenv.git dir=~/.goenv
