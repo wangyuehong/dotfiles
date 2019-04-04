@@ -35,7 +35,7 @@ install_z:
 	@make upclone github_repo=rupa/z.git dir=~/.zz
 
 ln_dotfiles:
-	@for file in aliases bash_profile ctags gemrc gitconfig gitignore psqlrc tigrc tmux.conf vimrc zshrc; do \
+	@for file in aliases bash_profile ctags gemrc gitconfig gitignore psqlrc tigrc tmux.conf vimrc ideavimrc zshrc; do \
 	  echo "ln -sf $(CURR_DIR)/.$$file ~/.$$file" && ln -sf $(CURR_DIR)/.$$file ~/.$$file; \
 	done;
 

@@ -1,16 +1,5 @@
 "部分设置来源于roclinux.cn
 
-"vim支持go语言 - 开始
-"关闭文件类型检测功能
-filetype off
-"关闭文件类型插件加载功能、文件类型缩进功能
-filetype plugin indent off
-"增加go语言的vim相关配置路径
-set runtimepath+=$GOROOT/misc/vim
-"重新打开文件类型检测功能、文件类型插件加载功能和文件类型缩进功能
-filetype plugin indent on
-"vim支持go语言 - 结束
-
 "按编程语言的语法,对代码进行彩色标示,术语叫做语法高亮
 syntax on
 
