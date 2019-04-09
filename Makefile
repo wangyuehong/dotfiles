@@ -60,5 +60,5 @@ go_tools:
 	go get -u golang.org/x/tools/cmd/goimports
 	go get -u github.com/cweill/gotests/...
 	go get -u github.com/derekparker/delve/cmd/dlv
-	# go get -u github.com/saibing/bingo
+	go get -u github.com/saibing/bingo
 	go get -u golang.org/x/tools/cmd/gopls
