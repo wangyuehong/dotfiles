@@ -62,4 +62,5 @@ go_tools:
 	go get -u github.com/derekparker/delve/cmd/dlv
 	go get -u golang.org/x/tools/cmd/gopls
 	go get -u github.com/golangci/golangci-lint/cmd/golangci-lint
+	go get -u github.com/godoctor/godoctor
 
