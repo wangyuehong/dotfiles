@@ -60,8 +60,9 @@ go_tools:
 	go get -u golang.org/x/tools/cmd/goimports
 	go get -u github.com/cweill/gotests/...
 	go get -u github.com/derekparker/delve/cmd/dlv
-	go get -u golang.org/x/tools/cmd/gopls
 	go get -u github.com/golangci/golangci-lint/cmd/golangci-lint
 	go get -u github.com/godoctor/godoctor
 	go get -u github.com/davidrjenni/reftools/cmd/fillstruct
+	go get -u github.com/josharian/impl
+	GO111MODULE=on go get golang.org/x/tools/gopls@latest
 
