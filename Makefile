@@ -56,13 +56,13 @@ fzf:
 	@~/.fzf/install --all
 
 go_tools:
-	go get -u github.com/rogpeppe/godef
-	go get -u golang.org/x/tools/cmd/goimports
-	go get -u github.com/cweill/gotests/...
-	go get -u github.com/derekparker/delve/cmd/dlv
-	go get -u github.com/golangci/golangci-lint/cmd/golangci-lint
-	go get -u github.com/godoctor/godoctor
-	go get -u github.com/davidrjenni/reftools/cmd/fillstruct
-	go get -u github.com/josharian/impl
-	GO111MODULE=on go get golang.org/x/tools/gopls@latest
+	go get github.com/rogpeppe/godef
+	go get golang.org/x/tools/cmd/goimports
+	go get github.com/cweill/gotests/...
+	go get github.com/derekparker/delve/cmd/dlv
+	go get github.com/golangci/golangci-lint/cmd/golangci-lint
+	go get github.com/godoctor/godoctor
+	go get github.com/davidrjenni/reftools/cmd/fillstruct
+	go get github.com/josharian/impl
+	go get golang.org/x/tools/cmd/gopls
 
