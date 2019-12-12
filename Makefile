@@ -64,5 +64,5 @@ go_tools:
 	go get github.com/godoctor/godoctor
 	go get github.com/davidrjenni/reftools/cmd/fillstruct
 	go get github.com/josharian/impl
-	go get golang.org/x/tools/cmd/gopls
+	go get golang.org/x/tools/gopls
 
