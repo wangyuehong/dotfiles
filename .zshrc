@@ -42,6 +42,8 @@ source $ZSH/oh-my-zsh.sh
 unsetopt share_history
 setopt hist_ignore_all_dups
 
+ZSH_DOTENV_PROMPT=false
+
 # set path
 # [[ "$PATH" == *"/usr/local/sbin"* ]] || export PATH=$PATH:/usr/local/sbin
 [[ "$PATH" == *"$HOME/bin"* ]] || export PATH=$HOME/bin:$PATH
