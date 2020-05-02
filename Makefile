@@ -64,5 +64,4 @@ go_tools:
 	go get github.com/davidrjenni/reftools/cmd/fillstruct
 	go get golang.org/x/tools/cmd/godoc
 	go get github.com/josharian/impl
-	go get golang.org/x/tools/gopls
-
+	GO111MODULE=on go get golang.org/x/tools/gopls@latest
