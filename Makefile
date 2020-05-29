@@ -10,7 +10,7 @@ home_dirs:
 upclone:
 	@echo upclone $(dir)
 	@if [ ! -d $(dir) ]; then \
-	  git clone https://github.com/$(github_repo) $(dir); \
+	  git clone --depth 1 https://github.com/$(github_repo) $(dir); \
 	else \
 	  cd $(dir) && git pull; \
 	fi
@@ -29,6 +29,7 @@ upclone_all:
 	@make upclone github_repo=yyuu/pyenv.git dir=~/.pyenv
 	@make upclone github_repo=syndbg/goenv.git dir=~/.goenv
 	@make upclone github_repo=junegunn/fzf.git dir=~/.fzf
+	@make upclone github_repo=tmux-plugins/tpm.git dir=~/.tmux/plugins/tpm
 
 install_z:
 	@if [ ! -f ~/.z ]; then touch ~/.z; fi
@@ -48,6 +49,9 @@ setup:
 
 brew_up:
 	@brew update && brew upgrade && brew cleanup
+
+brew_tools:
+	@brew install tmux zsh fd rg
 
 update_fzf:
 	@~/.fzf/install --bin
