@@ -29,6 +29,10 @@ upclone_all:
 	@make upclone github_repo=yyuu/pyenv.git dir=~/.pyenv
 	@make upclone github_repo=syndbg/goenv.git dir=~/.goenv
 	@make upclone github_repo=junegunn/fzf.git dir=~/.fzf
+	@make upclone github_repo=denysdovhan/spaceship-prompt.git \
+		dir=~/.oh-my-zsh/custom/themes/spaceship-prompt
+	@ln -s ~/.oh-my-zsh/custom/themes/spaceship-prompt/spaceship.zsh-theme ~/.oh-my-zsh/custom/themes/spaceship.zsh-theme
+
 
 install_z:
 	@if [ ! -f ~/.z ]; then touch ~/.z; fi
