@@ -5,11 +5,7 @@ ZSH=$HOME/.oh-my-zsh
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
-if [ -n "$INSIDE_EMACS" ]; then
-    ZSH_THEME="simple"
-else
-    ZSH_THEME="candy"
-fi
+ZSH_THEME="candy"
 
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
@@ -87,9 +83,6 @@ if [ -d ~/.fzf ]; then
         export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
     fi
 fi
-
-# thefuck
-# $(command -v thefuck >/dev/null 2>&1) && eval $(thefuck --alias)
 
 # local config
 [[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
