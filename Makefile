@@ -1,5 +1,5 @@
 MAKEFLAGS += --silent
-default: setup
+default: default
 
 CURR_DIR:=$(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 
@@ -29,7 +29,6 @@ upclone_all:
 	@make upclone github_repo=yyuu/pyenv.git dir=~/.pyenv
 	@make upclone github_repo=syndbg/goenv.git dir=~/.goenv
 	@make upclone github_repo=junegunn/fzf.git dir=~/.fzf
-	@make upclone github_repo=tmux-plugins/tpm.git dir=~/.tmux/plugins/tpm
 
 install_z:
 	@if [ ! -f ~/.z ]; then touch ~/.z; fi
@@ -40,18 +39,18 @@ ln_dotfiles:
 	  echo "ln -sf $(CURR_DIR)/.$$file ~/.$$file" && ln -sf $(CURR_DIR)/.$$file ~/.$$file; \
 	done;
 
-setup:
-	@make home_dirs
+default:
 	@make ln_dotfiles
 	@make install_z
 	@make upclone_all
 	@make update_fzf
 
+setup:
+	@make home_dirs
+	@brew install tmux zsh fd rg tig git tmux-mem-cpu-load aspell
+
 brew_up:
 	@brew update && brew upgrade && brew cleanup
-
-brew_tools:
-	@brew install tmux zsh fd rg
 
 update_fzf:
 	@~/.fzf/install --bin
@@ -69,3 +68,6 @@ go_tools:
 	go get golang.org/x/tools/cmd/godoc
 	go get github.com/josharian/impl
 	GO111MODULE=on go get golang.org/x/tools/gopls@latest
+
+terminfo-24bit:
+	tic -x -o ~/.terminfo terminfo-24bit.src
