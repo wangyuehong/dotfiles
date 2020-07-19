@@ -1,11 +1,9 @@
+# profile start
+# zmodload zsh/zprof
+
 # Path to your oh-my-zsh configuration.
 ZSH=$HOME/.oh-my-zsh
 
-# define before theme loaded
-SPACESHIP_PROMPT_FIRST_PREFIX_SHOW=true
-SPACESHIP_PROMPT_ADD_NEWLINE=false
-SPACESHIP_PROMPT_DEFAULT_PREFIX=" ["
-SPACESHIP_PROMPT_DEFAULT_SUFFIX="]"
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
@@ -36,15 +34,36 @@ DISABLE_UPDATE_PROMPT=true
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git z themes history history-substring-search docker docker-compose golang zsh-autosuggestions zsh-syntax-highlighting dotenv)
+plugins=(
+    asdf
+    git
+    z
+    themes
+    fzf
+    history
+    zsh-syntax-highlighting
+    docker
+    docker-compose
+    golang
+    zsh-autosuggestions
+    dotenv
+)
+
+# define before theme loaded
+SPACESHIP_PROMPT_FIRST_PREFIX_SHOW=true
+SPACESHIP_PROMPT_ADD_NEWLINE=false
+SPACESHIP_PROMPT_DEFAULT_PREFIX=" ["
+SPACESHIP_PROMPT_DEFAULT_SUFFIX="]"
+
+ZSH_DOTENV_PROMPT=false
+
+_Z_CMD=j
 
 source $ZSH/oh-my-zsh.sh
 
 # Customize to your needs...
 unsetopt share_history
 setopt hist_ignore_all_dups
-
-ZSH_DOTENV_PROMPT=false
 
 # set path
 # [[ "$PATH" == *"/usr/local/sbin"* ]] || export PATH=$PATH:/usr/local/sbin
@@ -56,23 +75,8 @@ fi
 
 export EDITOR=vi
 
-# z
-_Z_CMD=j
-source ~/.zz/z.sh
-
-# rbenv
-if [ -d ~/.rbenv ]; then
-    [[ "$PATH" == *"$HOME/.rbenv/bin"* ]] || export PATH=$HOME/.rbenv/bin:$PATH
-    eval "$(rbenv init -)";
-fi
-
-# pyenv
-if [ -d ~/.pyenv ]; then
-    [[ "$PATH" == *"$HOME/.pyenv/bin"* ]] || export PATH=$HOME/.pyenv/bin:$PATH
-    eval "$(pyenv init -)";
-fi
-
 # goenv
+# replace goenv by asdf after https://github.com/asdf-vm/asdf/issues/290 is fixed
 if [ -d ~/.goenv ]; then
     export GOENV_ROOT="$HOME/.goenv"
     [[ "$PATH" == *"$GOENV_ROOT/bin"* ]] || export PATH=$GOENV_ROOT/bin:$PATH
@@ -80,14 +84,10 @@ if [ -d ~/.goenv ]; then
     export PATH=$GOPATH/bin:$PATH
 fi
 
-# fzf
-if [ -d ~/.fzf ]; then
-    [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-    export FZF_DEFAULT_OPTS="--reverse --inline-info --exact --history-size=999999"
-    if command -v ag >/dev/null 2>&1; then
-        export FZF_DEFAULT_COMMAND='ag -g ""'
-        export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-    fi
+FZF_DEFAULT_OPTS="--reverse --inline-info --exact --history-size=999999"
+if command -v fd >/dev/null 2>&1; then
+    FZF_DEFAULT_COMMAND='fd --type f'
+    FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 fi
 
 # local config
@@ -96,7 +96,7 @@ fi
 # aliases
 [[ -f ~/.aliases ]] && source ~/.aliases
 
-export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=blue'
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=blue'
 
 # https://github.com/denysdovhan/spaceship-prompt/blob/master/docs/Options.md
 SPACESHIP_PROMPT_ORDER=(
@@ -159,3 +159,6 @@ SPACESHIP_GOLANG_COLOR=blue
 SPACESHIP_RUBY_PREFIX=" ruby:["
 SPACESHIP_RUBY_SYMBOL=""
 SPACESHIP_EXEC_TIME_PREFIX=" [took "
+
+# profile end
+# zprof

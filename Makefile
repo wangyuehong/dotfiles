@@ -17,16 +17,11 @@ upclone:
 
 upclone_all:
 	@make upclone github_repo=robbyrussell/oh-my-zsh.git dir=~/.oh-my-zsh
+	@make upclone github_repo=asdf-vm/asdf.git dir=~/.asdf
 	@make upclone github_repo=zsh-users/zsh-syntax-highlighting.git \
 		dir=~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
 	@make upclone github_repo=zsh-users/zsh-autosuggestions.git \
 		dir=~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
-	@make upclone github_repo=sstephenson/rbenv.git dir=~/.rbenv
-	@make upclone github_repo=sstephenson/ruby-build.git dir=~/.rbenv/plugins/ruby-build
-	@make upclone github_repo=sstephenson/rbenv-gem-rehash.git \
-		dir=~/.rbenv/plugins/rbenv-gem-rehash
-	@make upclone github_repo=sstephenson/rbenv-vars.git dir=~/.rbenv/plugins/rbenv-vars
-	@make upclone github_repo=yyuu/pyenv.git dir=~/.pyenv
 	@make upclone github_repo=syndbg/goenv.git dir=~/.goenv
 	@make upclone github_repo=junegunn/fzf.git dir=~/.fzf
 	@make upclone github_repo=denysdovhan/spaceship-prompt.git \
@@ -39,7 +34,7 @@ install_z:
 	@make upclone github_repo=rupa/z.git dir=~/.zz
 
 ln_dotfiles:
-	@for file in aliases bash_profile ctags gemrc gitconfig gitignore psqlrc tigrc tmux.conf vimrc zshrc myclirc; do \
+	@for file in asdfrc aliases bash_profile ctags gemrc gitconfig gitignore psqlrc tigrc tmux.conf vimrc zshrc myclirc; do \
 	  echo "ln -sf $(CURR_DIR)/.$$file ~/.$$file" && ln -sf $(CURR_DIR)/.$$file ~/.$$file; \
 	done;
 
@@ -51,7 +46,11 @@ default:
 
 setup:
 	@make home_dirs
-	@brew install tmux zsh fd rg tig git tmux-mem-cpu-load aspell
+	@brew install tmux zsh fd rg tig git tmux-mem-cpu-load aspell asdf
+
+asdf:
+	# asdf plugin list | grep -q golang || asdf plugin-add golang https://github.com/kennyp/asdf-golang.git
+	asdf plugin list | grep -q ruby || asdf plugin-add ruby https://github.com/asdf-vm/asdf-ruby.git
 
 brew_up:
 	@brew update && brew upgrade && brew cleanup
