@@ -100,10 +100,10 @@ export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=blue'
 
 # https://github.com/denysdovhan/spaceship-prompt/blob/master/docs/Options.md
 SPACESHIP_PROMPT_ORDER=(
-    time          # Time stampts section
     user          # Username section
-    dir           # Current directory section
+    time          # Time stampts section
     host          # Hostname section
+    dir           # Current directory section
     git           # Git section (git_branch + git_status)
     # hg            # Mercurial section (hg_branch  + hg_status)
     # package       # Package version
@@ -123,28 +123,39 @@ SPACESHIP_PROMPT_ORDER=(
     # gcloud        # Google Cloud Platform section
     # venv          # virtualenv section
     # conda         # conda virtualenv section
-    pyenv         # Pyenv section
-    dotnet        # .NET section
+    # pyenv         # Pyenv section
+    # dotnet        # .NET section
     # ember         # Ember.js section
     # kubectl       # Kubectl context section
     # terraform     # Terraform workspace section
     exec_time     # Execution time
     line_sep      # Line break
     # battery       # Battery level and status
-    vi_mode       # Vi-mode indicator
+    # vi_mode       # Vi-mode indicator
     jobs          # Background jobs indicator
     exit_code     # Exit code section
     char          # Prompt character
 )
 
+SPACESHIP_CHAR_SYMBOL="-> "
+SPACESHIP_USER_SHOW=always
+SPACESHIP_USER_COLOR=green
+SPACESHIP_USER_PREFIX=""
+SPACESHIP_USER_SUFFIX=" "
 SPACESHIP_TIME_SHOW=true
 SPACESHIP_TIME_PREFIX="["
-SPACESHIP_TIME_FORMAT="%D %D{%H:%M:%S}"
+SPACESHIP_TIME_COLOR=blue
 SPACESHIP_DIR_PREFIX=" ["
+SPACESHIP_DIR_COLOR=white
 SPACESHIP_DIR_TRUNC_REPO=false
 SPACESHIP_GIT_BRANCH_PREFIX=""
 SPACESHIP_GIT_PREFIX=" ["
 SPACESHIP_GIT_STATUS_PREFIX=" "
 SPACESHIP_GIT_STATUS_SUFFIX=""
-SPACESHIP_GIT_BRANCH_COLOR=028
-SPACESHIP_GOLANG_SYMBOL="go "
+SPACESHIP_GIT_BRANCH_COLOR=green
+SPACESHIP_GOLANG_PREFIX=" go:["
+SPACESHIP_GOLANG_SYMBOL=""
+SPACESHIP_GOLANG_COLOR=blue
+SPACESHIP_RUBY_PREFIX=" ruby:["
+SPACESHIP_RUBY_SYMBOL=""
+SPACESHIP_EXEC_TIME_PREFIX=" [took "
