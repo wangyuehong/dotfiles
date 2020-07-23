@@ -36,17 +36,17 @@ DISABLE_UPDATE_PROMPT=true
 # Example format: plugins=(rails git textmate ruby lighthouse)
 plugins=(
     asdf
-    git
-    z
-    themes
-    fzf
-    history
-    zsh-syntax-highlighting
     docker
     docker-compose
-    golang
-    zsh-autosuggestions
     dotenv
+    fzf
+    git
+    golang
+    history
+    themes
+    z
+    zsh-autosuggestions
+    zsh-syntax-highlighting
 )
 
 # define before theme loaded
