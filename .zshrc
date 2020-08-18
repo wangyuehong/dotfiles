@@ -41,6 +41,7 @@ plugins=(
     dotenv
     fzf
     git
+    gcloud
     golang
     history
     themes
