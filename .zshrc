@@ -40,10 +40,11 @@ plugins=(
     docker-compose
     dotenv
     fzf
-    git
     gcloud
+    git
     golang
     history
+    kubectl
     themes
     z
     zsh-autosuggestions
