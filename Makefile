@@ -57,7 +57,7 @@ go_tools:
 	go get golang.org/x/tools/cmd/goimports
 	go get github.com/cweill/gotests/...
 	go get github.com/go-delve/delve/cmd/dlv
-	go get github.com/godoctor/godoctor
+	go get github.com/fatih/gomodifytags
 	go get github.com/davidrjenni/reftools/cmd/fillstruct
 	go get golang.org/x/tools/cmd/godoc
 	go get github.com/josharian/impl
