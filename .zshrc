@@ -79,11 +79,8 @@ export EDITOR=vi
 
 # goenv
 # replace goenv by asdf after https://github.com/asdf-vm/asdf/issues/290 is fixed
-if [ -d ~/.goenv ]; then
-    export GOENV_ROOT="$HOME/.goenv"
-    [[ "$PATH" == *"$GOENV_ROOT/bin"* ]] || export PATH=$GOENV_ROOT/bin:$PATH
+if command -v goenv >/dev/null 2>&1; then
     eval "$(goenv init -)"
-    export PATH=$GOPATH/bin:$PATH
 fi
 
 FZF_DEFAULT_OPTS="--reverse --inline-info --exact --history-size=999999"
