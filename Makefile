@@ -34,7 +34,7 @@ default:
 	@make ln_dotfiles
 	@make upclone_all
 	@brew upgrade --fetch-HEAD goenv
-	@asdf plugin update ruby
+	@asdf plugin update --all
 	@make brew_up
 	@make go_tools
 
@@ -47,7 +47,8 @@ setup:
 asdf:
 	@brew install asdf
 	# asdf plugin list | grep -q golang || asdf plugin-add golang https://github.com/kennyp/asdf-golang.git
-	asdf plugin list | grep -q ruby || asdf plugin-add ruby https://github.com/asdf-vm/asdf-ruby.git
+	asdf plugin list | grep -q ruby || asdf plugin-add ruby
+	asdf plugin list | grep -q python || asdf plugin-add python
 
 brew_up:
 	@brew update && brew upgrade && brew cleanup
