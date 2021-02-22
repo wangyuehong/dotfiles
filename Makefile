@@ -43,9 +43,12 @@ setup:
 	@brew install tmux zsh fd rg tig git tmux-mem-cpu-load aspell asdf fzf z
 	@brew install --HEAD goenv
 	@make asdf
+	@make asdf_plugin
 
 asdf:
 	@brew install asdf
+
+asdf_plugin:
 	# asdf plugin list | grep -q golang || asdf plugin-add golang https://github.com/kennyp/asdf-golang.git
 	asdf plugin list | grep -q ruby || asdf plugin-add ruby
 	asdf plugin list | grep -q python || asdf plugin-add python
