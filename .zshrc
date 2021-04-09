@@ -79,7 +79,9 @@ export EDITOR=vi
 
 # goenv
 # replace goenv by asdf after https://github.com/asdf-vm/asdf/issues/290 is fixed
-if command -v goenv >/dev/null 2>&1; then
+if [ -d ~/.goenv ]; then
+    export GOENV_ROOT="$HOME/.goenv"
+    [[ "$PATH" == *"$GOENV_ROOT/bin"* ]] || export PATH=$GOENV_ROOT/bin:$PATH
     eval "$(goenv init -)"
 fi
 

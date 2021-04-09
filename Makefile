@@ -21,6 +21,7 @@ upclone_all:
 		dir=~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
 	@make upclone github_repo=zsh-users/zsh-autosuggestions.git \
 		dir=~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
+	@make upclone github_repo=syndbg/goenv.git dir=~/.goenv
 	@make upclone github_repo=denysdovhan/spaceship-prompt.git \
 		dir=~/.oh-my-zsh/custom/themes/spaceship-prompt
 	@ln -sf ~/.oh-my-zsh/custom/themes/spaceship-prompt/spaceship.zsh-theme ~/.oh-my-zsh/custom/themes/spaceship.zsh-theme
@@ -33,7 +34,6 @@ ln_dotfiles:
 default:
 	@make ln_dotfiles
 	@make upclone_all
-	@brew upgrade --fetch-HEAD goenv
 	@asdf plugin update --all
 	@make brew_up
 	@make go_tools
@@ -41,7 +41,6 @@ default:
 setup:
 	@make home_dirs
 	@brew install tmux zsh fd rg tig git tmux-mem-cpu-load aspell asdf fzf z
-	@brew install --HEAD goenv
 	@make asdf
 	@make asdf_plugin
 
