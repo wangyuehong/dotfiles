@@ -29,6 +29,8 @@
 	rebase = false
 [push]
 	default = tracking
+[fetch]
+	prune = true
 [merge]
 	branchdesc = true
 	log = true
