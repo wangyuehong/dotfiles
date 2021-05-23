@@ -24,6 +24,7 @@ upclone_all:
 	@make upclone github_repo=syndbg/goenv.git dir=~/.goenv
 	@make upclone github_repo=denysdovhan/spaceship-prompt.git \
 		dir=~/.oh-my-zsh/custom/themes/spaceship-prompt
+	@make upclone github_repo=tmux-plugins/tpm.git dir=~/.tmux/plugins/tpm
 	@ln -sf ~/.oh-my-zsh/custom/themes/spaceship-prompt/spaceship.zsh-theme ~/.oh-my-zsh/custom/themes/spaceship.zsh-theme
 
 ln_dotfiles:
