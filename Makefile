@@ -33,11 +33,11 @@ ln_dotfiles:
 	done;
 
 default:
-	@make ln_dotfiles
-	@make upclone_all
-	@asdf plugin update --all
-	@make brew_up
-	@make go_tools
+	make ln_dotfiles
+	make upclone_all
+	asdf plugin update --all
+	make brew_up
+	make go_tools
 
 setup:
 	@make home_dirs
@@ -54,7 +54,7 @@ asdf_plugin:
 	asdf plugin list | grep -q python || asdf plugin-add python
 
 brew_up:
-	@brew update && brew upgrade && brew cleanup
+	brew update && brew upgrade && brew cleanup
 
 go_tools:
 	go get github.com/rogpeppe/godef
