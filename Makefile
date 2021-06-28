@@ -35,7 +35,7 @@ ln_dotfiles:
 default:
 	make ln_dotfiles
 	make upclone_all
-	asdf update && asdf plugin update --all
+	asdf plugin update --all
 	make brew_up
 	make go_tools
 
