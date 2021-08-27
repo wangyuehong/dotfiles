@@ -57,15 +57,15 @@ brew_up:
 	brew update && brew upgrade && brew cleanup
 
 go_tools:
-	go get github.com/rogpeppe/godef
-	go get golang.org/x/tools/cmd/goimports
-	go get github.com/cweill/gotests/...
-	go get github.com/go-delve/delve/cmd/dlv
-	go get github.com/fatih/gomodifytags
-	go get github.com/davidrjenni/reftools/cmd/fillstruct
-	go get golang.org/x/tools/cmd/godoc
-	go get github.com/josharian/impl
-	GO111MODULE=on go get golang.org/x/tools/gopls@latest
+	go install github.com/rogpeppe/godef@latest
+	go install golang.org/x/tools/cmd/goimports@latest
+	go install github.com/cweill/gotests/...@latest
+	go install github.com/go-delve/delve/cmd/dlv@latest
+	go install github.com/fatih/gomodifytags@latest
+	go install github.com/davidrjenni/reftools/cmd/fillstruct@latest
+	go install golang.org/x/tools/cmd/godoc@latest
+	go install github.com/josharian/impl@latest
+	GO111MODULE=on go install golang.org/x/tools/gopls@latest
 
 terminfo-24bit:
 	tic -x -o ~/.terminfo terminfo-24bit.src
