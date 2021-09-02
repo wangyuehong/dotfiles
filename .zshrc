@@ -104,6 +104,7 @@ SPACESHIP_PROMPT_ORDER=(
     user          # Username section
     time          # Time stampts section
     host          # Hostname section
+    gcloud        # Google Cloud Platform section
     dir           # Current directory section
     git           # Git section (git_branch + git_status)
     # hg            # Mercurial section (hg_branch  + hg_status)
@@ -121,7 +122,6 @@ SPACESHIP_PROMPT_ORDER=(
     # julia         # Julia section
     # docker        # Docker section
     # aws           # Amazon Web Services section
-    # gcloud        # Google Cloud Platform section
     # venv          # virtualenv section
     # conda         # conda virtualenv section
     # pyenv         # Pyenv section
@@ -163,6 +163,9 @@ SPACESHIP_RUBY_SYMBOL=""
 SPACESHIP_EXEC_TIME_PREFIX=" [took "
 SPACESHIP_EXIT_CODE_SHOW=true
 SPACESHIP_EXIT_CODE_SYMBOL="x "
+SPACESHIP_GCLOUD_COLOR=33
+SPACESHIP_GCLOUD_SYMBOL=""
+SPACESHIP_GCLOUD_PREFIX=" ["
 
 # profile end
 # zprof
