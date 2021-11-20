@@ -97,7 +97,7 @@ fi
 # aliases
 [[ -f ~/.aliases ]] && source ~/.aliases
 
-ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=blue'
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=033'
 
 # https://github.com/denysdovhan/spaceship-prompt/blob/master/docs/Options.md
 SPACESHIP_PROMPT_ORDER=(
