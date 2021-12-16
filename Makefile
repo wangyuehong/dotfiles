@@ -21,6 +21,12 @@ upclone_all:
 		dir=~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
 	@make upclone github_repo=zsh-users/zsh-autosuggestions.git \
 		dir=~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
+	@make upclone github_repo=sstephenson/rbenv.git dir=~/.rbenv
+	@make upclone github_repo=sstephenson/ruby-build.git dir=~/.rbenv/plugins/ruby-build
+	@make upclone github_repo=sstephenson/rbenv-gem-rehash.git \
+		dir=~/.rbenv/plugins/rbenv-gem-rehash
+	@make upclone github_repo=sstephenson/rbenv-vars.git dir=~/.rbenv/plugins/rbenv-vars
+	@make upclone github_repo=yyuu/pyenv.git dir=~/.pyenv
 	@make upclone github_repo=syndbg/goenv.git dir=~/.goenv
 	@make upclone github_repo=denysdovhan/spaceship-prompt.git \
 		dir=~/.oh-my-zsh/custom/themes/spaceship-prompt
@@ -41,17 +47,7 @@ default:
 
 setup:
 	@make home_dirs
-	@brew install tmux zsh fd rg tig git tmux-mem-cpu-load aspell asdf fzf z
-	@make asdf
-	@make asdf_plugin
-
-asdf:
-	@brew install asdf
-
-asdf_plugin:
-	# asdf plugin list | grep -q golang || asdf plugin-add golang https://github.com/kennyp/asdf-golang.git
-	asdf plugin list | grep -q ruby || asdf plugin-add ruby
-	asdf plugin list | grep -q python || asdf plugin-add python
+	@brew install tmux zsh fd rg tig git tmux-mem-cpu-load aspell fzf z
 
 brew_up:
 	brew update && brew upgrade && brew cleanup

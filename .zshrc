@@ -35,7 +35,6 @@ DISABLE_UPDATE_PROMPT=true
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 plugins=(
-    asdf
     docker
     docker-compose
     dotenv
@@ -77,8 +76,19 @@ fi
 
 export EDITOR=vi
 
+# rbenv
+if [ -d ~/.rbenv ]; then
+    [[ "$PATH" == *"$HOME/.rbenv/bin"* ]] || export PATH=$HOME/.rbenv/bin:$PATH
+    eval "$(rbenv init -)";
+fi
+
+# pyenv
+if [ -d ~/.pyenv ]; then
+    [[ "$PATH" == *"$HOME/.pyenv/bin"* ]] || export PATH=$HOME/.pyenv/bin:$PATH
+    eval "$(pyenv init -)";
+fi
+
 # goenv
-# replace goenv by asdf after https://github.com/asdf-vm/asdf/issues/290 is fixed
 if [ -d ~/.goenv ]; then
     export GOENV_ROOT="$HOME/.goenv"
     [[ "$PATH" == *"$GOENV_ROOT/bin"* ]] || export PATH=$GOENV_ROOT/bin:$PATH
