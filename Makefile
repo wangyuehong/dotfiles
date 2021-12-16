@@ -23,8 +23,6 @@ upclone_all:
 		dir=~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
 	@make upclone github_repo=sstephenson/rbenv.git dir=~/.rbenv
 	@make upclone github_repo=sstephenson/ruby-build.git dir=~/.rbenv/plugins/ruby-build
-	@make upclone github_repo=sstephenson/rbenv-gem-rehash.git \
-		dir=~/.rbenv/plugins/rbenv-gem-rehash
 	@make upclone github_repo=sstephenson/rbenv-vars.git dir=~/.rbenv/plugins/rbenv-vars
 	@make upclone github_repo=yyuu/pyenv.git dir=~/.pyenv
 	@make upclone github_repo=syndbg/goenv.git dir=~/.goenv
