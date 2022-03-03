@@ -93,7 +93,13 @@ fi
 if [ -d ~/.goenv ]; then
     export GOENV_ROOT="$HOME/.goenv"
     [[ "$PATH" == *"$GOENV_ROOT/bin"* ]] || export PATH=$GOENV_ROOT/bin:$PATH
-    eval "$(goenv init -)"
+    eval "$(goenv init -)";
+fi
+
+# nodenv
+if [ -d ~/.nodenv ]; then
+    [[ "$PATH" == *"$HOME/.nodenv/bin"* ]] || export PATH=$HOME/.nodenv/bin:$PATH
+    eval "$(nodenv init -)";
 fi
 
 FZF_DEFAULT_OPTS="--reverse --inline-info --exact --history-size=999999"

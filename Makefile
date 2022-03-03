@@ -26,6 +26,8 @@ upclone_all:
 	@make upclone github_repo=sstephenson/rbenv-vars.git dir=~/.rbenv/plugins/rbenv-vars
 	@make upclone github_repo=yyuu/pyenv.git dir=~/.pyenv
 	@make upclone github_repo=syndbg/goenv.git dir=~/.goenv
+	@make upclone github_repo=nodenv/nodenv.git dir=~/.nodenv
+	@make upclone github_repo=nodenv/node-build.git dir=~/.nodenv/plugins/node-build
 	@make upclone github_repo=denysdovhan/spaceship-prompt.git \
 		dir=~/.oh-my-zsh/custom/themes/spaceship-prompt
 	@make upclone github_repo=tmux-plugins/tpm.git dir=~/.tmux/plugins/tpm
