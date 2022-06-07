@@ -60,6 +60,7 @@ go_tools:
 	go install github.com/davidrjenni/reftools/cmd/fillstruct@latest
 	go install golang.org/x/tools/cmd/godoc@latest
 	go install github.com/josharian/impl@latest
+	go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
 	GO111MODULE=on go install golang.org/x/tools/gopls@latest
 
 terminfo-24bit:
