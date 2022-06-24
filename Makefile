@@ -61,6 +61,7 @@ go_tools:
 	go install golang.org/x/tools/cmd/godoc@latest
 	go install github.com/josharian/impl@latest
 	go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
+	go install mvdan.cc/gofumpt@latest
 	GO111MODULE=on go install golang.org/x/tools/gopls@latest
 
 terminfo-24bit:
