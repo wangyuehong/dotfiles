@@ -21,9 +21,9 @@ upclone_all:
 		dir=~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
 	@make upclone github_repo=zsh-users/zsh-autosuggestions.git \
 		dir=~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
-	@make upclone github_repo=sstephenson/rbenv.git dir=~/.rbenv
-	@make upclone github_repo=sstephenson/ruby-build.git dir=~/.rbenv/plugins/ruby-build
-	@make upclone github_repo=sstephenson/rbenv-vars.git dir=~/.rbenv/plugins/rbenv-vars
+	@make upclone github_repo=rbenv/rbenv.git dir=~/.rbenv
+	@make upclone github_repo=rbenv/ruby-build.git dir=~/.rbenv/plugins/ruby-build
+	@make upclone github_repo=rbenv/rbenv-vars.git dir=~/.rbenv/plugins/rbenv-vars
 	@make upclone github_repo=yyuu/pyenv.git dir=~/.pyenv
 	@make upclone github_repo=syndbg/goenv.git dir=~/.goenv
 	@make upclone github_repo=nodenv/nodenv.git dir=~/.nodenv
