@@ -47,6 +47,7 @@ default:
 setup:
 	@make home_dirs
 	@brew install tmux zsh fd rg tig git tmux-mem-cpu-load aspell fzf z
+	@brew tap daipeihust/tap && brew install im-select
 
 brew_up:
 	brew update && brew upgrade && brew cleanup
