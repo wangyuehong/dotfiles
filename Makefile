@@ -1,12 +1,14 @@
 MAKEFLAGS += --silent
-default: default
+default: all
 
 CURR_DIR:=$(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 
-home_dirs:
+.PHONY: home-dirs
+home-dirs:
 	@mkdir -p ~/bin
 	@mkdir -p ~/go
 
+.PHONY: upclone
 upclone:
 	@echo upclone $(dir)
 	@if [ ! -d $(dir) ]; then \
@@ -15,7 +17,8 @@ upclone:
 	  cd $(dir) && git pull; \
 	fi
 
-upclone_all:
+.PHONY: upclone-all
+upclone-all:
 	@make upclone github_repo=robbyrussell/oh-my-zsh.git dir=~/.oh-my-zsh
 	@make upclone github_repo=zsh-users/zsh-syntax-highlighting.git \
 		dir=~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
@@ -33,26 +36,36 @@ upclone_all:
 	@make upclone github_repo=tmux-plugins/tpm.git dir=~/.tmux/plugins/tpm
 	@ln -sf ~/.oh-my-zsh/custom/themes/spaceship-prompt/spaceship.zsh-theme ~/.oh-my-zsh/custom/themes/spaceship.zsh-theme
 
-ln_dotfiles:
+.PHONY: ln-dotfiles
+ln-dotfiles:
 	@for file in aliases bash_profile zprofile ctags gemrc gitconfig gitignore psqlrc tigrc tmux.conf vimrc zshrc myclirc ripgreprc; do \
 	  echo "ln -sf $(CURR_DIR)/.$$file ~/.$$file" && ln -sf $(CURR_DIR)/.$$file ~/.$$file; \
 	done;
 
-default:
-	make ln_dotfiles
-	make upclone_all
-	make brew_up
-	make go_tools
+.PHONY: ln-scripts
+ln-scripts:
+	ln -sf $(CURR_DIR)/scripts/worktree.sh ~/bin/worktree.sh
 
+.PHONY: all
+all:
+	make ln-dotfiles
+	make ln-scripts
+	make upclone-all
+	make brew-up
+	make go-tools
+
+.PHONY: setup
 setup:
-	@make home_dirs
+	@make home-dirs
 	@brew install tmux zsh fd rg tig git tmux-mem-cpu-load aspell fzf z
 	@brew tap daipeihust/tap && brew install im-select
 
-brew_up:
+.PHONY: brew-up
+brew-up:
 	brew update && brew upgrade && brew cleanup
 
-go_tools:
+.PHONY: go-tools
+go-tools:
 	go install github.com/rogpeppe/godef@latest
 	go install golang.org/x/tools/cmd/goimports@latest
 	go install github.com/cweill/gotests/...@latest
