@@ -78,5 +78,7 @@ go-tools:
 	go install mvdan.cc/gofumpt@latest
 	GO111MODULE=on go install golang.org/x/tools/gopls@latest
 
-terminfo-24bit:
+.PHONY: terminfo
+terminfo:
 	tic -x -o ~/.terminfo terminfo-24bit.src
+	tic -x -o ~/.terminfo terminfo-italic.src
