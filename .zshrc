@@ -124,34 +124,34 @@ SPACESHIP_PROMPT_ORDER=(
     gcloud        # Google Cloud Platform section
     dir           # Current directory section
     git           # Git section (git_branch + git_status)
-    # hg            # Mercurial section (hg_branch  + hg_status)
-    # package       # Package version
+    # hg          # Mercurial section (hg_branch  + hg_status)
+    # package     # Package version
     node          # Node.js section
     ruby          # Ruby section
-    # elm           # Elm section
-    # elixir        # Elixir section
-    # xcode         # Xcode section
-    # swift         # Swift section
+    # elm         # Elm section
+    # elixir      # Elixir section
+    # xcode       # Xcode section
+    # swift       # Swift section
     golang        # Go section
-    # php           # PHP section
-    # rust          # Rust section
-    # haskell       # Haskell Stack section
-    # julia         # Julia section
-    # docker        # Docker section
-    # aws           # Amazon Web Services section
-    # venv          # virtualenv section
-    # conda         # conda virtualenv section
-    # pyenv         # Pyenv section
-    # dotnet        # .NET section
-    # ember         # Ember.js section
-    # kubectl       # Kubectl context section
-    # terraform     # Terraform workspace section
+    # php         # PHP section
+    # rust        # Rust section
+    # haskell     # Haskell Stack section
+    # julia       # Julia section
+    # docker      # Docker section
+    # aws         # Amazon Web Services section
+    # venv        # virtualenv section
+    # conda       # conda virtualenv section
+    # pyenv       # Pyenv section
+    # dotnet      # .NET section
+    # ember       # Ember.js section
+    # kubectl     # Kubectl context section
+    # terraform   # Terraform workspace section
     exec_time     # Execution time
     line_sep      # Line break
-    # battery       # Battery level and status
-    # vi_mode       # Vi-mode indicator
+    # battery     # Battery level and status
     jobs          # Background jobs indicator
     exit_code     # Exit code section
+    # sudo        # Sudo indicator
     char          # Prompt character
 )
 
@@ -183,6 +183,7 @@ SPACESHIP_EXIT_CODE_SYMBOL="x "
 SPACESHIP_GCLOUD_COLOR=33
 SPACESHIP_GCLOUD_SYMBOL=""
 SPACESHIP_GCLOUD_PREFIX=" ["
+SPACESHIP_TIME_FORMAT='%D{%H:%M:%S.%.}'
 
 # profile end
 # zprof
