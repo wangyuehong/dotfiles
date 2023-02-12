@@ -76,6 +76,7 @@ go-tools:
 	go install github.com/josharian/impl@latest
 	go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
 	go install mvdan.cc/gofumpt@latest
+	go install honnef.co/go/tools/cmd/staticcheck@latest
 	GO111MODULE=on go install golang.org/x/tools/gopls@latest
 
 .PHONY: terminfo
