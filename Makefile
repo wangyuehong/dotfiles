@@ -62,7 +62,7 @@ setup:
 
 .PHONY: brew-up
 brew-up:
-	brew update && brew upgrade && brew cleanup -s
+	brew update && brew upgrade && brew update --cask && brew upgrade --cask && brew cleanup -s
 
 .PHONY: go-tools
 go-tools:
