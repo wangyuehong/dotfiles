@@ -1,4 +1,4 @@
-MAKEFLAGS += --silent
+# MAKEFLAGS += --silent
 default: all
 
 CURR_DIR:=$(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
@@ -41,6 +41,7 @@ ln-dotfiles:
 	@for file in aliases bash_profile zprofile ctags gemrc gitconfig gitignore psqlrc tigrc tmux.conf vimrc zshrc myclirc ripgreprc; do \
 	  echo "ln -sf $(CURR_DIR)/.$$file ~/.$$file" && ln -sf $(CURR_DIR)/.$$file ~/.$$file; \
 	done;
+	ln -sf $(CURR_DIR)/direnv.toml ~/.config/direnv/direnv.toml
 
 .PHONY: ln-scripts
 ln-scripts:
@@ -48,36 +49,37 @@ ln-scripts:
 
 .PHONY: all
 all:
-	make ln-dotfiles
-	make ln-scripts
-	make upclone-all
-	make brew-up
-	make go-tools
+	@make ln-dotfiles
+	@make ln-scripts
+	@make upclone-all
+	@make brew-up
+	@make go-tools
 
 .PHONY: setup
 setup:
 	@make home-dirs
-	@brew install tmux zsh fd rg tig git tmux-mem-cpu-load aspell fzf z
+	@mkdir -p ~/.config/direnv
+	@brew install tmux zsh fd rg tig git tmux-mem-cpu-load aspell fzf z direnv
 	@brew tap daipeihust/tap && brew install im-select
 
 .PHONY: brew-up
 brew-up:
-	brew update && brew upgrade && brew update --cask && brew upgrade --cask && brew cleanup -s
+	@brew update && brew upgrade && brew update --cask && brew upgrade --cask && brew cleanup -s
 
 .PHONY: go-tools
 go-tools:
-	go install github.com/rogpeppe/godef@latest
-	go install golang.org/x/tools/cmd/goimports@latest
-	go install github.com/cweill/gotests/...@latest
-	go install github.com/go-delve/delve/cmd/dlv@latest
-	go install github.com/fatih/gomodifytags@latest
-	go install github.com/davidrjenni/reftools/cmd/fillstruct@latest
-	go install golang.org/x/tools/cmd/godoc@latest
-	go install github.com/josharian/impl@latest
-	go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
-	go install mvdan.cc/gofumpt@latest
-	go install honnef.co/go/tools/cmd/staticcheck@latest
-	GO111MODULE=on go install golang.org/x/tools/gopls@latest
+	@go install github.com/rogpeppe/godef@latest
+	@go install golang.org/x/tools/cmd/goimports@latest
+	@go install github.com/cweill/gotests/...@latest
+	@go install github.com/go-delve/delve/cmd/dlv@latest
+	@go install github.com/fatih/gomodifytags@latest
+	@go install github.com/davidrjenni/reftools/cmd/fillstruct@latest
+	@go install golang.org/x/tools/cmd/godoc@latest
+	@go install github.com/josharian/impl@latest
+	@go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
+	@go install mvdan.cc/gofumpt@latest
+	@go install honnef.co/go/tools/cmd/staticcheck@latest
+	@GO111MODULE=on go install golang.org/x/tools/gopls@latest
 
 .PHONY: terminfo
 terminfo:
