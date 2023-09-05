@@ -41,7 +41,8 @@
 [mergetool]
 	# no prompt before merge each file
 	prompt = false
-
+[commit]
+	verbose = true
 [include]
 	# for user/name user/email
 	path = ~/.gitconfig.local
