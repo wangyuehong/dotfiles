@@ -42,6 +42,7 @@ ln-dotfiles:
 	  echo "ln -sf $(CURR_DIR)/.$$file ~/.$$file" && ln -sf $(CURR_DIR)/.$$file ~/.$$file; \
 	done;
 	ln -sf $(CURR_DIR)/direnv.toml ~/.config/direnv/direnv.toml
+	ln -sf $(CURR_DIR)/tmux-nerd-font-window-name.yml ~/.config/tmux/tmux-nerd-font-window-name.yml
 
 .PHONY: ln-scripts
 ln-scripts:
@@ -59,6 +60,7 @@ all:
 setup:
 	@make home-dirs
 	@mkdir -p ~/.config/direnv
+	@mkdir -p ~/.config/tmux/
 	@brew install tmux zsh fd rg tig git tmux-mem-cpu-load aspell z direnv universal-ctags
 	@brew tap daipeihust/tap && brew install im-select
 
