@@ -54,6 +54,7 @@ all:
 	@make ln-scripts
 	@make upclone-all
 	@make brew-up
+	@~/.tmux/plugins/tpm/bin/update_plugins all
 	@make go-tools
 
 .PHONY: setup
@@ -61,8 +62,10 @@ setup:
 	@make home-dirs
 	@mkdir -p ~/.config/direnv
 	@mkdir -p ~/.config/tmux/
-	@brew install tmux zsh fd rg tig git tmux-mem-cpu-load aspell z direnv universal-ctags
-	@brew tap daipeihust/tap && brew install im-select
+	@brew install --cask cmake
+	@brew install -q tmux zsh fd rg tig git aspell z yq direnv universal-ctags
+	@brew tap daipeihust/tap && brew install -q im-select
+	@~/.tmux/plugins/tpm/bin/install_plugins
 
 .PHONY: brew-up
 brew-up:
