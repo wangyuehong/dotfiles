@@ -59,7 +59,7 @@ all:
 setup:
 	@make home-dirs
 	@mkdir -p ~/.config/direnv
-	@brew install tmux zsh fd rg tig git tmux-mem-cpu-load aspell fzf z direnv
+	@brew install tmux zsh fd rg tig git tmux-mem-cpu-load aspell z direnv universal-ctags
 	@brew tap daipeihust/tap && brew install im-select
 
 .PHONY: brew-up

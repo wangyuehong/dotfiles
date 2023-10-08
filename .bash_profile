@@ -8,6 +8,4 @@ export HISTCONTROL=ignoreboth:erasedups
 # alias
 alias tm='tmux attach -t base || tmux new -s base'
 
-[ -f ~/.fzf.bash ] && source ~/.fzf.bash
-
 [ -f ~/.bash_profile.local ] && source ~/.bash_profile.local
