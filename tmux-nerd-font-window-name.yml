@@ -1,8 +1,8 @@
 config:
-  fallback-icon: "" # icon to use if no definition is found
+  fallback-icon: "?" # icon to use if no definition is found
+  multi-panes-icon: ""
   show-name: true # show the window name with the icon
 
 icons:
   zsh: ""
-  Emacs: ""
   make: ""
