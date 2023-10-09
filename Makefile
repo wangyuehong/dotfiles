@@ -61,8 +61,7 @@ setup:
 	@make home-dirs
 	@mkdir -p ~/.config/direnv
 	@mkdir -p ~/.config/tmux/
-	@brew install --cask cmake
-	@brew install -q tmux zsh fd rg tig git aspell z yq direnv universal-ctags
+	@brew install -q tmux zsh fd rg tig git aspell z yq direnv universal-ctags tmux-mem-cpu-load
 	@brew tap daipeihust/tap && brew install -q im-select
 	@~/.tmux/plugins/tpm/bin/install_plugins
 	@make ln-dotfiles
