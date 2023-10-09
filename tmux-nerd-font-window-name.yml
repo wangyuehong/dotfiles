@@ -1,6 +1,6 @@
 config:
   fallback-icon: "?" # icon to use if no definition is found
-  multi-panes-icon: ""
+  multi-pane-icon: ""
   show-name: true # show the window name with the icon
 
 icons:
