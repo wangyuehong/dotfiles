@@ -38,6 +38,7 @@ plugins=(
     docker
     docker-compose
     direnv
+    fzf
     gcloud
     git
     golang
@@ -99,6 +100,13 @@ fi
 if [ -d ~/.nodenv ]; then
     [[ "$PATH" == *"$HOME/.nodenv/bin"* ]] || export PATH=$HOME/.nodenv/bin:$PATH
     eval "$(nodenv init -)";
+fi
+
+# fzf
+FZF_DEFAULT_OPTS="--reverse --inline-info --exact --history-size=999999"
+if command -v fd >/dev/null 2>&1; then
+    FZF_DEFAULT_COMMAND='fd --type f'
+    FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 fi
 
 # local config
