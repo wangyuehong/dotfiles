@@ -78,9 +78,7 @@ go-tools:
 	@go install github.com/cweill/gotests/...@latest
 	@go install github.com/go-delve/delve/cmd/dlv@latest
 	@go install github.com/fatih/gomodifytags@latest
-	@go install github.com/davidrjenni/reftools/cmd/fillstruct@latest
 	@go install golang.org/x/tools/cmd/godoc@latest
-	@go install github.com/josharian/impl@latest
 	@go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
 	@go install mvdan.cc/gofumpt@latest
 	@go install honnef.co/go/tools/cmd/staticcheck@latest
