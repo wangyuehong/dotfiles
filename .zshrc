@@ -146,8 +146,9 @@ SPACESHIP_PROMPT_ORDER=(
     # dotnet      # .NET section
     # ember       # Ember.js section
     # kubectl     # Kubectl context section
-    terraform   # Terraform workspace section
+    terraform     # Terraform workspace section
     exec_time     # Execution time
+    async         # Async jobs indicator
     line_sep      # Line break
     # battery     # Battery level and status
     jobs          # Background jobs indicator
@@ -176,7 +177,7 @@ SPACESHIP_GIT_BRANCH_COLOR=green
 SPACESHIP_GOLANG_PREFIX=" go:["
 SPACESHIP_GOLANG_SYMBOL=""
 SPACESHIP_GOLANG_COLOR=blue
-SPACESHIP_RUBY_PREFIX=" ruby:["
+SPACESHIP_RUBY_PREFIX=" rb:["
 SPACESHIP_RUBY_SYMBOL=""
 SPACESHIP_EXEC_TIME_PREFIX=" [took "
 SPACESHIP_EXIT_CODE_SHOW=true
