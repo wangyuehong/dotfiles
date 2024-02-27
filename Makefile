@@ -75,6 +75,7 @@ brew-up:
 go-tools:
 	@go install github.com/rogpeppe/godef@latest
 	@go install golang.org/x/tools/cmd/goimports@latest
+	@go install golang.org/x/tools/cmd/deadcode@latest
 	@go install github.com/cweill/gotests/...@latest
 	@go install github.com/go-delve/delve/cmd/dlv@latest
 	@go install github.com/fatih/gomodifytags@latest
