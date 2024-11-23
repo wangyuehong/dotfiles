@@ -1,3 +1,5 @@
+-- -*- mode: sql; sql-product: postgres -*-
+
 -- prevent noisy loading of psqlrc file
 \set QUIET yes
 
