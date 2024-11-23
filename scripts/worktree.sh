@@ -12,6 +12,6 @@ cd $dir
 
 git clone --bare $repo .bare
 echo "gitdir: ./.bare" > .git
-echo "	fetch = +refs/heads/*:refs/remotes/origin/*" >> ./.bare/config
+echo "fetch = +refs/heads/*:refs/remotes/origin/*" >> ./.bare/config
 
 git worktree add $defaultBranch
