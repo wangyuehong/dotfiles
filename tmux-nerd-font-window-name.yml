@@ -4,7 +4,6 @@ config:
   show-name: true # show the window name with the icon
 
 icons:
-  zsh: ""
+  zsh: ""
   Emacs: ""
-  emacs-30.0.92: ""
   make: ""
