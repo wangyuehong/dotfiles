@@ -6,4 +6,5 @@ config:
 icons:
   zsh: ""
   Emacs: ""
+  emacsclient: ""
   make: ""
