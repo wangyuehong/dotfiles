@@ -44,6 +44,7 @@ ln-dotfiles:
 	ln -sf $(CURR_DIR)/direnv.toml ~/.config/direnv/direnv.toml
 	ln -sf $(CURR_DIR)/tmux-nerd-font-window-name.yml ~/.config/tmux/tmux-nerd-font-window-name.yml
 	ln -sf $(CURR_DIR)/.editorconfig ~/.editorconfig
+	ln -sf $(CURR_DIR)/ghostty.toml ~/.config/ghostty/config
 
 .PHONY: ln-scripts
 ln-scripts:
@@ -61,6 +62,7 @@ setup:
 	@make home-dirs
 	@mkdir -p ~/.config/direnv
 	@mkdir -p ~/.config/tmux/
+	@mkdir -p ~/.config/ghostty
 	@brew install -q tmux zsh fd fzf rg tig git aspell z yq direnv universal-ctags tmux-mem-cpu-load
 	@brew tap daipeihust/tap && brew install -q im-select
 	@~/.tmux/plugins/tpm/bin/install_plugins
