@@ -1,17 +1,18 @@
+shell-integration = zsh
+
+theme = srcery
+
 font-family = Maple Mono NL NF CN
 font-family = SauceCodePro Nerd Font Mono
 font-size = 17
 
-window-padding-balance = true
-
 background-opacity = 0.85
 background-blur-radius = 20
-macos-titlebar-style = transparent
 
-shell-integration = zsh
 clipboard-read = allow
 clipboard-write = allow
-macos-option-as-alt = true
 copy-on-select = clipboard
 
-theme = srcery
+macos-option-as-alt = true
+
+mouse-hide-while-typing = true
