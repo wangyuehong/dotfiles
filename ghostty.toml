@@ -2,7 +2,7 @@ shell-integration = zsh
 
 theme = srcery
 
-font-family = Maple Mono NL NF CN
+font-family = Maple Mono Normal NL NF CN
 font-family = SauceCodePro Nerd Font Mono
 font-size = 17
 
