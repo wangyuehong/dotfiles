@@ -85,8 +85,7 @@ fi
 # pyenv
 if [ -d ~/.pyenv ]; then
     [[ "$PATH" == *"$HOME/.pyenv/bin"* ]] || export PATH=$HOME/.pyenv/bin:$PATH
-    eval "$(pyenv init --path)";
-    eval "$(pyenv init -)";
+    eval "$(pyenv init - zsh)"
 fi
 
 # goenv
