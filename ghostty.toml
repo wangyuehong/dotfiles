@@ -16,3 +16,7 @@ copy-on-select = clipboard
 macos-option-as-alt = true
 
 mouse-hide-while-typing = true
+
+window-theme = ghostty
+window-padding-x = 4
+window-padding-y = 4
