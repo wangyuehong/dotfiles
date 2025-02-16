@@ -18,4 +18,4 @@ macos-option-as-alt = true
 mouse-hide-while-typing = true
 
 window-theme = ghostty
-window-padding-x = 4
+window-padding-x = 5,0
