@@ -63,7 +63,7 @@ setup:
 	@mkdir -p ~/.config/direnv
 	@mkdir -p ~/.config/tmux/
 	@mkdir -p ~/.config/ghostty
-	@brew install -q tmux zsh fd fzf rg tig git aspell z yq direnv universal-ctags tmux-mem-cpu-load
+	@brew install -q tmux zsh fd fzf rg tig git aspell z yq direnv libvterm universal-ctags tmux-mem-cpu-load
 	@brew tap daipeihust/tap && brew install -q im-select
 	@~/.tmux/plugins/tpm/bin/install_plugins
 	@make ln-dotfiles
@@ -85,7 +85,7 @@ go-tools:
 	@go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
 	@go install mvdan.cc/gofumpt@latest
 	@go install honnef.co/go/tools/cmd/staticcheck@latest
-	@GO111MODULE=on go install golang.org/x/tools/gopls@latest
+	@go install golang.org/x/tools/gopls@latest
 
 .PHONY: terminfo
 terminfo:
