@@ -8,6 +8,6 @@
     max_tokens: 65536
     thinking:
       type: enabled
-      budget_tokens: 24576
+      budget_tokens: 32768
   editor_model_name: vertex_ai/claude-3-7-sonnet@20250219
   editor_edit_format: editor-diff
