@@ -39,12 +39,14 @@ upclone-all:
 .PHONY: ln-dotfiles
 ln-dotfiles:
 	@for file in aliases bash_profile zprofile ctags gemrc gitconfig gitignore psqlrc tigrc tmux.conf vimrc \
-		zshrc myclirc ripgreprc aider.conf.yml editorconfig; do \
+		zshrc myclirc ripgreprc editorconfig; do \
 	  echo "ln -sf $(CURR_DIR)/.$$file ~/.$$file" && ln -sf $(CURR_DIR)/.$$file ~/.$$file; \
 	done;
 	ln -sf $(CURR_DIR)/direnv.toml ~/.config/direnv/direnv.toml
 	ln -sf $(CURR_DIR)/tmux-nerd-font-window-name.yml ~/.config/tmux/tmux-nerd-font-window-name.yml
 	ln -sf $(CURR_DIR)/ghostty.toml ~/.config/ghostty/config
+	ln -sf $(CURR_DIR)/aider.conf.yml  ~/.aider.conf.yml
+	ln -sf $(CURR_DIR)/aider.model.settings.yml  ~/.aider.model.settings.yml
 
 .PHONY: ln-scripts
 ln-scripts:

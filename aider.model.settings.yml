@@ -1,0 +1,13 @@
+- name: vertex_ai/claude-3-7-sonnet@20250219
+  edit_format: diff
+  weak_model_name: vertex_ai/claude-3-7-sonnet@20250219
+  use_repo_map: true
+  examples_as_sys_msg: true
+  use_temperature: false
+  extra_params:
+    max_tokens: 64000
+    thinking:
+      type: enabled
+      budget_tokens: 32000
+  editor_model_name: vertex_ai/claude-3-7-sonnet@20250219
+  editor_edit_format: editor-diff
