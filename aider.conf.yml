@@ -28,7 +28,7 @@ cache-prompts: true
 cache-keepalive-pings: 3
 
 ## Suggested number of tokens to use for repo map, use 0 to disable
-#map-tokens: xxx
+map-tokens: 4096
 
 ## Specify the chat input history file (default: .aider.input.history)
 #input-history-file: .aider.input.history
