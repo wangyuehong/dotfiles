@@ -5,7 +5,7 @@
   examples_as_sys_msg: true
   use_temperature: false
   extra_params:
-    max_tokens: 65536
+    max_tokens: 64000
     thinking:
       type: enabled
       budget_tokens: 32768
