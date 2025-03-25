@@ -2,6 +2,7 @@
   edit_format: diff
   weak_model_name: vertex_ai/claude-3-5-sonnet-v2@20241022
   use_repo_map: true
+  overeager: true
   examples_as_sys_msg: true
   extra_params:
     max_tokens: 64000
@@ -10,4 +11,5 @@
       budget_tokens: 32768
   editor_model_name: vertex_ai/claude-3-7-sonnet@20250219
   editor_edit_format: editor-diff
-  accepts_settings: ["thinking_tokens"]
+  accepts_settings:
+  - thinking_tokens
