@@ -77,3 +77,5 @@ check-update: true
 ## specify a read-only file (can be used multiple times)
 # read:
 #  - conventions.md
+
+chat-language: zh
