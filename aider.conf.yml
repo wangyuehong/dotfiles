@@ -5,7 +5,7 @@ model: vertex-sonnet
 ## Add a model alias (can be used multiple times)
 alias:
   - "vertex-sonnet:vertex_ai/claude-3-7-sonnet@20250219"
-  - "vertex-sonnet-weak:vertex_ai/claude-3-5-sonnet-v2@20241022"
+  - "vertex-gemini:vertex_ai/gemini-2.5-pro-exp-03-25"
 
 ## Timeout in seconds for API calls (default: None)
 timeout: 10
@@ -14,10 +14,10 @@ timeout: 10
 architect: true
 
 ## Enable/disable automatic acceptance of architect changes (default: True)
-auto-accept-architect: true
+auto-accept-architect: false
 
 ## Specify the model to use for commit messages and chat history summarization (default depends on --model)
-weak-model: vertex-sonnet-weak
+weak-model: vertex-sonnet
 
 ## Specify the model to use for editor tasks (default depends on --model)
 editor-model: vertex-sonnet
