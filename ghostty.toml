@@ -7,7 +7,7 @@ font-family = SauceCodePro Nerd Font Mono
 font-size = 16
 
 background-opacity = 0.85
-background-blur-radius = 20
+background-blur = 20
 
 clipboard-read = allow
 clipboard-write = allow
