@@ -78,4 +78,8 @@ check-update: true
 # read:
 #  - conventions.md
 
+## Specify the language to use in the chat (default: None, uses system settings)
 chat-language: zh
+
+## Specify which editor to use for the /editor command
+editor: emacsclient -t
