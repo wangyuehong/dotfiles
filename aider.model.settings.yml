@@ -1,3 +1,4 @@
+# https://aider.chat/docs/llms/anthropic.html
 - name: vertex_ai/claude-3-7-sonnet@20250219
   overeager: true
   edit_format: diff
@@ -15,4 +16,5 @@
       budget_tokens: 32768
   editor_model_name: vertex_ai/claude-3-7-sonnet@20250219
   editor_edit_format: editor-diff
-  accepts_settings: ["thinking_tokens"]
+  accepts_settings:
+    - thinking_tokens
