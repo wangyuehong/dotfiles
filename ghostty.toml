@@ -20,3 +20,5 @@ mouse-hide-while-typing = true
 
 window-theme = ghostty
 window-padding-x = 6,0
+
+keybind = cmd+grave_accent=toggle_quick_terminal
