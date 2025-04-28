@@ -11,7 +11,7 @@ alias:
 # timeout: 60
 
 ## Use architect edit format for the main chat
-architect: true
+architect: false
 
 ## Enable/disable automatic acceptance of architect changes (default: True)
 auto-accept-architect: false
@@ -26,7 +26,7 @@ editor-model: vertex-sonnet
 cache-prompts: true
 
 ## Number of times to ping at 5min intervals to keep prompt cache warm (default: 0)
-cache-keepalive-pings: 3
+cache-keepalive-pings: 1
 
 ## Suggested number of tokens to use for repo map, use 0 to disable
 map-tokens: 4096
@@ -63,7 +63,7 @@ subtree-only: true
 auto-commits: true
 
 ## Enable/disable commits when repo is found dirty (default: True)
-dirty-commits: false
+dirty-commits: true
 
 ## Enable/disable watching files for ai coding comments (default: False)
 watch-files: true
