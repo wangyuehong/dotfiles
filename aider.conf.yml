@@ -54,7 +54,7 @@ dark-mode: true
 code-theme: monokai
 
 ## Show diffs when committing changes (default: False)
-show-diffs: true
+# show-diffs: false
 
 ## Only consider files in the current subtree of the git repository
 subtree-only: true
