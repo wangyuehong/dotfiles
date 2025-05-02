@@ -65,6 +65,12 @@ auto-commits: true
 ## Enable/disable commits when repo is found dirty (default: True)
 dirty-commits: true
 
+## Attribute aider code changes in the git author name (default: True)
+attribute-author: false
+
+## Attribute aider commits in the git committer name (default: True)
+attribute-committer: false
+
 ## Enable/disable watching files for ai coding comments (default: False)
 watch-files: true
 
