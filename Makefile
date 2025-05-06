@@ -88,8 +88,3 @@ go-tools:
 	@go install mvdan.cc/gofumpt@latest
 	@go install honnef.co/go/tools/cmd/staticcheck@latest
 	@go install golang.org/x/tools/gopls@latest
-
-.PHONY: terminfo
-terminfo:
-	tic -x -o ~/.terminfo terminfo-24bit.src
-	tic -x -o ~/.terminfo terminfo-italic.src
