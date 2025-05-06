@@ -7,7 +7,7 @@ export HISTCONTROL=ignoreboth:erasedups
 export RIPGREP_CONFIG_PATH=~/.ripgreprc
 
 # alias
-alias tm='tmux attach -t base || tmux new -s base'
-alias tt='tmux attach -t quick || tmux new -s quick'
+alias tm='tmux new -A -s work'
+alias tt='tmux new -A -s quick'
 
 [ -f ~/.zprofile.local ] && source ~/.zprofile.local
