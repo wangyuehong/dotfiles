@@ -6,9 +6,6 @@ font-family = Maple Mono Normal NL NF CN
 font-family = SauceCodePro Nerd Font Mono
 font-size = 18
 
-background-opacity = 0.9
-background-blur = 20
-
 clipboard-read = allow
 clipboard-write = allow
 copy-on-select = clipboard
