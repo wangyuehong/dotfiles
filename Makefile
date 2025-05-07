@@ -67,6 +67,7 @@ setup:
 	@mkdir -p ~/.config/ghostty
 	@brew install -q tmux zsh fd fzf rg tig git aspell z yq direnv libvterm universal-ctags tmux-mem-cpu-load
 	@brew tap daipeihust/tap && brew install -q im-select
+	@brew tap laishulu/homebrew && brew install -q macism
 	@~/.tmux/plugins/tpm/bin/install_plugins
 	@make ln-dotfiles
 	@make ln-scripts
