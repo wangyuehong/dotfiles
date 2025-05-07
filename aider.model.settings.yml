@@ -1,3 +1,4 @@
+# will be linked to ~/.aider.model.settings.yml
 # https://aider.chat/docs/llms/anthropic.html
 - name: vertex_ai/claude-3-7-sonnet@20250219
   overeager: true
@@ -8,9 +9,9 @@
   use_temperature: false
   examples_as_sys_msg: true
   extra_params:
+    max_tokens: 64000
     extra_headers:
       anthropic-beta: token-efficient-tools-2025-02-19,output-128k-2025-02-19
-    max_tokens: 64000
     thinking:
       type: enabled
       budget_tokens: 32768

@@ -1,3 +1,4 @@
+# will be linked to ~/.aider.conf.yml
 # Main model:
 ## Specify the model to use for the main chat
 model: vertex-sonnet
