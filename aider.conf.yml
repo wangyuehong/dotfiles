@@ -28,7 +28,8 @@ cache-prompts: true
 
 ## Number of times to ping at 5min intervals to keep prompt cache warm (default: 0)
 ## keep cache warm for 5*4=20 minutes
-cache-keepalive-pings: 4
+# disable it until https://github.com/Aider-AI/aider/issues/3820 is fixed
+# cache-keepalive-pings: 4
 
 ## Suggested number of tokens to use for repo map, use 0 to disable
 map-tokens: 4096

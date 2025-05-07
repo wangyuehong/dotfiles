@@ -5,7 +5,8 @@
   edit_format: diff
   weak_model_name: vertex_ai/claude-3-5-sonnet-v2@20241022
   use_repo_map: true
-  cache_control: true
+  # disable cache until https://github.com/Aider-AI/aider/issues/3820 is fixed
+  # cache_control: true
   use_temperature: false
   examples_as_sys_msg: true
   extra_params:
