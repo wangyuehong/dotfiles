@@ -92,3 +92,6 @@ chat-language: zh
 
 ## Specify which editor to use for the /editor command
 editor: emacsclient -t
+
+## Specify the .env file to load (default: .env in git root)
+env-file: .aider.env
