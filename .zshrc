@@ -128,6 +128,7 @@ SPACESHIP_PROMPT_ORDER=(
     # package     # Package version
     node          # Node.js section
     ruby          # Ruby section
+    python        # Python section
     # elm         # Elm section
     # elixir      # Elixir section
     # xcode       # Xcode section
@@ -141,7 +142,7 @@ SPACESHIP_PROMPT_ORDER=(
     # aws         # Amazon Web Services section
     # venv        # virtualenv section
     # conda       # conda virtualenv section
-    # pyenv       # Pyenv section
+    uv            # uv section
     # dotnet      # .NET section
     # ember       # Ember.js section
     # kubectl     # Kubectl context section
