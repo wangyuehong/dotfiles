@@ -44,6 +44,7 @@ plugins=(
     golang
     history
     kubectl
+    terraform
     themes
     z
     zsh-autosuggestions
