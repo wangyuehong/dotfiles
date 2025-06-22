@@ -46,3 +46,5 @@
 [include]
 	# for user/name user/email
 	path = ~/.gitconfig.local
+[init]
+	defaultBranch = main
