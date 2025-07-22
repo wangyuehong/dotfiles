@@ -19,3 +19,4 @@ window-theme = ghostty
 window-padding-x = 6,0
 
 keybind = cmd+grave_accent=toggle_quick_terminal
+keybind = shift+enter=text:\n
