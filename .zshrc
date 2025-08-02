@@ -109,6 +109,9 @@ if command -v fd >/dev/null 2>&1; then
     FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 fi
 
+# eat shell integration
+[ -n "$EAT_SHELL_INTEGRATION_DIR" ] && source "$EAT_SHELL_INTEGRATION_DIR/zsh"
+
 # local config
 [[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
 
