@@ -1,0 +1,15 @@
+{
+    "includeCoAuthoredBy": false,
+    "env": {},
+    "permissions": {
+        "defaultMode": "plan",
+        "allow": [
+            "Bash(grep:*)",
+            "Bash(cd:*)",
+            "Bash(go:*)"
+        ],
+        "deny": [
+            "Bash(rm:*)"
+        ]
+    }
+}
