@@ -1,15 +1,16 @@
 {
-    "includeCoAuthoredBy": false,
-    "env": {},
-    "permissions": {
-        "defaultMode": "plan",
-        "allow": [
-            "Bash(grep:*)",
-            "Bash(cd:*)",
-            "Bash(go:*)"
-        ],
-        "deny": [
-            "Bash(rm:*)"
-        ]
-    }
+  "env": {},
+  "includeCoAuthoredBy": false,
+  "permissions": {
+    "allow": [
+      "Bash(grep:*)",
+      "Bash(cd:*)",
+      "Bash(go:*)"
+    ],
+    "deny": [
+      "Bash(rm:*)"
+    ],
+    "defaultMode": "plan"
+  },
+  "model": "sonnet"
 }
