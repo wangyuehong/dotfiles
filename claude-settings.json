@@ -12,5 +12,9 @@
     ],
     "defaultMode": "plan"
   },
-  "model": "sonnet"
+  "model": "opusplan",
+  "statusLine": {
+    "type": "command",
+    "command": "input=$(cat); printf '\\033[32m%s\\033[0m \\033[34m[%s]\\033[0m \\033[33m[%s]\\033[0m \\033[37m[%s]\\033[0m' \"$(whoami)\" \"$(date +%H:%M:%S)\" \"$(echo \"$input\" | jq -r '.model.display_name')\" \"$(basename \"$(echo \"$input\" | jq -r '.workspace.current_dir')\")\""
+  }
 }
