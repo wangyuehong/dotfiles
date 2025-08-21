@@ -8,7 +8,6 @@ font-size = 18
 
 clipboard-read = allow
 clipboard-write = allow
-copy-on-select = clipboard
 
 macos-icon = retro
 macos-option-as-alt = true
