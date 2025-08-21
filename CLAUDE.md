@@ -9,6 +9,77 @@
   trash -r dirname # 代替 rm -rf dirname
   ```
 
+## 高效工具使用规则
+
+### 核心原则
+**一个命令行操作 > 多次工具调用**
+
+### 必备命令
+
+#### 模式搜索
+```bash
+rg -n "pattern" --glob '!vendor/*'  # 带行号搜索，排除vendor目录
+```
+
+#### 文件查找
+```bash
+fd filename          # 按名称查找
+fd .ext directory    # 按扩展名在指定目录查找
+```
+
+#### 批量重构
+```bash
+# 查找并批量替换 - 一个命令替代几十次Edit调用！
+rg -l "pattern" | xargs sed -i '' 's/old/new/g'
+```
+
+#### 项目结构
+```bash
+tree -L 2            # 快速查看项目结构
+```
+
+#### 数据处理
+```bash
+jq '.key' file.json  # 直接提取JSON数据
+yq '.key' file.yaml  # 直接提取YAML数据
+```
+
+### 高效模式
+
+#### 关键模式：查找 → 管道 → 批量转换
+```bash
+# 这一个命令可以替代几十次Edit工具调用！
+rg -l "find_this" | xargs sed -i '' 's/replace_this/with_this/g'
+```
+
+### 工作流程检查清单
+使用Read/Edit/Glob工具前，先考虑：
+- 能用 `rg` 更快找到这个模式吗？
+- 能用 `fd` 更快定位这些文件吗？
+- 能用 `sed` 一次修复所有实例吗？
+- 能用 `jq/yq` 直接提取数据吗？
+
+### 实用组合
+```bash
+# 查找Go结构体定义
+rg "type\s+\w+\s+struct" -t go
+
+# 查找Go函数定义
+rg "func\s+\w+" -t go
+
+# 批量重命名
+fd old_pattern | xargs -I {} mv {} {//}/new_name
+
+# 统计Go代码行数
+fd -e go | xargs wc -l
+```
+
+### 规则
+- 优先使用CLI命令，避免多次工具调用
+- 批量操作必须使用管道和xargs
+- 搜索前用专业工具快速定位
+- 记住：一个好的管道命令 > 几十次API调用
+
 ## CC 指令功能
 当文件中的注释包含 `CC` 标记时，理解并执行相应指令。
 移植自 aider 的 [watch files](https://aider.chat/docs/usage/watch.html) 功能。
