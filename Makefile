@@ -47,8 +47,9 @@ ln-dotfiles:
 	ln -sf $(CURR_DIR)/ghostty.toml ~/.config/ghostty/config
 	ln -sf $(CURR_DIR)/aider.conf.yml  ~/.aider.conf.yml
 	ln -sf $(CURR_DIR)/aider.model.settings.yml  ~/.aider.model.settings.yml
-	ln -sf $(CURR_DIR)/claude-settings.json ~/.claude/settings.json
-	ln -sf $(CURR_DIR)/CLAUDE.md ~/.claude/CLAUDE.md
+	ln -sf $(CURR_DIR)/claude/settings.json ~/.claude/settings.json
+	ln -sf $(CURR_DIR)/claude/CLAUDE.md ~/.claude/CLAUDE.md
+	ln -snf $(CURR_DIR)/claude/commands ~/.claude/commands
 
 .PHONY: ln-scripts
 ln-scripts:

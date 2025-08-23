@@ -3,9 +3,14 @@
   "includeCoAuthoredBy": false,
   "permissions": {
     "allow": [
-      "Bash(grep:*)",
       "Bash(cd:*)",
       "Bash(go:*)"
+      "Bash(grep:*)",
+      "Bash(jq:*)"
+      "Bash(rd:*)"
+      "Bash(rg:*)"
+      "Bash(sed:*)"
+      "Bash(yq:*)"
     ],
     "deny": [
       "Bash(rm:*)"
