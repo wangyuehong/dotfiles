@@ -1,0 +1,41 @@
+# AutoCorrect 配置文件
+# 参考: https://github.com/huacnlee/autocorrect/blob/main/autocorrect/.autocorrectrc.default
+
+rules:
+  # 中英文之间自动添加空格 (默认: 1)
+  space-word: 1
+  
+  # 标点符号周围的空格 (默认: 1)
+  space-punctuation: 1
+  
+  # 括号周围的空格 (默认: 1)
+  space-bracket: 1
+  
+  # 反引号周围添加空格 (默认: 1)
+  space-backticks: 1
+  
+  # $ 符号周围的空格 (默认: 0)
+  space-dollar: 0
+  
+  # 转换为全角字符 - 已关闭，避免与半角转换冲突 (默认: 1)
+  fullwidth: 0
+  
+  # 移除全角标点周围的空格 (默认: 1)
+  no-space-fullwidth: 1
+  
+  # 移除全角引号周围的空格 (默认: 1)
+  no-space-fullwidth-quote: 1
+  
+  # 全角英数字转半角 (默认: 1)
+  halfwidth-word: 1
+  
+  # 英文中的全角标点转半角 (默认: 1)
+  halfwidth-punctuation: 1
+  
+  # 拼写检查 - 已关闭 (默认: 0)
+  spellcheck: 0
+
+# 代码块处理上下文
+context:
+  # 代码块内也进行格式化 (默认: 1)  
+  codeblock: 1
