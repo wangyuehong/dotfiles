@@ -4,12 +4,14 @@
   "permissions": {
     "allow": [
       "Bash(cd:*)",
-      "Bash(go:*)"
+      "Bash(go:*)",
       "Bash(grep:*)",
-      "Bash(jq:*)"
-      "Bash(rd:*)"
-      "Bash(rg:*)"
-      "Bash(sed:*)"
+      "Bash(jq:*)",
+      "Bash(rd:*)",
+      "Bash(rg:*)",
+      "Bash(sed:*)",
+      "Bash(trash:*)",
+      "Bash(tree:*)",
       "Bash(yq:*)"
     ],
     "deny": [
