@@ -50,6 +50,7 @@ ln-dotfiles:
 	ln -sf $(CURR_DIR)/claude/settings.json ~/.claude/settings.json
 	ln -sf $(CURR_DIR)/claude/CLAUDE.md ~/.claude/CLAUDE.md
 	ln -snf $(CURR_DIR)/claude/commands ~/.claude/commands
+	ln -snf $(CURR_DIR)/claude/agents ~/.claude/agents
 
 .PHONY: ln-scripts
 ln-scripts:
