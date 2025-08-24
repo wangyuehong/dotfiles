@@ -47,10 +47,6 @@ ln-dotfiles:
 	ln -sf $(CURR_DIR)/ghostty.toml ~/.config/ghostty/config
 	ln -sf $(CURR_DIR)/aider.conf.yml  ~/.aider.conf.yml
 	ln -sf $(CURR_DIR)/aider.model.settings.yml  ~/.aider.model.settings.yml
-	ln -sf $(CURR_DIR)/claude/settings.json ~/.claude/settings.json
-	ln -sf $(CURR_DIR)/claude/CLAUDE.md ~/.claude/CLAUDE.md
-	ln -snf $(CURR_DIR)/claude/commands ~/.claude/commands
-	ln -snf $(CURR_DIR)/claude/agents ~/.claude/agents
 
 .PHONY: ln-scripts
 ln-scripts:
@@ -69,7 +65,6 @@ setup:
 	@mkdir -p ~/.config/direnv
 	@mkdir -p ~/.config/tmux/
 	@mkdir -p ~/.config/ghostty
-	@mkdir -p ~/.claude
 	@brew install -q tmux zsh fd fzf rg tig git jq aspell z autocorrect yq direnv libvterm universal-ctags tmux-mem-cpu-load trash
 	@brew tap daipeihust/tap && brew install -q im-select
 	@brew tap laishulu/homebrew && brew install -q macism
