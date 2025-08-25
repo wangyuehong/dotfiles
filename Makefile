@@ -38,7 +38,7 @@ upclone-all:
 
 .PHONY: ln-dotfiles
 ln-dotfiles:
-	@for file in autocorrectrc aliases bash_profile zprofile ctags gemrc gitconfig gitignore psqlrc tigrc tmux.conf vimrc \
+	@for file in aliases bash_profile zprofile ctags gemrc gitconfig gitignore psqlrc tigrc tmux.conf vimrc \
 		zshrc myclirc ripgreprc editorconfig; do \
 	  echo "ln -sf $(CURR_DIR)/.$$file ~/.$$file" && ln -sf $(CURR_DIR)/.$$file ~/.$$file; \
 	done;
@@ -65,7 +65,7 @@ setup:
 	@mkdir -p ~/.config/direnv
 	@mkdir -p ~/.config/tmux/
 	@mkdir -p ~/.config/ghostty
-	@brew install -q tmux zsh fd fzf rg tig git jq aspell z autocorrect yq direnv libvterm universal-ctags tmux-mem-cpu-load trash
+	@brew install -q tmux zsh fd fzf rg tig git jq aspell z yq direnv libvterm universal-ctags tmux-mem-cpu-load trash
 	@brew tap daipeihust/tap && brew install -q im-select
 	@brew tap laishulu/homebrew && brew install -q macism
 	@~/.tmux/plugins/tpm/bin/install_plugins
