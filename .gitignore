@@ -3,3 +3,4 @@ TAGS
 .aider*
 .env
 /.claude/
+.dir-locals.el
