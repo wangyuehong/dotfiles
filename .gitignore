@@ -1,6 +1,5 @@
 .DS_Store
 TAGS
-.aider*
 .env
 /.claude/
 .dir-locals.el

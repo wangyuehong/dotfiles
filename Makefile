@@ -45,8 +45,6 @@ ln-dotfiles:
 	ln -sf $(CURR_DIR)/direnv.toml ~/.config/direnv/direnv.toml
 	ln -sf $(CURR_DIR)/tmux-nerd-font-window-name.yml ~/.config/tmux/tmux-nerd-font-window-name.yml
 	ln -sf $(CURR_DIR)/ghostty.toml ~/.config/ghostty/config
-	ln -sf $(CURR_DIR)/aider.conf.yml  ~/.aider.conf.yml
-	ln -sf $(CURR_DIR)/aider.model.settings.yml  ~/.aider.model.settings.yml
 
 .PHONY: ln-scripts
 ln-scripts:
