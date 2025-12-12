@@ -7,5 +7,6 @@ icons:
   zsh: ""
   Emacs: ""
   Emacs-arm64-11: ""
+  Emacs-real: ""
   emacsclient: ""
   make: ""
