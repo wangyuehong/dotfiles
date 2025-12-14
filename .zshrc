@@ -85,28 +85,6 @@ fi
 
 export EDITOR=vi
 
-# rbenv (lazy load)
-if [ -d ~/.rbenv ]; then
-    [[ "$PATH" == *"$HOME/.rbenv/bin"* ]] || export PATH=$HOME/.rbenv/bin:$PATH
-    rbenv() {
-        unfunction rbenv
-        eval "$(command rbenv init -)"
-        rbenv "$@"
-    }
-fi
-
-# pyenv (lazy load)
-if [ -d ~/.pyenv ]; then
-    [[ "$PATH" == *"$HOME/.pyenv/bin"* ]] || export PATH=$HOME/.pyenv/bin:$PATH
-    pyenv() {
-        unfunction pyenv
-        eval "$(command pyenv init - zsh)"
-        pyenv "$@"
-    }
-fi
-
-
-
 # fzf
 FZF_DEFAULT_OPTS="--reverse --inline-info --exact --history-size=999999"
 if command -v fd >/dev/null 2>&1; then
