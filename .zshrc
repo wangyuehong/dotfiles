@@ -44,6 +44,7 @@ plugins=(
     golang
     history
     kubectl
+    mise
     terraform
     themes
     z
@@ -116,15 +117,6 @@ if [ -d ~/.goenv ]; then
     }
 fi
 
-# nodenv (lazy load)
-if [ -d ~/.nodenv ]; then
-    [[ "$PATH" == *"$HOME/.nodenv/bin"* ]] || export PATH=$HOME/.nodenv/bin:$PATH
-    nodenv() {
-        unfunction nodenv
-        eval "$(command nodenv init -)"
-        nodenv "$@"
-    }
-fi
 
 # fzf
 FZF_DEFAULT_OPTS="--reverse --inline-info --exact --history-size=999999"
