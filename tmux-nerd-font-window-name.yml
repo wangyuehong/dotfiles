@@ -2,7 +2,7 @@ config:
   fallback-icon: "?" # icon to use if no definition is found
   multi-pane-icon: ""
   show-name: true # show the window name with the icon
-
+  prefer-program-name: true
 icons:
   zsh: ""
   Emacs: ""
