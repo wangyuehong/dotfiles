@@ -63,9 +63,16 @@ _Z_CMD=j
 
 source $ZSH/oh-my-zsh.sh
 
-# Customize to your needs...
-unsetopt share_history
-setopt hist_ignore_all_dups
+# History configuration
+unsetopt share_history           # keep arrow keys clean (current session only)
+setopt inc_append_history        # write immediately (other windows can search)
+setopt hist_ignore_all_dups      # remove duplicates
+setopt hist_ignore_space         # ignore commands starting with space
+setopt hist_reduce_blanks        # remove extra blanks
+setopt hist_verify               # show before executing history expansion
+
+HISTSIZE=100000
+SAVEHIST=100000
 
 # set path
 # [[ "$PATH" == *"/usr/local/sbin"* ]] || export PATH=$PATH:/usr/local/sbin
@@ -77,29 +84,45 @@ fi
 
 export EDITOR=vi
 
-# rbenv
+# rbenv (lazy load)
 if [ -d ~/.rbenv ]; then
     [[ "$PATH" == *"$HOME/.rbenv/bin"* ]] || export PATH=$HOME/.rbenv/bin:$PATH
-    eval "$(rbenv init -)";
+    rbenv() {
+        unfunction rbenv
+        eval "$(command rbenv init -)"
+        rbenv "$@"
+    }
 fi
 
-# pyenv
+# pyenv (lazy load)
 if [ -d ~/.pyenv ]; then
     [[ "$PATH" == *"$HOME/.pyenv/bin"* ]] || export PATH=$HOME/.pyenv/bin:$PATH
-    eval "$(pyenv init - zsh)"
+    pyenv() {
+        unfunction pyenv
+        eval "$(command pyenv init - zsh)"
+        pyenv "$@"
+    }
 fi
 
-# goenv
+# goenv (lazy load)
 if [ -d ~/.goenv ]; then
     export GOENV_ROOT="$HOME/.goenv"
     [[ "$PATH" == *"$GOENV_ROOT/bin"* ]] || export PATH=$GOENV_ROOT/bin:$PATH
-    eval "$(goenv init -)";
+    goenv() {
+        unfunction goenv
+        eval "$(command goenv init -)"
+        goenv "$@"
+    }
 fi
 
-# nodenv
+# nodenv (lazy load)
 if [ -d ~/.nodenv ]; then
     [[ "$PATH" == *"$HOME/.nodenv/bin"* ]] || export PATH=$HOME/.nodenv/bin:$PATH
-    eval "$(nodenv init -)";
+    nodenv() {
+        unfunction nodenv
+        eval "$(command nodenv init -)"
+        nodenv "$@"
+    }
 fi
 
 # fzf
@@ -118,7 +141,11 @@ fi
 # aliases
 [[ -f ~/.aliases ]] && source ~/.aliases
 
+# Autosuggestions optimization
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=033'
+ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
+ZSH_AUTOSUGGEST_USE_ASYNC=1
+ZSH_AUTOSUGGEST_MANUAL_REBIND=1
 
 # https://github.com/denysdovhan/spaceship-prompt/blob/master/docs/Options.md
 SPACESHIP_PROMPT_ORDER=(

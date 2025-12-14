@@ -5,7 +5,6 @@ alias v='vim'
 alias ..='cd ..'
 alias ...='cd ../..'
 alias g='git'
-alias h='history'
 alias df='df -h'
 alias du='du -h'
 alias su="su -"
