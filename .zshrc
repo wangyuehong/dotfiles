@@ -43,7 +43,6 @@ plugins=(
     git
     golang
     history
-    kubectl
     mise
     terraform
     themes
