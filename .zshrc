@@ -106,16 +106,6 @@ if [ -d ~/.pyenv ]; then
     }
 fi
 
-# goenv (lazy load)
-if [ -d ~/.goenv ]; then
-    export GOENV_ROOT="$HOME/.goenv"
-    [[ "$PATH" == *"$GOENV_ROOT/bin"* ]] || export PATH=$GOENV_ROOT/bin:$PATH
-    goenv() {
-        unfunction goenv
-        eval "$(command goenv init -)"
-        goenv "$@"
-    }
-fi
 
 
 # fzf
