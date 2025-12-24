@@ -2,9 +2,12 @@ shell-integration = zsh
 
 theme = srcery
 
+background-opacity = 0.95
+background-blur-radius = 10
+
 font-family = Maple Mono Normal NL NF CN
 font-family = SauceCodePro Nerd Font Mono
-font-size = 18
+font-size = 16
 
 clipboard-read = allow
 clipboard-write = allow
