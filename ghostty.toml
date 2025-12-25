@@ -1,3 +1,5 @@
+auto-update-channel = stable
+
 shell-integration = zsh
 
 theme = srcery
