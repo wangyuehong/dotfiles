@@ -3,3 +3,4 @@ TAGS
 .env
 /.claude/
 .dir-locals.el
+cmd/tmux-im/tmux-im
