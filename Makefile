@@ -42,7 +42,7 @@ ln-dotfiles:
 
 .PHONY: ln-scripts
 ln-scripts:
-	@for script in worktree.sh tmux-fzf.sh tmux-im.sh; do \
+	@for script in worktree.sh tmux-fzf.sh tmux-im.sh tmux-im-sync.sh; do \
 		chmod +x $(CURR_DIR)/scripts/$$script && \
 		ln -sf $(CURR_DIR)/scripts/$$script ~/bin/$$script; \
 	done
