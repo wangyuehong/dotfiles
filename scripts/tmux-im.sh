@@ -6,11 +6,13 @@ set -euo pipefail
 DEFAULT_IM="${TMUX_IM_DEFAULT:-com.apple.keylayout.ABC}"
 LOG_FILE="${HOME}/.cache/tmux-im/debug.log"
 
+_log_init=false
 log() {
-	local timestamp
-	timestamp=$(date '+%Y-%m-%d %H:%M:%S')
-	mkdir -p "$(dirname "$LOG_FILE")"
-	echo "[$timestamp] $*" >> "$LOG_FILE"
+	if [[ "$_log_init" != "true" ]]; then
+		mkdir -p "$(dirname "$LOG_FILE")"
+		_log_init=true
+	fi
+	echo "[$(date '+%Y-%m-%d %H:%M:%S')] $*" >> "$LOG_FILE"
 }
 
 get_current_im() {
@@ -37,8 +39,7 @@ switch_im() {
 
 save_im() {
 	local pane_key="$1"
-	local current_im
-	current_im=$(get_current_im)
+	local current_im="${2:-$(get_current_im)}"
 	log "save_im: pane_key=$pane_key current_im=$current_im"
 	tmux-im "$pane_key" "$current_im"
 }
@@ -94,12 +95,10 @@ cmd_mode_changed() {
 			return 0
 		fi
 		# Mouse scroll or other way to enter copy-mode
-		# Get current IM once, use for both save and switch check
 		local current_im
 		current_im=$(get_current_im)
 		log "cmd_mode_changed: entering copy-mode, saving and switching"
-		log "save_im: pane_key=$pane_key current_im=$current_im"
-		tmux-im "$pane_key" "$current_im"
+		save_im "$pane_key" "$current_im"
 		if [[ "$current_im" != "$DEFAULT_IM" ]]; then
 			log "cmd_mode_changed: switching to $DEFAULT_IM"
 			macism "$DEFAULT_IM"
@@ -122,10 +121,7 @@ cmd_prefix() {
 	# Get current IM once, use for both save and switch check
 	local current_im
 	current_im=$(get_current_im)
-
-	# Save current IM
-	log "save_im: pane_key=$pane_key current_im=$current_im"
-	tmux-im "$pane_key" "$current_im"
+	save_im "$pane_key" "$current_im"
 
 	# Set pane option so focus-out/mode-changed will skip saving
 	tmux set-option -p -t "$pane_id" @im-saved 1
