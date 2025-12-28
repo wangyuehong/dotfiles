@@ -28,7 +28,7 @@ main() {
 	current=$(tmux show-options -gqv @im-color 2>/dev/null || echo "")
 	[[ "$current" == "$color" ]] && exit 0
 
-	# Update tmux global option and trigger status refresh
+	# Update tmux global option and trigger refresh
 	tmux set-option -g @im-color "$color"
 	tmux refresh-client -S
 }
