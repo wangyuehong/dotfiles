@@ -245,5 +245,19 @@ teardown() {
 	[ -z "$(get_opt "$pane_b" @im-color)" ]
 }
 
+@test "AC-0020-0090: consecutive IM switch refreshes border" {
+	local pane=$(get_pane)
+	# Set blue border (Japanese)
+	update_border_color "$pane" "$IM_GOOGLE_JP"
+	[ "$(get_opt "$pane" @im-color)" = "$COLOR_BLUE" ]
+	# Switch to English - border should become default (empty)
+	update_border_color "$pane" "$IM_ABC"
+	[ -z "$(get_opt "$pane" @im-color)" ]
+}
+
+# Note: The fix for AC-0020-0090 ensures refresh-client -S is always called
+# even when @im-color value is unchanged. This cannot be unit tested as it's
+# a visual refresh issue, not a state issue.
+
 # Note: AC-0010-0080 (prefix cancel) not implemented
 # Note: AC-0010-0120 (non-terminal check) handled by Hammerspoon

@@ -86,13 +86,13 @@ update_border_color() {
 	local color
 	color=$(get_im_color "$source_id")
 
-	# Dedup: skip if unchanged
+	# Skip set-option if unchanged, but always refresh client
 	local current_color
 	current_color=$(tmux show-options -pqv -t "$pane_id" @im-color 2>/dev/null || echo "")
-	[[ "$current_color" == "$color" ]] && return
-
-	log "update_border_color: pane=$pane_id color=${color:-default}"
-	tmux set-option -p -t "$pane_id" @im-color "$color"
+	if [[ "$current_color" != "$color" ]]; then
+		log "update_border_color: pane=$pane_id color=${color:-default}"
+		tmux set-option -p -t "$pane_id" @im-color "$color"
+	fi
 	tmux refresh-client -S
 }
 
