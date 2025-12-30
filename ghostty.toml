@@ -1,5 +1,7 @@
 auto-update-channel = stable
 
+title = ghostty
+maximize = true
 shell-integration = zsh
 
 theme = srcery
