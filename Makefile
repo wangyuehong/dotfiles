@@ -62,7 +62,7 @@ setup:
 	@mkdir -p ~/.config/tmux
 	@mkdir -p ~/.config/ghostty
 	@mkdir -p ~/.config/mise
-	@brew install -q coreutils mise tmux zsh fd fzf rg tig git jq aspell z yq direnv universal-ctags tmux-mem-cpu-load trash
+	@brew install -q coreutils mise tmux zsh fd fzf rg tig git jq aspell z yq direnv universal-ctags tmux-mem-cpu-load trash bats-core
 	@brew tap daipeihust/tap && brew install -q im-select
 	@brew tap laishulu/homebrew && brew install -q macism
 	@~/.tmux/plugins/tpm/bin/install_plugins
@@ -94,3 +94,7 @@ py-tools:
 mise-tools:
 	@mise trust ~/.dotfiles/mise.toml
 	@echo "Edit ~/.config/mise/config.local.toml to add tools"
+
+.PHONY: test-tmux-im
+test-tmux-im:
+	@bats scripts/tmux-im.bats

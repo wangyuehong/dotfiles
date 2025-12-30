@@ -271,4 +271,7 @@ main() {
 	esac
 }
 
-main "$@"
+# 支持被 source 时不执行 main（用于测试）
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+	main "$@"
+fi
