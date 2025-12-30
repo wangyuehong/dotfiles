@@ -42,14 +42,11 @@ ln-dotfiles:
 
 .PHONY: ln-scripts
 ln-scripts:
-	@for script in worktree.sh tmux-fzf.sh tmux-im.sh tmux-im-sync.sh; do \
+	@for script in worktree.sh tmux-fzf.sh tmux-im.sh; do \
 		chmod +x $(CURR_DIR)/scripts/$$script && \
 		ln -sf $(CURR_DIR)/scripts/$$script ~/bin/$$script; \
 	done
 
-.PHONY: build-go
-build-go:
-	@cd $(CURR_DIR)/cmd/tmux-im && go build -o ~/bin/tmux-im .
 
 .PHONY: all
 all:
@@ -71,7 +68,6 @@ setup:
 	@~/.tmux/plugins/tpm/bin/install_plugins
 	@make ln-dotfiles
 	@make ln-scripts
-	@make build-go
 
 .PHONY: brew-up
 brew-up:
