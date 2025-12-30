@@ -110,6 +110,17 @@ teardown() {
 	[ -z "$(get_opt "$pane" @im)" ]
 }
 
+@test "AC-0010-0030-border: new pane uses default border color" {
+	local pane=$(get_pane)
+	# New pane should have empty @im and @im-color
+	unset_opt "$pane" @im
+	unset_opt "$pane" @im-color
+	# Simulate focus-in on new pane
+	cmd_focus_in "$pane"
+	# Border color should be empty (default brightmagenta)
+	[ -z "$(get_opt "$pane" @im-color)" ]
+}
+
 # === Integration tests: border color ===
 
 @test "AC-0020-0040: border color updates on IM change" {
