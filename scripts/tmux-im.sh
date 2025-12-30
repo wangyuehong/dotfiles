@@ -46,7 +46,12 @@ switch_im() {
 	# Skip if already using target IM to avoid unnecessary switch
 	if [[ "$current" != "$target" ]]; then
 		log "switch_im: switching to $target"
-		macism "$target"
+		# Use macism without workaround (arg 0) for ABC to avoid delay
+		if [[ "$target" == "$DEFAULT_IM" ]]; then
+			macism "$target" 0
+		else
+			macism "$target"
+		fi
 	else
 		log "switch_im: already at target, skipping"
 	fi
