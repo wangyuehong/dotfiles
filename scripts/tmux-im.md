@@ -109,6 +109,28 @@
 - When: 用户在浏览器中切换输入法，再切回终端
 - Then: pane 的输入法状态保持为中文（不被浏览器中的输入法覆盖）
 
+**虚假焦点事件过滤**
+
+macism 调用会触发短暂窗口切换（~20ms），产生虚假的 focus-out/focus-in 事件。需要区分触发源：
+
+#### AC-0010-0170: 外部程序触发的虚假焦点事件同步当前输入法
+
+- Given: pane A 输入法状态为英文（ABC），@im-saved 未设置
+- When: 外部程序（如 Emacs）调用 macism 切换到中文，macism 引发短暂窗口切换
+- Then: 不恢复旧输入法（ABC），而是同步当前输入法（中文）
+
+#### AC-0010-0175: prefix/copy-mode 触发的虚假焦点事件跳过保存
+
+- Given: 用户按 C-a 进入 prefix 模式，输入法为中文，@im-saved=1
+- When: prefix 切换到英文的 macism 调用引发短暂窗口切换
+- Then: 跳过保存，保持 @im=中文（不被英文覆盖）
+
+#### AC-0010-0180: 正常 pane 切换不受去抖影响
+
+- Given: pane A 输入法状态为中文，pane B 输入法状态为英文
+- When: 用户正常切换 pane（间隔 > 50ms）
+- Then: 正常恢复目标 pane 的输入法
+
 **多 Session 场景**
 
 #### AC-0010-0160: 多 session 时保存到正确的 pane

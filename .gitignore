@@ -4,3 +4,4 @@ TAGS
 /.claude/
 .dir-locals.el
 cmd/tmux-im/tmux-im
+scripts/.tmux-im-test.log

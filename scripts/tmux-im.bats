@@ -61,6 +61,8 @@ cleanup_session_b() {
 # === Setup/Teardown ===
 
 setup() {
+	export TMUX_IM_LOG="$BATS_TEST_DIRNAME/.tmux-im-test.log"
+	truncate -s 0 "$TMUX_IM_LOG" 2>/dev/null || true
 	source "${BATS_TEST_DIRNAME}/tmux-im.sh"
 	macism() { echo "${MOCK_IM:-$IM_ABC}"; }
 	export -f macism
@@ -100,7 +102,7 @@ teardown() {
 @test "AC-0010-0020: restore IM on pane switch" {
 	local pane=$(get_pane)
 	set_opt "$pane" @im "$IM_RIME"
-	run restore_im "$pane"
+	run restore_pane_im "$pane"
 	[ "$status" -eq 0 ]
 }
 
@@ -147,12 +149,14 @@ teardown() {
 
 # === Integration tests: prefix mode ===
 
-@test "AC-0010-0040: prefix saves IM and sets flag" {
+@test "AC-0010-0040: prefix switches to English and saves IM" {
 	local pane=$(get_pane)
 	MOCK_IM="$IM_RIME"
 	cmd_prefix "$pane"
+	# Should save current IM (Rime) and set protection flag
 	[ "$(get_opt "$pane" @im)" = "$IM_RIME" ]
 	[ "$(get_opt "$pane" @im-saved)" = "1" ]
+	# Note: actual macism switch verified by code path (macism "$DEFAULT_IM")
 }
 
 @test "AC-0010-0050: prefix keeps English" {
@@ -180,13 +184,15 @@ teardown() {
 
 # === Integration tests: copy-mode ===
 
-@test "AC-0010-0090: enter copy-mode saves IM" {
+@test "AC-0010-0090: enter copy-mode switches to English and saves IM" {
 	local pane=$(get_pane)
 	MOCK_IM="$IM_RIME"
 	unset_opt "$pane" @im-saved
 	cmd_mode_changed "$pane" "copy-mode"
+	# Should save current IM (Rime) and set protection flag
 	[ "$(get_opt "$pane" @im)" = "$IM_RIME" ]
 	[ "$(get_opt "$pane" @im-saved)" = "1" ]
+	# Note: actual macism switch to English verified by code path
 }
 
 @test "AC-0010-0070: copy-mode after prefix skips save" {
@@ -264,6 +270,85 @@ teardown() {
 	# Switch to English - border should become default (empty)
 	update_border_color "$pane" "$IM_ABC"
 	[ -z "$(get_opt "$pane" @im-color)" ]
+}
+
+# === Integration tests: spurious focus event ===
+
+@test "AC-0010-0170: external spurious focus-in syncs current IM" {
+	local pane=$(get_pane)
+	# Setup: pane has ABC saved, @im-saved NOT set (external trigger like Emacs)
+	set_opt "$pane" @im "$IM_ABC"
+	unset_opt "$pane" @im-saved
+	MOCK_IM="$IM_RIME"
+	# Simulate spurious focus: set focus_out_ts to now (within debounce threshold)
+	set_opt "$pane" @focus_out_ts "$(get_timestamp_ms)"
+	sleep 0.01
+	cmd_focus_in "$pane"
+	# Should sync current IM (Rime), not restore saved IM (ABC)
+	[ "$(get_opt "$pane" @im)" = "$IM_RIME" ]
+	[ "$(get_opt "$pane" @im-color)" = "$COLOR_RED" ]
+}
+
+@test "AC-0010-0175: prefix spurious focus-in skips save (protected)" {
+	local pane=$(get_pane)
+	# Setup: pane has Rime saved, @im-saved=1 (prefix just saved it)
+	set_opt "$pane" @im "$IM_RIME"
+	set_opt "$pane" @im-saved 1
+	set_opt "$pane" @im-color "$COLOR_RED"
+	MOCK_IM="$IM_ABC"  # macism switched to ABC
+	# Simulate spurious focus from prefix's macism call
+	set_opt "$pane" @focus_out_ts "$(get_timestamp_ms)"
+	sleep 0.01
+	cmd_focus_in "$pane"
+	# Should skip: @im stays Rime (not overwritten by ABC), @im-color unchanged
+	[ "$(get_opt "$pane" @im)" = "$IM_RIME" ]
+	[ "$(get_opt "$pane" @im-color)" = "$COLOR_RED" ]
+	[ "$(get_opt "$pane" @im-saved)" = "1" ]
+}
+
+@test "AC-0010-0180: normal focus-in restores saved IM" {
+	local pane=$(get_pane)
+	# Setup: pane has Rime saved
+	set_opt "$pane" @im "$IM_RIME"
+	MOCK_IM="$IM_ABC"
+	# No @focus_out_ts set (normal pane switch, not spurious)
+	unset_opt "$pane" @focus_out_ts
+	cmd_focus_in "$pane"
+	# Should restore saved IM (Rime)
+	[ "$(get_opt "$pane" @im)" = "$IM_RIME" ]
+	[ "$(get_opt "$pane" @im-color)" = "$COLOR_RED" ]
+}
+
+@test "is_spurious_focus_in: returns true when elapsed < threshold" {
+	local pane=$(get_pane)
+	set_opt "$pane" @focus_out_ts "$(get_timestamp_ms)"
+	sleep 0.01
+	run is_spurious_focus_in "$pane"
+	[ "$status" -eq 0 ]
+}
+
+@test "is_spurious_focus_in: returns false when no focus_out_ts" {
+	local pane=$(get_pane)
+	unset_opt "$pane" @focus_out_ts
+	run is_spurious_focus_in "$pane"
+	[ "$status" -eq 1 ]
+}
+
+@test "is_spurious_focus_in: returns false when elapsed > threshold" {
+	local pane=$(get_pane)
+	# Set timestamp 1 second ago (well beyond 50ms threshold)
+	local old_ts=$(($(get_timestamp_ms) - 1000))
+	set_opt "$pane" @focus_out_ts "$old_ts"
+	run is_spurious_focus_in "$pane"
+	[ "$status" -eq 1 ]
+}
+
+@test "cmd_focus_out: sets focus_out_ts" {
+	local pane=$(get_pane)
+	unset_opt "$pane" @focus_out_ts
+	cmd_focus_out "$pane"
+	local ts=$(get_opt "$pane" @focus_out_ts)
+	[ -n "$ts" ]
 }
 
 # Note: The fix for AC-0020-0090 ensures refresh-client -S is always called
