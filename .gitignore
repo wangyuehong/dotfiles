@@ -1,7 +1,7 @@
 .DS_Store
 TAGS
 .env
-/.claude/
+/.claude/settings.local.json
 .dir-locals.el
 cmd/tmux-im/tmux-im
 scripts/.tmux-im-test.log
