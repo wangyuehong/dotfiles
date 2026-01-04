@@ -95,6 +95,6 @@ mise-tools:
 	@mise trust ~/.dotfiles/mise.toml
 	@echo "Edit ~/.config/mise/config.local.toml to add tools"
 
-.PHONY: test-tmux-im
-test-tmux-im:
-	@bats scripts/tmux-im.bats
+.PHONY: test
+test:
+	@bats scripts/tmux-im.bats scripts/tmux-fzf.bats

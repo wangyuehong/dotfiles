@@ -1,6 +1,50 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# === Utility Functions ===
+
+# Shorten path by replacing $HOME with ~
+# Usage: shorten_home_path "$HOME/file" -> "~/file"
+shorten_home_path() {
+	local f="$1"
+	if [[ "$f" == "$HOME/"* ]]; then
+		echo "~${f#$HOME}"
+	elif [[ "$f" == "$HOME" ]]; then
+		echo "~"
+	else
+		echo "$f"
+	fi
+}
+
+# Format path for AI tool (@ prefix, single-quote escaping)
+# Usage: format_at_prefix "path with space" -> "@'path with space'"
+format_at_prefix() {
+	local p="$1"
+	if [[ "$p" == *[[:space:]\'\"\$\`\\]* ]]; then
+		p="'${p//\'/"'\''"}'"
+	fi
+	echo "@$p"
+}
+
+# Format path for shell (printf %q, preserve ~ expansion)
+# Usage: format_shell_escape "~/path with space" -> "~/path\ with\ space"
+format_shell_escape() {
+	local p="$1"
+	local escaped
+	if [[ "$p" == "~"* ]]; then
+		printf -v escaped "%q" "${p#\~}"
+		echo "~$escaped"
+	else
+		printf -v escaped "%q" "$p"
+		echo "$escaped"
+	fi
+}
+
+# Return early if sourced for testing
+[[ "${BASH_SOURCE[0]}" != "${0}" ]] && return 0
+
+# === Main Script ===
+
 # --- Environment Check ---
 if [[ -z "${TMUX-}" ]]; then
 	echo "Error: This script must be run inside a tmux session." >&2
@@ -127,12 +171,7 @@ output=()
 case "$mode" in
 	abs)
 		for f in "${files[@]}"; do
-			if [[ "$f" == "$HOME/"* ]]; then
-				f="~${f#$HOME}"
-			elif [[ "$f" == "$HOME" ]]; then
-				f="~"
-			fi
-			output+=("$f")
+			output+=("$(shorten_home_path "$f")")
 		done
 		;;
 	git|rel)
@@ -151,22 +190,13 @@ esac
 if $at_prefix_mode; then
 	result=()
 	for p in "${output[@]}"; do
-		if [[ "$p" == *[[:space:]\'\"\$\`\\]* ]]; then
-			p="'${p//\'/"'\''"}'"
-		fi
-		result+=("@$p")
+		result+=("$(format_at_prefix "$p")")
 	done
 	printf -v out "%s " "${result[@]}"
 else
 	result=()
 	for p in "${output[@]}"; do
-		if [[ "$p" == "~"* ]]; then
-			printf -v escaped "%q" "${p#\~}"
-			result+=("~$escaped")
-		else
-			printf -v escaped "%q" "$p"
-			result+=("$escaped")
-		fi
+		result+=("$(format_shell_escape "$p")")
 	done
 	printf -v out "%s " "${result[@]}"
 fi
