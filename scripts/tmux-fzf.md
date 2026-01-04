@@ -159,69 +159,27 @@
 - Abs 模式下 $HOME 前缀统一替换为 ~
 - 导航后选择外部文件时，自动使用绝对路径（无论当前模式）
 
-## US-0030: AI 工具集成
+## US-0030: 输出格式
 
-作为 AI 工具（claude/gemini/codex）用户，我希望选择的文件路径自动添加 @ 前缀，以便直接作为 AI 工具的文件引用使用。
+作为用户，我希望选择的文件路径正确转义，以便在 shell 中安全使用。
 
 ### 验收标准
 
-**AI 工具检测**
+#### AC-0030-0010: 特殊字符转义
 
-#### AC-0030-0010: 检测到 AI 工具时使用 @ 前缀
-
-- Given: 当前 pane 正在运行 claude
-- When: 选择一个文件
-- Then: 输出格式为 @path/to/file（带 @ 前缀）
-
-#### AC-0030-0020: 检测到 gemini 时使用 @ 前缀
-
-- Given: 当前 pane 正在运行 gemini
-- When: 选择一个文件
-- Then: 输出格式为 @path/to/file
-
-#### AC-0030-0030: 检测到 codex 时使用 @ 前缀
-
-- Given: 当前 pane 正在运行 codex
-- When: 选择一个文件
-- Then: 输出格式为 @path/to/file
-
-**输出格式**
-
-#### AC-0030-0040: AI 工具环境下多文件输出
-
-- Given: 当前 pane 正在运行 AI 工具
-- When: 选择多个文件
-- Then: 每个路径都带 @ 前缀，以空格分隔（如 @file1 @file2）
-
-#### AC-0030-0050: AI 工具环境下特殊字符转义
-
-- Given: 当前 pane 正在运行 AI 工具
-- When: 选择包含特殊字符（空格、引号、$、反引号、反斜杠）的文件
-- Then: 路径使用单引号包裹（如 @'path with space.txt'）
-
-#### AC-0030-0060: AI 工具环境下单引号转义
-
-- Given: 当前 pane 正在运行 AI 工具
-- When: 选择包含单引号的文件 file'name.txt
-- Then: 单引号正确转义（如 @'file'\''name.txt'）
-
-#### AC-0030-0070: 非 AI 工具环境输出
-
-- Given: 当前 pane 未运行 AI 工具
-- When: 选择文件
-- Then: 输出 shell 转义后的路径，不带 @ 前缀
-
-#### AC-0030-0080: 非 AI 工具环境特殊字符转义
-
-- Given: 当前 pane 未运行 AI 工具
-- When: 选择包含空格的文件 path with space.txt
+- Given: 用户选择包含空格的文件 path with space.txt
+- When: 确认选择
 - Then: 路径使用 shell 转义（如 path\ with\ space.txt）
 
-#### AC-0030-0090: 非 AI 工具环境 ~ 路径保持可展开
+#### AC-0030-0020: ~ 路径保持可展开
 
-- Given: 当前 pane 未运行 AI 工具，在 Abs 模式下
+- Given: 用户在 Abs 模式下
 - When: 选择 $HOME/project/main.go
 - Then: 输出 ~/project/main.go（~ 不被转义为 \~，保持 shell 可展开）
+
+### 补充说明
+
+- 如需 @ 前缀（用于 AI 工具），用户可先输入 @ 再调用文件选择器
 
 ## US-0040: 父目录导航
 

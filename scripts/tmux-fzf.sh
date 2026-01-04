@@ -16,18 +16,6 @@ shorten_home_path() {
 	fi
 }
 
-# Format path for AI tool (@ prefix, single-quote escaping)
-# Usage: format_at_prefix "path with space" -> "@'path with space'"
-format_at_prefix() {
-	local p="$1"
-	local special_chars='[[:space:]'"'"'\"$`\]'
-	if [[ "$p" =~ $special_chars ]]; then
-		p=${p//\'/\'\\\'\'}
-		p="'$p'"
-	fi
-	echo "@$p"
-}
-
 # Format path for shell (printf %q, preserve ~ expansion)
 # Usage: format_shell_escape "~/path with space" -> "~/path\ with\ space"
 format_shell_escape() {
@@ -56,13 +44,6 @@ fi
 # --- Pane Info ---
 pane_id=$(tmux display-message -p '#{pane_id}')
 pane_dir=$(tmux display-message -p '#{pane_current_path}')
-pane_pid=$(tmux display-message -p '#{pane_pid}')
-
-# --- AI Tool Detection ---
-at_prefix_mode=false
-if pgrep -P "$pane_pid" -f ".*claude.*|node.*gemini|codex" >/dev/null; then
-	at_prefix_mode=true
-fi
 
 # --- Git Detection ---
 git_root=$(git -C "$pane_dir" rev-parse --show-toplevel 2>/dev/null || true)
@@ -229,19 +210,11 @@ case "$mode" in
 esac
 
 # --- Format Output ---
-if $at_prefix_mode; then
-	result=()
-	for p in "${output[@]}"; do
-		result+=("$(format_at_prefix "$p")")
-	done
-	printf -v out "%s " "${result[@]}"
-else
-	result=()
-	for p in "${output[@]}"; do
-		result+=("$(format_shell_escape "$p")")
-	done
-	printf -v out "%s " "${result[@]}"
-fi
+result=()
+for p in "${output[@]}"; do
+	result+=("$(format_shell_escape "$p")")
+done
+printf -v out "%s " "${result[@]}"
 
 # --- Send to Tmux ---
 tmux send-keys -t "$pane_id" "$out"

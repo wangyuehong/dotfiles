@@ -29,56 +29,14 @@ setup() {
 	[ "$output" = "/tmp/file.txt" ]
 }
 
-# === Unit tests: format_at_prefix ===
-
-@test "AC-0030-0050: format_at_prefix: space -> single quote" {
-	run format_at_prefix "path with space.txt"
-	[ "$output" = "@'path with space.txt'" ]
-}
-
-@test "AC-0030-0060: format_at_prefix: single quote escape" {
-	run format_at_prefix "file'name.txt"
-	[ "$output" = "@'file'\\''name.txt'" ]
-}
-
-@test "format_at_prefix: no special chars -> no quote" {
-	run format_at_prefix "simple.txt"
-	[ "$output" = "@simple.txt" ]
-}
-
-@test "format_at_prefix: dollar sign -> single quote" {
-	run format_at_prefix 'file$var.txt'
-	[ "$output" = "@'file\$var.txt'" ]
-}
-
-@test "format_at_prefix: backslash -> single quote" {
-	run format_at_prefix 'file\name.txt'
-	[ "$output" = "@'file\\name.txt'" ]
-}
-
-@test "format_at_prefix: backtick -> single quote" {
-	run format_at_prefix 'file`cmd`.txt'
-	[ "$output" = "@'file\`cmd\`.txt'" ]
-}
-
-@test "format_at_prefix: double quote -> single quote" {
-	run format_at_prefix 'file"name.txt'
-	[ "$output" = "@'file\"name.txt'" ]
-}
-
-@test "format_at_prefix: tab -> single quote" {
-	run format_at_prefix $'file\tname.txt'
-	[ "$output" = $'@\'file\tname.txt\'' ]
-}
-
 # === Unit tests: format_shell_escape ===
 
-@test "AC-0030-0080: format_shell_escape: space -> backslash escape" {
+@test "AC-0030-0010: format_shell_escape: space -> backslash escape" {
 	run format_shell_escape "path with space.txt"
 	[ "$output" = 'path\ with\ space.txt' ]
 }
 
-@test "AC-0030-0090: format_shell_escape: ~ path preserved" {
+@test "AC-0030-0020: format_shell_escape: ~ path preserved" {
 	run format_shell_escape "~/project/main.go"
 	[ "$output" = "~/project/main.go" ]
 }
