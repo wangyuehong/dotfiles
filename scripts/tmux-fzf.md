@@ -74,7 +74,8 @@
 
 ### 补充说明
 
-- 从当前 pane 所在目录开始搜索（可通过 Ctrl-H 导航到父目录）
+- Git 仓库内从 git 根目录开始搜索，仓库外从当前 pane 目录开始搜索
+- 可通过 Ctrl-H/Ctrl-L 导航到其他目录
 - 隐藏文件（.开头）包含在搜索结果中
 - .git 目录被排除
 - 目录预览最多显示 30 行
@@ -93,7 +94,7 @@
 
 - Given: 当前目录在 git 仓库内
 - When: 执行脚本
-- Then: 提示符显示 Git 模式，选择文件后输出相对于 git 仓库根目录的路径
+- Then: 提示符显示 Git 模式，候选列表显示相对于 git 根目录的路径，选择后输出相对路径
 
 #### AC-0020-0020: Git 仓库外默认绝对路径
 
@@ -107,13 +108,14 @@
 
 - Given: 当前目录在 git 仓库内，fzf 界面已打开
 - When: 按 Ctrl-T
-- Then: 提示符显示 Abs 模式
+- Then: 提示符显示 Abs 模式，候选列表刷新显示绝对路径
 
 #### AC-0020-0040: Git 仓库内再次切换回 Git 相对路径
 
 - Given: 当前目录在 git 仓库内，已切换到 Abs 模式
 - When: 再次按 Ctrl-T
-- Then: 提示符显示 Git 模式
+- Then: 提示符显示 Git 模式，候选列表刷新显示相对路径
+- Note: 如果已导航到 git 仓库外，按 Ctrl-T 无法切换到 Git 模式（无变化）
 
 #### AC-0020-0050: Git 仓库外切换到相对路径
 
@@ -132,7 +134,7 @@
 #### AC-0020-0070: Git 模式输出相对路径
 
 - Given: 在 Git 模式下，git 仓库根目录为 /home/user/project
-- When: 选择 /home/user/project/src/main.go
+- When: 选择列表中显示的 src/main.go
 - Then: 输出 src/main.go
 
 #### AC-0020-0080: Abs 模式输出绝对路径
@@ -147,29 +149,11 @@
 - When: 选择 /home/user/project/src/main.go
 - Then: 输出 src/main.go
 
-#### AC-0020-0100: Git 模式导航后选择外部文件使用绝对路径
-
-- Given: 在 Git 模式下，通过 Ctrl-H 导航到 git 仓库外
-- When: 选择一个不在 git 仓库内的文件
-- Then: 输出绝对路径（~/...），而非相对路径
-
-#### AC-0020-0110: Rel 模式导航后选择外部文件使用绝对路径
-
-- Given: 在 Rel 模式下，通过 Ctrl-H 导航到 pane 目录外
-- When: 选择一个不在原始 pane 目录内的文件
-- Then: 输出绝对路径（~/...），而非相对路径
-
-#### AC-0020-0120: 导航后选择内部文件仍使用相对路径
-
-- Given: 在 Git/Rel 模式下，通过 Ctrl-H/Ctrl-L 导航后
-- When: 选择一个在基准目录（Git 仓库或 pane 目录）内的文件
-- Then: 仍输出相对路径
-
 ### 补充说明
 
-- 当缺少 grealpath 时，git/rel 模式回退到绝对路径
+- 当缺少 grealpath 时，rel 模式回退到绝对路径
 - Abs 模式下 $HOME 前缀统一替换为 ~
-- 导航后选择外部文件时，自动使用绝对路径（无论当前模式）
+- 导航时根据目标目录的 git 状态自动切换模式（见 US-0040）
 
 ## US-0030: 输出格式
 
@@ -203,7 +187,7 @@
 
 - Given: 用户在 fzf 界面中，当前搜索目录为 /home/user/project
 - When: 按 Ctrl-H
-- Then: 搜索目录切换到 /home/user，列表显示父目录下的文件和目录（混合显示）
+- Then: 搜索目录切换到 /home/user，列表显示父目录下的文件和目录（混合显示），查询框清空
 
 #### AC-0040-0020: 连续导航
 
@@ -217,17 +201,19 @@
 - When: 按 Ctrl-H
 - Then: 保持在根目录，不发生变化
 
-#### AC-0040-0040: 切换类型后保持目录
+#### AC-0040-0040: 切换类型后保持目录（Abs/Rel 模式）
 
-- Given: 用户已按 Ctrl-H 导航到父目录
+- Given: 用户在 Abs/Rel 模式下，已按 Ctrl-H 导航到其他目录
 - When: 按 Ctrl-D 切换类型（All/Files/Dirs）
 - Then: 继续在当前导航目录下搜索，不重置到原始目录
+- Note: Git 模式下切换类型始终搜索整个 git 仓库
 
-#### AC-0040-0050: Header 显示当前搜索目录
+#### AC-0040-0050: Header 显示当前目录
 
 - Given: 用户在 fzf 界面中
 - When: 界面打开时
-- Then: Header 第一行显示当前搜索目录路径（$HOME 缩写为 ~）
+- Then: Header 第一行显示当前 pane 目录路径（$HOME 缩写为 ~）
+- Note: Git 模式下虽然搜索整个 git 仓库，Header 仍显示 pane 目录
 
 #### AC-0040-0060: 导航后 Header 更新
 
@@ -239,7 +225,7 @@
 
 - Given: 用户在 fzf 界面中，光标在一个目录上
 - When: 按 Ctrl-L
-- Then: 搜索目录切换到选中的目录，列表显示该目录下的文件和目录（混合显示），Header 更新
+- Then: 搜索目录切换到选中的目录，列表显示该目录下的文件和目录（混合显示），Header 更新，查询框清空
 
 #### AC-0040-0080: 非目录时 Ctrl-L 无效
 
@@ -247,14 +233,41 @@
 - When: 按 Ctrl-L
 - Then: 无变化
 
+**导航时自动切换模式**
+
+#### AC-0040-0090: 导航到 git 仓库外自动切换到 Abs 模式
+
+- Given: 用户在 Git 模式下，当前在 git 仓库内
+- When: 按 Ctrl-H 导航到 git 仓库外的目录
+- Then: 自动切换到 Abs 模式，候选列表显示绝对路径，提示符更新
+
+#### AC-0040-0100: 进入 git 仓库自动切换到 Git 模式
+
+- Given: 用户在 Abs 模式下，当前在 git 仓库外
+- When: 按 Ctrl-L 进入一个 git 仓库内的目录
+- Then: 自动切换到 Git 模式，候选列表显示相对路径，提示符更新
+
+**导航后操作**
+
+#### AC-0040-0110: 导航后切换类型使用当前 git root
+
+- Given: 用户从非 git 目录导航进入 git 仓库，已自动切换到 Git 模式
+- When: 按 Ctrl-D 切换类型（All/Files/Dirs）
+- Then: 列表显示当前 git 仓库的相对路径，而非启动时的 git root
+
+#### AC-0040-0120: 导航后切换模式使用当前 git root
+
+- Given: 用户从一个 git 仓库导航到另一个 git 仓库
+- When: 按 Ctrl-T 切换到 Git 模式
+- Then: 列表显示当前 git 仓库的相对路径，而非启动时的 git root
+
 ### 补充说明
 
-- 默认从当前 pane 目录开始搜索
 - Ctrl-H: 导航到父目录（混合显示文件和目录）
 - Ctrl-L: 进入选中的子目录（混合显示文件和目录）
 - 导航时始终混合显示文件和目录，便于继续导航或选择文件
-- 导航不改变路径模式（Git/Abs/Rel）的行为
-- 导航后选择的文件仍按当前路径模式格式化输出
+- 导航时根据目标目录的 git 状态自动切换模式（Git/Abs）
+- 导航后选择的文件按自动切换后的模式格式化输出
 
 ## US-0050: 错误处理
 

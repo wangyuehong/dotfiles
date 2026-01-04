@@ -63,8 +63,8 @@ fi
 has_grealpath=false
 command -v grealpath >/dev/null 2>&1 && has_grealpath=true
 
-# --- Preview Command ---
-# Auto-detect file vs directory and use appropriate preview
+# --- Preview Tools ---
+# Auto-detect file vs directory preview commands
 if command -v bat >/dev/null 2>&1; then
 	file_cmd='bat --style=numbers --color=always'
 elif command -v batcat >/dev/null 2>&1; then
@@ -79,17 +79,22 @@ else
 	dir_cmd='ls -ap --color=always'
 fi
 
-preview="[[ -d {} ]] && $dir_cmd {} | head -n 30 || $file_cmd {}"
-
 # --- fd Commands ---
 fd_flags="-H --exclude .git"
 printf -v escaped_dir "%q" "$pane_dir"
-# Static command for initial load (files and directories)
-fd_all="$fd_cmd $fd_flags --absolute-path . $escaped_dir"
-# Templates for dynamic reload (base directory appended at runtime)
-fd_files_tpl="$fd_cmd $fd_flags --type f --absolute-path ."
-fd_dirs_tpl="$fd_cmd $fd_flags --type d --absolute-path ."
-fd_all_tpl="$fd_cmd $fd_flags --absolute-path ."
+
+# Abs mode: absolute paths (templates for dynamic reload)
+fd_abs_all_tpl="$fd_cmd $fd_flags --absolute-path"
+fd_abs_files_tpl="$fd_cmd $fd_flags --type f --absolute-path"
+fd_abs_dirs_tpl="$fd_cmd $fd_flags --type d --absolute-path"
+
+# Initial load command
+if $in_git_repo; then
+	printf -v escaped_git_root "%q" "$git_root"
+	fd_initial="$fd_cmd $fd_flags --base-directory $escaped_git_root ."
+else
+	fd_initial="$fd_cmd $fd_flags --absolute-path . $escaped_dir"
+fi
 
 # --- State Files ---
 mode_file=$(mktemp)
@@ -101,6 +106,11 @@ else
 fi
 echo "$pane_dir" > "$base_file"
 trap "rm -f '$mode_file' '$base_file'" EXIT
+
+# --- Preview Command ---
+# Handle relative paths (Git mode) by dynamically getting git root from base_file
+preview_path="p={}; if [[ \"\$p\" != /* && ! -e \"\$p\" ]]; then base=\$(cat '$base_file'); gr=\$(git -C \"\$base\" rev-parse --show-toplevel 2>/dev/null); p=\"\$gr\"/\"\$p\"; fi; echo \"\$p\""
+preview="p=\$($preview_path); [[ -d \"\$p\" ]] && $dir_cmd \"\$p\" | head -n 30 || $file_cmd \"\$p\""
 
 # --- ANSI Colors ---
 C=$'\e[38;5;203m'  # coral/salmon red
@@ -114,18 +124,35 @@ prompt_builder="printf '%s' \"${C}\${type}${R} | ${C}\${mode}${R} > \""
 # --- fzf Bindings ---
 # Ctrl-D: cycle All -> Files -> Dirs -> All
 bind_switch_type="ctrl-d:transform:
+	mode=\$(echo \"\$FZF_PROMPT\" | grep -oE '(Git|Abs|Rel)')
 	base=\$(cat '$base_file')
 	printf -v esc '%q' \"\$base\"
-	mode=\$(echo \"\$FZF_PROMPT\" | grep -oE '(Git|Abs|Rel)')
 	if [[ \$FZF_PROMPT =~ All ]]; then
-		type=Files fd='$fd_files_tpl'
+		type=Files
 	elif [[ \$FZF_PROMPT =~ Files ]]; then
-		type=Dirs fd='$fd_dirs_tpl'
+		type=Dirs
 	else
-		type=All fd='$fd_all_tpl'
+		type=All
+	fi
+	# Select fd command based on mode
+	if [[ \$mode == Git ]]; then
+		# Git mode: dynamically get git root for current base directory
+		git_root=\$(git -C \"\$base\" rev-parse --show-toplevel 2>/dev/null)
+		printf -v git_esc '%q' \"\$git_root\"
+		case \$type in
+			All) fd='$fd_cmd $fd_flags --base-directory '\"\$git_esc\"' .' ;;
+			Files) fd='$fd_cmd $fd_flags --type f --base-directory '\"\$git_esc\"' .' ;;
+			Dirs) fd='$fd_cmd $fd_flags --type d --base-directory '\"\$git_esc\"' .' ;;
+		esac
+	else
+		case \$type in
+			All) fd='$fd_abs_all_tpl . '\"\$esc\" ;;
+			Files) fd='$fd_abs_files_tpl . '\"\$esc\" ;;
+			Dirs) fd='$fd_abs_dirs_tpl . '\"\$esc\" ;;
+		esac
 	fi
 	prompt=\$($prompt_builder)
-	echo \"change-prompt(\$prompt)+reload(\$fd \$esc)+first\""
+	echo \"change-prompt(\$prompt)+reload(\$fd)+first\""
 
 if $in_git_repo; then
 	default_mode=Git
@@ -141,13 +168,34 @@ initial_header="$(shorten_home_path "$pane_dir")
 $keybinds_header"
 
 bind_switch_path="ctrl-t:transform:
+	base=\$(cat '$base_file')
+	printf -v esc '%q' \"\$base\"
 	if [[ \$FZF_PROMPT =~ All ]]; then type=All
 	elif [[ \$FZF_PROMPT =~ Files ]]; then type=Files
 	else type=Dirs
 	fi
 	[[ \$FZF_PROMPT =~ $alt_mode ]] && mode=$default_mode || mode=$alt_mode
+	# Select fd command based on new mode
+	if [[ \$mode == Git ]]; then
+		# Git mode: dynamically get git root for current base directory
+		# AC-0020-0040: If navigated outside git repo, cannot switch to Git mode
+		git_root=\$(git -C \"\$base\" rev-parse --show-toplevel 2>/dev/null)
+		[[ -z \"\$git_root\" ]] && exit 0
+		printf -v git_esc '%q' \"\$git_root\"
+		case \$type in
+			All) fd='$fd_cmd $fd_flags --base-directory '\"\$git_esc\"' .' ;;
+			Files) fd='$fd_cmd $fd_flags --type f --base-directory '\"\$git_esc\"' .' ;;
+			Dirs) fd='$fd_cmd $fd_flags --type d --base-directory '\"\$git_esc\"' .' ;;
+		esac
+	else
+		case \$type in
+			All) fd='$fd_abs_all_tpl . '\"\$esc\" ;;
+			Files) fd='$fd_abs_files_tpl . '\"\$esc\" ;;
+			Dirs) fd='$fd_abs_dirs_tpl . '\"\$esc\" ;;
+		esac
+	fi
 	prompt=\$($prompt_builder)
-	echo \"change-prompt(\$prompt)+execute-silent(sh -c 'echo \$mode | tr A-Z a-z > $mode_file')\""
+	echo \"change-prompt(\$prompt)+reload(\$fd)+execute-silent(sh -c 'echo \$mode | tr A-Z a-z > $mode_file')+first\""
 
 bind_parent_dir="ctrl-h:transform:
 	base=\$(cat '$base_file')
@@ -158,24 +206,56 @@ bind_parent_dir="ctrl-h:transform:
 	short=\$(echo \"\$parent\" | sed 's|^$HOME|~|')
 	header=\"\${short}
 $keybinds_header\"
-	echo \"change-header(\$header)+reload($fd_all_tpl \$esc)+first\""
+	# Auto-switch mode based on git status
+	target_git=\$(git -C \"\$parent\" rev-parse --show-toplevel 2>/dev/null || true)
+	if [[ -n \"\$target_git\" ]]; then
+		mode=Git
+		printf -v git_esc '%q' \"\$target_git\"
+		fd='$fd_cmd $fd_flags --base-directory '\"\$git_esc\"' .'
+	else
+		mode=Abs
+		fd='$fd_abs_all_tpl . '\"\$esc\"
+	fi
+	echo \"\$mode\" | tr A-Z a-z > '$mode_file'
+	type=All
+	prompt=\$($prompt_builder)
+	echo \"clear-query+change-header(\$header)+change-prompt(\$prompt)+reload(\$fd)+first\""
 
 bind_enter_dir="ctrl-l:transform:
 	[[ ! -d {} ]] && exit 0
 	dir={}
+	# Handle relative path from Git mode
+	if [[ \"\$dir\" != /* ]]; then
+		base=\$(cat '$base_file')
+		current_git=\$(git -C \"\$base\" rev-parse --show-toplevel 2>/dev/null)
+		dir=\"\$current_git\"/\"\$dir\"
+	fi
 	echo \"\$dir\" > '$base_file'
 	printf -v esc '%q' \"\$dir\"
 	short=\$(echo \"\$dir\" | sed 's|^$HOME|~|')
 	header=\"\${short}
 $keybinds_header\"
-	echo \"change-header(\$header)+reload($fd_all_tpl \$esc)+first\""
+	# Auto-switch mode based on git status
+	target_git=\$(git -C \"\$dir\" rev-parse --show-toplevel 2>/dev/null || true)
+	if [[ -n \"\$target_git\" ]]; then
+		mode=Git
+		printf -v git_esc '%q' \"\$target_git\"
+		fd='$fd_cmd $fd_flags --base-directory '\"\$git_esc\"' .'
+	else
+		mode=Abs
+		fd='$fd_abs_all_tpl . '\"\$esc\"
+	fi
+	echo \"\$mode\" | tr A-Z a-z > '$mode_file'
+	type=All
+	prompt=\$($prompt_builder)
+	echo \"clear-query+change-header(\$header)+change-prompt(\$prompt)+reload(\$fd)+first\""
 
 fzf_opts=(
 	--multi --reverse
 	--preview "$preview"
 	--prompt "${C}All${R} | ${C}${default_mode}${R} > "
 	--header "$initial_header"
-	--bind "start:reload:$fd_all"
+	--bind "start:reload:$fd_initial"
 	--bind "$bind_switch_type"
 	--bind "$bind_switch_path"
 	--bind "$bind_parent_dir"
@@ -202,14 +282,25 @@ case "$mode" in
 			output+=("$(shorten_home_path "$f")")
 		done
 		;;
-	git|rel)
-		[[ "$mode" == "git" ]] && base="$git_root" || base="$pane_dir"
+	git)
+		# Git mode: paths are already relative from fd, use directly
 		for f in "${files[@]}"; do
-			# Use absolute path if file is outside base directory
-			if [[ "$f" != "$base"/* ]]; then
+			if [[ "$f" == /* ]]; then
+				# Absolute path (from Abs mode before switch)
+				output+=("$(shorten_home_path "$f")")
+			else
+				# Relative path from git root
+				output+=("$f")
+			fi
+		done
+		;;
+	rel)
+		for f in "${files[@]}"; do
+			# Use absolute path if file is outside pane directory
+			if [[ "$f" != "$pane_dir"/* ]]; then
 				output+=("$(shorten_home_path "$f")")
 			elif $has_grealpath; then
-				output+=("$(grealpath --relative-to="$base" "$f")")
+				output+=("$(grealpath --relative-to="$pane_dir" "$f")")
 			else
 				output+=("$(shorten_home_path "$f")")
 			fi
