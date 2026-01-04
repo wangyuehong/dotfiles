@@ -20,7 +20,7 @@ shorten_home_path() {
 # Usage: format_at_prefix "path with space" -> "@'path with space'"
 format_at_prefix() {
 	local p="$1"
-	local special_chars='[[:space:]'"'"'\"$`\\]'
+	local special_chars='[[:space:]'"'"'\"$`\]'
 	if [[ "$p" =~ $special_chars ]]; then
 		p=${p//\'/\'\\\'\'}
 		p="'$p'"

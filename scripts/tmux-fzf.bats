@@ -66,6 +66,11 @@ setup() {
 	[ "$output" = "@'file\"name.txt'" ]
 }
 
+@test "format_at_prefix: tab -> single quote" {
+	run format_at_prefix $'file\tname.txt'
+	[ "$output" = $'@\'file\tname.txt\'' ]
+}
+
 # === Unit tests: format_shell_escape ===
 
 @test "AC-0030-0080: format_shell_escape: space -> backslash escape" {
