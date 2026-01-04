@@ -56,6 +56,16 @@ setup() {
 	[ "$output" = "@'file\\name.txt'" ]
 }
 
+@test "format_at_prefix: backtick -> single quote" {
+	run format_at_prefix 'file`cmd`.txt'
+	[ "$output" = "@'file\`cmd\`.txt'" ]
+}
+
+@test "format_at_prefix: double quote -> single quote" {
+	run format_at_prefix 'file"name.txt'
+	[ "$output" = "@'file\"name.txt'" ]
+}
+
 # === Unit tests: format_shell_escape ===
 
 @test "AC-0030-0080: format_shell_escape: space -> backslash escape" {
@@ -80,14 +90,14 @@ setup() {
 
 # === Integration tests: error handling ===
 
-@test "AC-0040-0010: non-tmux env exits with error" {
+@test "AC-0050-0010: non-tmux env exits with error" {
 	unset TMUX
 	run "$SCRIPT"
 	[ "$status" -eq 1 ]
 	[[ "$output" == *"must be run inside a tmux session"* ]]
 }
 
-@test "AC-0040-0020: missing fd exits with error" {
+@test "AC-0050-0020: missing fd exits with error" {
 	# Save original TMUX to restore later
 	local orig_tmux="${TMUX:-}"
 	export TMUX="fake-tmux-session"

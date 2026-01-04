@@ -20,8 +20,10 @@ shorten_home_path() {
 # Usage: format_at_prefix "path with space" -> "@'path with space'"
 format_at_prefix() {
 	local p="$1"
-	if [[ "$p" == *[[:space:]\'\"\$\`\\]* ]]; then
-		p="'${p//\'/"'\''"}'"
+	local special_chars='[[:space:]'"'"'\"$`\\]'
+	if [[ "$p" =~ $special_chars ]]; then
+		p=${p//\'/\'\\\'\'}
+		p="'$p'"
 	fi
 	echo "@$p"
 }
@@ -101,17 +103,24 @@ preview="[[ -d {} ]] && $dir_cmd {} | head -n 30 || $file_cmd {}"
 # --- fd Commands ---
 fd_flags="-H --exclude .git"
 printf -v escaped_dir "%q" "$pane_dir"
+# Static command for initial load (files only)
 fd_files="$fd_cmd $fd_flags --type f --absolute-path . $escaped_dir"
-fd_dirs="$fd_cmd $fd_flags --type d --absolute-path . $escaped_dir"
+# Templates for dynamic reload (base directory appended at runtime)
+fd_files_tpl="$fd_cmd $fd_flags --type f --absolute-path ."
+fd_dirs_tpl="$fd_cmd $fd_flags --type d --absolute-path ."
+# Mixed mode: files and directories (for navigation)
+fd_all_tpl="$fd_cmd $fd_flags --absolute-path ."
 
-# --- State File ---
+# --- State Files ---
 mode_file=$(mktemp)
+base_file=$(mktemp)
 if $in_git_repo; then
 	echo "git" > "$mode_file"
 else
 	echo "abs" > "$mode_file"
 fi
-trap "rm -f '$mode_file'" EXIT
+echo "$pane_dir" > "$base_file"
+trap "rm -f '$mode_file' '$base_file'" EXIT
 
 # --- ANSI Colors ---
 C=$'\e[38;5;203m'  # coral/salmon red
@@ -124,11 +133,13 @@ prompt_builder="printf '%s' \"${C}\${type}${R} | ${C}\${mode}${R} > \""
 
 # --- fzf Bindings ---
 bind_switch_type="ctrl-d:transform:
+	base=\$(cat '$base_file')
+	printf -v esc '%q' \"\$base\"
 	mode=\$(echo \"\$FZF_PROMPT\" | grep -oE '(Git|Abs|Rel)')
 	[[ \$FZF_PROMPT =~ Files ]] && type=Dirs || type=Files
-	[[ \$type == Dirs ]] && fd=\"$fd_dirs\" || fd=\"$fd_files\"
+	[[ \$type == Dirs ]] && fd='$fd_dirs_tpl' || fd='$fd_files_tpl'
 	prompt=\$($prompt_builder)
-	echo \"change-prompt(\$prompt)+reload(\$fd)+first\""
+	echo \"change-prompt(\$prompt)+reload(\$fd \$esc)+first\""
 
 if $in_git_repo; then
 	default_mode=Git
@@ -138,20 +149,48 @@ else
 	alt_mode=Rel
 fi
 
+# --- Header ---
+keybinds_header="C-d: Files/Dirs | C-t: ${default_mode}/${alt_mode} | C-h: Up | C-l: In"
+initial_header="$(shorten_home_path "$pane_dir")
+$keybinds_header"
+
 bind_switch_path="ctrl-t:transform:
 	[[ \$FZF_PROMPT =~ Files ]] && type=Files || type=Dirs
 	[[ \$FZF_PROMPT =~ $alt_mode ]] && mode=$default_mode || mode=$alt_mode
 	prompt=\$($prompt_builder)
 	echo \"change-prompt(\$prompt)+execute-silent(sh -c 'echo \$mode | tr A-Z a-z > $mode_file')\""
 
+bind_parent_dir="ctrl-h:transform:
+	base=\$(cat '$base_file')
+	parent=\$(dirname \"\$base\")
+	[[ \"\$parent\" == \"\$base\" ]] && exit 0
+	echo \"\$parent\" > '$base_file'
+	printf -v esc '%q' \"\$parent\"
+	short=\$(echo \"\$parent\" | sed 's|^$HOME|~|')
+	header=\"\${short}
+$keybinds_header\"
+	echo \"change-header(\$header)+reload($fd_all_tpl \$esc)+first\""
+
+bind_enter_dir="ctrl-l:transform:
+	[[ ! -d {} ]] && exit 0
+	dir={}
+	echo \"\$dir\" > '$base_file'
+	printf -v esc '%q' \"\$dir\"
+	short=\$(echo \"\$dir\" | sed 's|^$HOME|~|')
+	header=\"\${short}
+$keybinds_header\"
+	echo \"change-header(\$header)+reload($fd_all_tpl \$esc)+first\""
+
 fzf_opts=(
 	--multi --reverse
 	--preview "$preview"
 	--prompt "${C}Files${R} | ${C}${default_mode}${R} > "
-	--header "C-d: Files/Dirs | C-t: ${default_mode}/${alt_mode}"
+	--header "$initial_header"
 	--bind "start:reload:$fd_files"
 	--bind "$bind_switch_type"
 	--bind "$bind_switch_path"
+	--bind "$bind_parent_dir"
+	--bind "$bind_enter_dir"
 )
 
 # --- Run fzf ---
@@ -176,13 +215,16 @@ case "$mode" in
 		;;
 	git|rel)
 		[[ "$mode" == "git" ]] && base="$git_root" || base="$pane_dir"
-		if $has_grealpath; then
-			while IFS= read -r line; do
-				[[ -n "$line" ]] && output+=("$line")
-			done < <(grealpath --relative-to="$base" "${files[@]}")
-		else
-			output=("${files[@]}")
-		fi
+		for f in "${files[@]}"; do
+			# Use absolute path if file is outside base directory
+			if [[ "$f" != "$base"/* ]]; then
+				output+=("$(shorten_home_path "$f")")
+			elif $has_grealpath; then
+				output+=("$(grealpath --relative-to="$base" "$f")")
+			else
+				output+=("$(shorten_home_path "$f")")
+			fi
+		done
 		;;
 esac
 
