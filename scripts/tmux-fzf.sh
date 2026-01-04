@@ -84,12 +84,11 @@ preview="[[ -d {} ]] && $dir_cmd {} | head -n 30 || $file_cmd {}"
 # --- fd Commands ---
 fd_flags="-H --exclude .git"
 printf -v escaped_dir "%q" "$pane_dir"
-# Static command for initial load (files only)
-fd_files="$fd_cmd $fd_flags --type f --absolute-path . $escaped_dir"
+# Static command for initial load (files and directories)
+fd_all="$fd_cmd $fd_flags --absolute-path . $escaped_dir"
 # Templates for dynamic reload (base directory appended at runtime)
 fd_files_tpl="$fd_cmd $fd_flags --type f --absolute-path ."
 fd_dirs_tpl="$fd_cmd $fd_flags --type d --absolute-path ."
-# Mixed mode: files and directories (for navigation)
 fd_all_tpl="$fd_cmd $fd_flags --absolute-path ."
 
 # --- State Files ---
@@ -109,16 +108,22 @@ R=$'\e[0m'         # reset
 
 # --- Prompt Builder ---
 # Usage in fzf transform: builds "Type | Mode > " prompt with colors
-# Expects: $type (Files/Dirs), $mode (Git/Abs/Rel)
+# Expects: $type (All/Files/Dirs), $mode (Git/Abs/Rel)
 prompt_builder="printf '%s' \"${C}\${type}${R} | ${C}\${mode}${R} > \""
 
 # --- fzf Bindings ---
+# Ctrl-D: cycle All -> Files -> Dirs -> All
 bind_switch_type="ctrl-d:transform:
 	base=\$(cat '$base_file')
 	printf -v esc '%q' \"\$base\"
 	mode=\$(echo \"\$FZF_PROMPT\" | grep -oE '(Git|Abs|Rel)')
-	[[ \$FZF_PROMPT =~ Files ]] && type=Dirs || type=Files
-	[[ \$type == Dirs ]] && fd='$fd_dirs_tpl' || fd='$fd_files_tpl'
+	if [[ \$FZF_PROMPT =~ All ]]; then
+		type=Files fd='$fd_files_tpl'
+	elif [[ \$FZF_PROMPT =~ Files ]]; then
+		type=Dirs fd='$fd_dirs_tpl'
+	else
+		type=All fd='$fd_all_tpl'
+	fi
 	prompt=\$($prompt_builder)
 	echo \"change-prompt(\$prompt)+reload(\$fd \$esc)+first\""
 
@@ -131,12 +136,15 @@ else
 fi
 
 # --- Header ---
-keybinds_header="C-d: Files/Dirs | C-t: ${default_mode}/${alt_mode} | C-h: Up | C-l: In"
+keybinds_header="C-d: All/Files/Dirs | C-t: ${default_mode}/${alt_mode} | C-h: Up | C-l: In"
 initial_header="$(shorten_home_path "$pane_dir")
 $keybinds_header"
 
 bind_switch_path="ctrl-t:transform:
-	[[ \$FZF_PROMPT =~ Files ]] && type=Files || type=Dirs
+	if [[ \$FZF_PROMPT =~ All ]]; then type=All
+	elif [[ \$FZF_PROMPT =~ Files ]]; then type=Files
+	else type=Dirs
+	fi
 	[[ \$FZF_PROMPT =~ $alt_mode ]] && mode=$default_mode || mode=$alt_mode
 	prompt=\$($prompt_builder)
 	echo \"change-prompt(\$prompt)+execute-silent(sh -c 'echo \$mode | tr A-Z a-z > $mode_file')\""
@@ -165,9 +173,9 @@ $keybinds_header\"
 fzf_opts=(
 	--multi --reverse
 	--preview "$preview"
-	--prompt "${C}Files${R} | ${C}${default_mode}${R} > "
+	--prompt "${C}All${R} | ${C}${default_mode}${R} > "
 	--header "$initial_header"
-	--bind "start:reload:$fd_files"
+	--bind "start:reload:$fd_all"
 	--bind "$bind_switch_type"
 	--bind "$bind_switch_path"
 	--bind "$bind_parent_dir"
