@@ -36,6 +36,7 @@ ln-dotfiles:
 	  echo "ln -sf $(CURR_DIR)/.$$file ~/.$$file" && ln -sf $(CURR_DIR)/.$$file ~/.$$file; \
 	done;
 	ln -sf $(CURR_DIR)/direnv.toml ~/.config/direnv/direnv.toml
+	ln -sf $(CURR_DIR)/direnvrc ~/.config/direnv/direnvrc
 	ln -sf $(CURR_DIR)/ghostty.toml ~/.config/ghostty/config
 	ln -sf $(CURR_DIR)/mise.toml ~/.config/mise/config.toml
 
