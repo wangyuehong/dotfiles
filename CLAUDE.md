@@ -14,7 +14,7 @@ make setup          # 创建目录、安装 Homebrew 包、符号链接 dotfiles
 
 ```bash
 make                # 全量更新：oh-my-zsh、插件、Homebrew、tmux 插件、Go 工具
-make brew-up        # 仅更新 Homebrew
+make brew-up        # 更新 Homebrew formulae 和 cask
 make go-tools       # 仅更新 Go 工具
 make py-tools       # 仅更新 Python 工具
 ```

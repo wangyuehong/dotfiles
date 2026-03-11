@@ -63,6 +63,7 @@ setup:
 	@mkdir -p ~/.config/ghostty
 	@mkdir -p ~/.config/mise
 	@brew install -q coreutils mise tmux zsh fd fzf rg tig git jq aspell z yq direnv universal-ctags tmux-mem-cpu-load trash bats-core
+	@brew install --cask -q --force font-maple-mono-normal-nl-nf-cn font-sauce-code-pro-nerd-font
 	@brew tap laishulu/homebrew && brew install -q macism
 	@make ln-dotfiles
 	@make ln-scripts
@@ -70,7 +71,7 @@ setup:
 
 .PHONY: brew-up
 brew-up:
-	@brew update && brew upgrade && brew cleanup -s
+	@brew update && brew upgrade --greedy && brew cleanup -s
 
 .PHONY: go-tools
 go-tools:
