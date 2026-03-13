@@ -88,7 +88,9 @@ go-tools:
 
 .PHONY: py-tools
 py-tools:
-	@brew install ruff pyright uv
+	@brew install ruff uv
+	@uv tool install basedpyright
+	@uv tool install ty
 
 .PHONY: mise-tools
 mise-tools:
