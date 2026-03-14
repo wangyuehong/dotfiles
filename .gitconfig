@@ -23,12 +23,10 @@
 	dc = diff --cached
 	l = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --
 	ri = rebase -i
-[core]
-	excludesfile = ~/.gitignore
 [pull]
 	rebase = false
 [push]
-	default = tracking
+	default = upstream
 [fetch]
 	prune = true
 [merge]
@@ -37,7 +35,6 @@
 	tool = vimdiff
 [diff]
 	tool = vimdiff
-	compactionHeuristic = true
 [mergetool]
 	# no prompt before merge each file
 	prompt = false

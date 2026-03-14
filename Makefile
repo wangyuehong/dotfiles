@@ -19,19 +19,19 @@ upclone:
 
 .PHONY: upclone-all
 upclone-all:
-	@make upclone github_repo=robbyrussell/oh-my-zsh.git dir=~/.oh-my-zsh
-	@make upclone github_repo=zsh-users/zsh-syntax-highlighting.git \
+	@$(MAKE) upclone github_repo=robbyrussell/oh-my-zsh.git dir=~/.oh-my-zsh
+	@$(MAKE) upclone github_repo=zsh-users/zsh-syntax-highlighting.git \
 		dir=~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
-	@make upclone github_repo=zsh-users/zsh-autosuggestions.git \
+	@$(MAKE) upclone github_repo=zsh-users/zsh-autosuggestions.git \
 		dir=~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
-	@make upclone github_repo=denysdovhan/spaceship-prompt.git \
+	@$(MAKE) upclone github_repo=denysdovhan/spaceship-prompt.git \
 		dir=~/.oh-my-zsh/custom/themes/spaceship-prompt
-	@make upclone github_repo=tmux-plugins/tpm.git dir=~/.tmux/plugins/tpm
+	@$(MAKE) upclone github_repo=tmux-plugins/tpm.git dir=~/.tmux/plugins/tpm
 	@ln -sf ~/.oh-my-zsh/custom/themes/spaceship-prompt/spaceship.zsh-theme ~/.oh-my-zsh/custom/themes/spaceship.zsh-theme
 
 .PHONY: ln-dotfiles
 ln-dotfiles:
-	@for file in aliases bash_profile zprofile ctags gemrc gitconfig gitignore psqlrc tigrc tmux.conf vimrc \
+	@for file in aliases bash_profile zprofile ctags gitconfig gitignore psqlrc tigrc tmux.conf vimrc \
 		zshrc myclirc ripgreprc editorconfig; do \
 	  echo "ln -sf $(CURR_DIR)/.$$file ~/.$$file" && ln -sf $(CURR_DIR)/.$$file ~/.$$file; \
 	done;
@@ -50,23 +50,23 @@ ln-scripts:
 
 .PHONY: all
 all:
-	@make upclone-all
-	@make brew-up
+	@$(MAKE) upclone-all
+	@$(MAKE) brew-up
 	@~/.tmux/plugins/tpm/bin/update_plugins all
-	@make go-tools
+	@$(MAKE) go-tools
 
 .PHONY: setup
 setup:
-	@make home-dirs
+	@$(MAKE) home-dirs
 	@mkdir -p ~/.config/direnv
 	@mkdir -p ~/.config/tmux
 	@mkdir -p ~/.config/ghostty
 	@mkdir -p ~/.config/mise
-	@brew install -q coreutils mise tmux zsh fd fzf rg tig git jq aspell z yq direnv universal-ctags tmux-mem-cpu-load trash bats-core
+	@brew install -q coreutils mise tmux zsh fd fzf ripgrep tig git jq aspell z yq direnv universal-ctags tmux-mem-cpu-load trash bats-core
 	@brew install --cask -q --force font-maple-mono-normal-nl-nf-cn font-sauce-code-pro-nerd-font
 	@brew tap laishulu/homebrew && brew install -q macism
-	@make ln-dotfiles
-	@make ln-scripts
+	@$(MAKE) ln-dotfiles
+	@$(MAKE) ln-scripts
 	@~/.tmux/plugins/tpm/bin/install_plugins
 
 .PHONY: brew-up

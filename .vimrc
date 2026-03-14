@@ -95,12 +95,6 @@ set tabstop=2
 "换行自动缩进,是按照shiftwidth值来缩进的
 set cindent shiftwidth=2
 
-"最基本的自动缩进
-set autoindent shiftwidth=2
-
-"比autoindent稍智能的自动缩进
-set smartindent shiftwidth=2
-
 "将新增的tab转换为空格。不会对已有的tab进行转换
 set expandtab
 
@@ -124,7 +118,6 @@ set noerrorbells
 
 "语言编码设置
 set encoding=utf-8
-set termencoding=utf-8
 set fileencodings=ucs-bom,utf-8,cp936,gb18030,big5,euc-jp,euc-kr,latin1
 set helplang=cn
 
@@ -132,25 +125,25 @@ set helplang=cn
 let mapleader=","
 
 "利用前导键加b,则可以在一个单子两边加上大括号
-map <leader>b wbi{<Esc>ea}<Esc>
+noremap <leader>b wbi{<Esc>ea}<Esc>
 
 "使用前导键加w来实现加速文件保存,来代替:w!加回车
-nmap <leader>w :w!<CR>
+nnoremap <leader>w :w!<CR>
 
 "匹配那些末尾有空格或TAB的行。（es：Endspace Show）
-map <leader>es :/.*\s\+$<CR>
+noremap <leader>es :/.*\s\+$<CR>
 
 "删除行末尾的空格或TAB（ed：Endspace Delete）
-map <leader>ed :s#\s\+$##<CR>
+noremap <leader>ed :s#\s\+$##<CR>
 
 "如果所选行的行首没有#,则给所选行行首加上注释符#（#a：# add）
-map <leader>#a :s/^\([^#]\s*\)/#\1/<CR>
+noremap <leader>#a :s/^\([^#]\s*\)/#\1/<CR>
 
 "如果所选行行首有#,则将所选行行首所有的#都去掉（#d：# delete）
-map <leader>#d :s/^#\+\(\s*\)/\1/<CR>
+noremap <leader>#d :s/^#\+\(\s*\)/\1/<CR>
 
 "如果所选行的行首没有//,则给所选行行首加上注释符//（/a：/ add）
-map <leader>/a :s/^\([^\/\/]\s*\)/\/\/\1/<CR>
+noremap <leader>/a :s/^\([^\/\/]\s*\)/\/\/\1/<CR>
 
 "如果所选行行首有//,则将所选行行首的//都去掉（/d：/ delete）
-map <leader>/d :s/^\/\/\(\s*\)/\1/<CR>
+noremap <leader>/d :s/^\/\/\(\s*\)/\1/<CR>
