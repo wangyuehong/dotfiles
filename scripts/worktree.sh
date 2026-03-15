@@ -1,4 +1,5 @@
-#!/bin/bash -e
+#!/usr/bin/env bash
+set -euo pipefail
 
 if [[ -z "$1" ]]; then
   echo "Usage: worktree.sh <repo-url> [branch]" >&2

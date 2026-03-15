@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
 # Get friendly window name for tmux
 # Usage: tmux-window-name.sh <pane_pid> [panes]
 

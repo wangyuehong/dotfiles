@@ -28,21 +28,25 @@ bats scripts/tmux-im.bats     # 运行单个测试文件
 
 ## 架构
 
-### 目录结构
+### 文件清单
 
-- 根目录：配置 dotfiles（`.zshrc`、`.tmux.conf`、`.vimrc` 等）
-- `scripts/`：自定义 shell 脚本，配套 spec 文档和 BATS 测试
-- `Makefile`：安装自动化和依赖管理
+Dotfiles（`make ln-dotfiles` -> `~/.{file}`，清单省略 `.` 前缀）：
 
-### 符号链接策略
+`aliases`, `bash_profile`, `zprofile`, `ctags`, `gitconfig`, `gitignore`, `psqlrc`, `tigrc`, `tmux.conf`, `vimrc`, `zshrc`, `myclirc`, `ripgreprc`, `editorconfig`
 
-`make ln-dotfiles` 将仓库文件链接到 `~/.{file}`。配置目录使用 `~/.config/{app}/`：
+配置文件（`make ln-dotfiles` -> `~/.config/`）：
 
 - `direnv.toml` -> `~/.config/direnv/direnv.toml`
+- `direnvrc` -> `~/.config/direnv/direnvrc`
 - `ghostty.toml` -> `~/.config/ghostty/config`
 - `mise.toml` -> `~/.config/mise/config.toml`
 
-`make ln-scripts` 将脚本链接到 `~/bin/`。
+脚本（`make ln-scripts` -> `~/bin/`）：
+
+- `tmux-im.sh` - 输入法边框同步（三件套完备）
+- `tmux-fzf.sh` - fzf 文件选择器（三件套完备）
+- `tmux-window-name.sh` - 窗口名称生成（三件套完备）
+- `worktree.sh` - git worktree 初始化（无 spec / 测试）
 
 ### 外部依赖
 
@@ -65,9 +69,11 @@ tmux 插件（由 tpm 管理，位于 `~/.tmux/plugins/tpm`）：
 
 `.tmux.conf` 通过 hook 和按键绑定调用 `scripts/` 下的脚本：
 
-- `tmux-window-name.sh`：通过 `automatic-rename-format` 调用，根据运行进程动态生成窗口名
-- `tmux-fzf.sh`：通过 `prefix + C-f` 在 popup 中启动文件选择器
-- `tmux-im.sh`：输入法状态管理，支持多语言切换
+- `automatic-rename-format`: 调用 `tmux-window-name.sh #{pane_pid} #{window_panes}`
+- `C-a` binding: 运行 `tmux-im.sh prefix #{pane_id}` 后进入 prefix 模式
+- `prefix + C-f`: 在 popup 中启动 `tmux-fzf.sh`
+- `pane-focus-in` hook: 运行 `tmux-im.sh focus-in #{pane_id}`
+- `pane-mode-changed` hook: 运行 `tmux-im.sh mode-changed #{pane_id} #{pane_mode}`
 
 `tmux-im.sh` 子命令：
 
@@ -80,21 +86,98 @@ tmux 插件（由 tpm 管理，位于 `~/.tmux/plugins/tpm`）：
 
 依赖：`macism`（Homebrew tap `laishulu/homebrew`）
 
+## Shell 脚本规范
+
+- Shebang: `#!/usr/bin/env bash`
+- 安全选项：shebang 后 `set -euo pipefail`
+- 函数命名：`snake_case`
+- 局部变量：必须使用 `local`
+- 常量 / 环境变量：`UPPER_CASE`
+- 子命令脚本结构：`usage()` + `main()` + `case` dispatch
+- Sourcing guard（脚本末尾，允许测试 source）:
+
+```bash
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+    main "$@"
+fi
+```
+
+参考实现：`scripts/tmux-im.sh`
+
 ## 脚本开发
 
-脚本遵循 spec 驱动开发，验收标准写在 markdown 文件中：
+脚本遵循 spec 驱动开发，每个脚本必须包含三件套（命名：kebab-case，三文件同名）：
 
-- `scripts/tmux-im.md` - `tmux-im.sh` 的 spec
-- `scripts/tmux-fzf.md` - `tmux-fzf.sh` 的 spec
-- `scripts/tmux-window-name.md` - `tmux-window-name.sh` 的 spec
+- `scripts/{name}.sh` - 实现
+- `scripts/{name}.md` - spec（用户故事 + 验收标准）
+- `scripts/{name}.bats` - BATS 测试
 
-每个脚本配套 `.bats` 测试文件（BATS - Bash Automated Testing System）。
+现有缺口：`worktree.sh` 无 spec 和测试。
 
-### 测试规范
+### BATS 测试模式
 
-- 测试命名对应 spec 中的验收标准：`@test "AC-XXXX-XXXX: 描述"`
-- 脚本使用 sourcing guard（`if [[ "${BASH_SOURCE[0]}" == "${0}" ]]`），允许测试文件直接 source 脚本访问内部函数
-- Mock 机制：通过环境变量（如 `MOCK_IM`）和函数导出模拟外部依赖
+文件结构（参考 `scripts/tmux-im.bats`）：
+
+```bash
+#!/usr/bin/env bats
+# {name}.bats: Tests for {name}.sh
+#
+# Run: bats scripts/{name}.bats
+
+# === Constants ===
+# 测试用常量
+
+# === Helpers ===
+# 辅助函数（可选）
+
+# === Setup/Teardown ===
+setup() {
+    source "${BATS_TEST_DIRNAME}/{name}.sh"
+    # Mock 外部依赖: 定义同名函数 + export -f
+}
+teardown() { ... }
+
+# === Section Name ===
+@test "AC-XXXX-XXXX: 描述" { ... }
+```
+
+Mock 机制：
+
+- 环境变量控制 mock 行为（如 `MOCK_IM`）
+- 在 `setup()` 中 override 函数：`macism() { echo "${MOCK_IM:-default}"; }; export -f macism`
+- 被测脚本通过 sourcing guard 提供函数供测试直接调用
+
+测试命名：
+
+- 对应 spec 验收标准：`@test "AC-XXXX-XXXX: 描述"`
+- 补充测试：`@test "函数名: 描述"`
+
+### Makefile 变更清单
+
+新增脚本时：
+
+- `ln-scripts` target: 添加到 `for` 循环的脚本列表
+- `test` target: 添加新的 `.bats` 文件路径
+
+新增 dotfile 时：
+
+- `ln-dotfiles` target: 添加到 `for` 循环的文件列表
+
+新增配置文件（`~/.config/` 目标）时：
+
+- `ln-dotfiles` target: 添加 `ln -sf` 行
+- `setup` target: 添加 `mkdir -p` 创建目标目录
+
+新增 Homebrew 包时：
+
+- `setup` target: 添加到 `brew install` 行
+
+## 注意事项
+
+- 始终编辑仓库中的源文件，禁止直接修改 `~/` 下的符号链接目标
+- 部分文件链接时改名：`ghostty.toml` -> `config`、`mise.toml` -> `config.toml`
+- `worktree.sh` 无 sourcing guard，不可被 source
+- `tmux-im.bats` 会创建和销毁临时 tmux session，其余测试文件不依赖 tmux server
 
 ## 本地覆盖
 
