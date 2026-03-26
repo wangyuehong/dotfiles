@@ -28,4 +28,3 @@ window-padding-x = 6,0
 quick-terminal-autohide = false
 
 keybind = cmd+grave_accent=toggle_quick_terminal
-keybind = shift+enter=text:\n
