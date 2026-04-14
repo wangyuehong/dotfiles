@@ -1,5 +1,6 @@
 alias e='emacs -nw'
 alias cc='claude'
+alias cc2='CLAUDE_CODE_DISABLE_1M_CONTEXT=1 claude'
 alias ec='emacsclient -t'
 alias n='nvim'
 alias v='vim'
