@@ -6,4 +6,5 @@ TAGS
 cmd/tmux-im/tmux-im
 scripts/.tmux-im-test.log
 /.claude/worktrees/
+/.claude/scheduled_tasks.lock
 /.worktreeinclude
