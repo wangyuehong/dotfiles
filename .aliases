@@ -9,6 +9,7 @@ alias ...='cd ../..'
 alias g='git'
 alias df='df -h'
 alias du='du -h'
+alias rm='trash'
 alias su="su -"
 alias sudo='sudo -E'
 alias less='less -r'
