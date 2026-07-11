@@ -36,6 +36,13 @@ _Z_CMD=j
 
 source $ZSH/oh-my-zsh.sh
 
+# oh-my-zsh 按 terminfo[khome]/[kend] 绑定 Home/End (对 xterm-256color 是 \eOH/\eOF)，
+# 但 tmux 转发进 pane 时用的是 \e[1~/\e[4~，两者不一致，需要显式补绑
+if [[ -n "$TMUX" ]]; then
+    bindkey '^[[1~' beginning-of-line
+    bindkey '^[[4~' end-of-line
+fi
+
 # History configuration
 unsetopt share_history           # keep arrow keys clean (current session only)
 setopt inc_append_history        # write immediately (other windows can search)

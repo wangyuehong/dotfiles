@@ -28,3 +28,9 @@ window-padding-x = 6,0
 quick-terminal-autohide = false
 
 keybind = cmd+grave_accent=toggle_quick_terminal
+
+# 默认 cmd+arrow_left/right 发裸 Ctrl-A/Ctrl-E，会被 tmux 的 C-a prefix 吞掉；
+# 改发 khome/kend 转义序列 (与当前 $TERM=xterm-256color 的 terminfo 一致，
+# oh-my-zsh 按 terminfo[khome]/[kend] 动态绑定 Home/End，形式必须匹配)
+keybind = super+arrow_left=text:\x1bOH
+keybind = super+arrow_right=text:\x1bOF
