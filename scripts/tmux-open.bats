@@ -7,6 +7,29 @@
 SCRIPT="${BATS_TEST_DIRNAME}/tmux-open.sh"
 SESSION='$1'
 EMACS_PANE='%2'
+# Any of these calls means Emacs or the focus changed
+FOCUS_CALLS='emacsclient\|select-window\|select-pane'
+
+# === Helpers ===
+
+# Fail when any recorded call matches the pattern (bare `! grep` never fails a bats test).
+not_called() {
+	if grep -q "$1" "$CALLS"; then
+		echo "unexpected call matching: $1" >&2
+		return 1
+	fi
+}
+
+# Run main for a click at column x of text, with an optional hyperlink.
+click() {
+	run main "$SESSION" "$WORK" "$2" "$1" "${3:-}"
+}
+
+# Assert split_location splits $1 into path $2, line $3 and col $4.
+location_is() {
+	split_location "$1"
+	[ "$LOC_PATH" = "$2" ] && [ "$LOC_LINE" = "$3" ] && [ "$LOC_COL" = "$4" ]
+}
 
 # === Setup/Teardown ===
 setup() {
@@ -41,19 +64,6 @@ ${EMACS_PANE} Emacs"
 	export -f tmux open emacsclient
 }
 
-# Fail when any recorded call matches the pattern (bare `! grep` never fails a bats test).
-not_called() {
-	if grep -q "$1" "$CALLS"; then
-		echo "unexpected call matching: $1" >&2
-		return 1
-	fi
-}
-
-# Run main for a click at column x of text, with an optional hyperlink.
-click() {
-	run main "$SESSION" "$WORK" "$2" "$1" "${3:-}"
-}
-
 # === Target recognition ===
 
 @test "AC-0010-0010: hyperlink target wins over visible text" {
@@ -72,6 +82,8 @@ click() {
 	[ "$output" = "src/a.go" ]
 	run token_at "src/a.go:3:, next" 2
 	[ "$output" = "src/a.go:3" ]
+	run token_at "is it src/a.go?!" 8
+	[ "$output" = "src/a.go" ]
 }
 
 @test "AC-0010-0030: full-width characters count as two columns" {
@@ -88,7 +100,7 @@ click() {
 @test "AC-0010-0040: delimiter under the mouse reports no target" {
 	click "a.go  b.go" 5
 	grep -q "tmux display-message -N -C -l -d 2000 tmux-open: no path or URL under the mouse" "$CALLS"
-	not_called "emacsclient\|select-pane"
+	not_called "$FOCUS_CALLS"
 }
 
 # === URL ===
@@ -96,12 +108,19 @@ click() {
 @test "AC-0010-0050: URL text opens with the system opener" {
 	click "docs at https://example.com/a:12 now" 12
 	grep -qx "open https://example.com/a:12" "$CALLS"
-	not_called "emacsclient\|select-pane"
+	not_called "$FOCUS_CALLS"
 }
 
 @test "AC-0010-0050: http hyperlink opens with the system opener" {
 	click "the label" 5 "https://example.com"
 	grep -qx "open https://example.com" "$CALLS"
+	not_called "$FOCUS_CALLS"
+}
+
+@test "AC-0010-0050: any scheme other than file goes to the system opener" {
+	click "open vscode://file/a.go now" 7
+	grep -qx "open vscode://file/a.go" "$CALLS"
+	not_called "$FOCUS_CALLS"
 }
 
 # === Paths ===
@@ -128,21 +147,17 @@ click() {
 }
 
 @test "AC-0010-0070: line, column and line range" {
-	run split_location "a.go:12:3"
-	[ "$output" = "a.go${LOC_SEP}12${LOC_SEP}3" ]
-	run split_location "a.go:12-20"
-	[ "$output" = "a.go${LOC_SEP}12${LOC_SEP}" ]
-	run split_location "a.go"
-	[ "$output" = "a.go${LOC_SEP}${LOC_SEP}" ]
+	location_is "a.go:12:3" a.go 12 3
+	location_is "a.go:12-20" a.go 12 ""
+	location_is "a.go:12-20:3" a.go 12 3
+	location_is "a.go" a.go "" ""
 	click "src/a.go:12:3" 0
 	grep -qx "emacsclient -n +12:3 $WORK/src/a.go" "$CALLS"
 }
 
 @test "AC-0010-0070: link fragment #L line and column" {
-	run split_location "file:///a.go#L12C3"
-	[ "$output" = "file:///a.go${LOC_SEP}12${LOC_SEP}3" ]
-	run split_location "a.go#L12-L20"
-	[ "$output" = "a.go${LOC_SEP}12${LOC_SEP}" ]
+	location_is "file:///a.go#L12C3" file:///a.go 12 3
+	location_is "a.go#L12-L20" a.go 12 ""
 	click "a.go:99" 0 "file://$WORK/src/a.go#L42"
 	grep -qx "emacsclient -n +42 $WORK/src/a.go" "$CALLS"
 }
@@ -158,14 +173,14 @@ click() {
 @test "AC-0010-0090: missing path reports not found" {
 	click "src/none.go:3" 0
 	grep -q "tmux display-message -N -C -l -d 2000 tmux-open: not found: $WORK/src/none.go" "$CALLS"
-	not_called "emacsclient\|select-pane"
+	not_called "$FOCUS_CALLS"
 }
 
 @test "AC-0010-0100: no Emacs pane reports and keeps focus" {
 	export MOCK_PANES="%1 zsh"
 	click "src/a.go" 0
 	grep -q "tmux display-message -N -C -l -d 2000 tmux-open: no Emacs pane in this session" "$CALLS"
-	not_called "emacsclient\|select-pane"
+	not_called "$FOCUS_CALLS"
 }
 
 # === Usage ===

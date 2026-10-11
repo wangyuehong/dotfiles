@@ -32,7 +32,10 @@ bats scripts/tmux-im.bats     # 运行单个测试文件
 
 Dotfiles（`make ln-dotfiles` -> `~/.{file}`，清单省略 `.` 前缀）：
 
-`aliases`, `bash_profile`, `zprofile`, `ctags`, `gitconfig`, `gitignore`, `psqlrc`, `tigrc`, `tmux.conf`, `vimrc`, `zshrc`, `myclirc`, `ripgreprc`, `editorconfig`
+- Shell：`aliases`, `bash_profile`, `zprofile`, `zshrc`
+- Git：`gitconfig`, `gitignore`
+- 编辑器：`vimrc`, `editorconfig`, `ctags`
+- 终端与 CLI 工具：`tmux.conf`, `tigrc`, `psqlrc`, `myclirc`, `ripgreprc`
 
 配置文件（`make ln-dotfiles` -> `~/.config/`）：
 
@@ -64,7 +67,10 @@ tmux 插件（由 tpm 管理，位于 `~/.tmux/plugins/tpm`）：
 
 ### 代码风格
 
-`.editorconfig` 定义格式规则：默认 2 空格缩进，Go 使用 tab，Python 使用 4 空格，Makefile 使用 tab。
+`.editorconfig` 定义格式规则：
+
+- 默认 2 空格缩进，Python 使用 4 空格
+- Go、Makefile，以及 `scripts/` 下的 shell 脚本与 BATS 测试使用 tab
 
 ### tmux 与脚本集成
 

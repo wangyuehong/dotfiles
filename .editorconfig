@@ -19,6 +19,10 @@ indent_size = 4
 [Makefile]
 indent_style = tab
 
+# Path-relative so the symlinked ~/.editorconfig does not impose tabs on other projects
+[scripts/*.{sh,bats}]
+indent_style = tab
+
 [*.{yaml,yml}]
 indent_style = space
 indent_size = 2

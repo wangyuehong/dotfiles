@@ -68,21 +68,20 @@ token_at() {
 	echo "$token"
 }
 
-# Split a location into path, line and col joined by LOC_SEP; missing parts are empty.
+# Split a location into LOC_PATH, LOC_LINE and LOC_COL; missing parts are empty.
 # Accepts "path:line[-end][:col]" and the link fragment form "path#Lline[Ccol][-Lend]".
-# Usage: split_location "a.go:12:3" -> "a.go<SEP>12<SEP>3"
-LOC_SEP=$'\x1f'
+# Sets variables like char_width, so callers need no subshell or parsing.
+# Usage: split_location "a.go:12:3" -> LOC_PATH=a.go LOC_LINE=12 LOC_COL=3
 split_location() {
 	local s="$1"
+	LOC_PATH="$s" LOC_LINE="" LOC_COL=""
 	if [[ "$s" =~ ^(.+)#L([0-9]+)(C([0-9]+))?(-L?[0-9]+)?$ ]]; then
-		echo "${BASH_REMATCH[1]}$LOC_SEP${BASH_REMATCH[2]}$LOC_SEP${BASH_REMATCH[4]}"
+		LOC_PATH="${BASH_REMATCH[1]}" LOC_LINE="${BASH_REMATCH[2]}" LOC_COL="${BASH_REMATCH[4]}"
 	# Two patterns because ERE has no lazy match: "(.+)" would swallow ":line" of "path:line:col".
 	elif [[ "$s" =~ ^(.+):([0-9]+)(-[0-9]+)?:([0-9]+)$ ]]; then
-		echo "${BASH_REMATCH[1]}$LOC_SEP${BASH_REMATCH[2]}$LOC_SEP${BASH_REMATCH[4]}"
+		LOC_PATH="${BASH_REMATCH[1]}" LOC_LINE="${BASH_REMATCH[2]}" LOC_COL="${BASH_REMATCH[4]}"
 	elif [[ "$s" =~ ^(.+):([0-9]+)(-[0-9]+)?$ ]]; then
-		echo "${BASH_REMATCH[1]}$LOC_SEP${BASH_REMATCH[2]}$LOC_SEP"
-	else
-		echo "$s$LOC_SEP$LOC_SEP"
+		LOC_PATH="${BASH_REMATCH[1]}" LOC_LINE="${BASH_REMATCH[2]}"
 	fi
 }
 
@@ -158,11 +157,12 @@ main() {
 		return 0
 	fi
 
-	local path line col
-	IFS="$LOC_SEP" read -r path line col < <(split_location "$target")
+	split_location "$target"
+	local path="$LOC_PATH" line="$LOC_LINE" col="$LOC_COL"
 	# A link without a line number may still show one in its visible text.
 	if [[ -n "$link" && -z "$line" ]]; then
-		IFS="$LOC_SEP" read -r _ line col < <(split_location "$token")
+		split_location "$token"
+		line="$LOC_LINE" col="$LOC_COL"
 	fi
 	if [[ "$path" == file://* ]]; then
 		path=$(file_url_path "$path")
