@@ -53,7 +53,7 @@ ln-dotfiles: ## 符号链接 dotfiles 到 ~/ 与 ~/.config/
 
 .PHONY: ln-scripts
 ln-scripts: ## 符号链接 scripts/ 下指定脚本到 ~/bin/
-	@for script in worktree.sh tmux-fzf.sh tmux-im.sh tmux-window-name.sh; do \
+	@for script in worktree.sh tmux-fzf.sh tmux-im.sh tmux-open.sh tmux-window-name.sh; do \
 		chmod +x $(CURR_DIR)/scripts/$$script && \
 		ln -sf $(CURR_DIR)/scripts/$$script ~/bin/$$script; \
 	done
@@ -110,4 +110,4 @@ mise-tools: ## 信任 mise 配置，提示编辑 config.local.toml
 
 .PHONY: test
 test: ## 运行全部 BATS 测试
-	@bats scripts/tmux-im.bats scripts/tmux-fzf.bats scripts/tmux-window-name.bats
+	@bats scripts/tmux-im.bats scripts/tmux-fzf.bats scripts/tmux-open.bats scripts/tmux-window-name.bats

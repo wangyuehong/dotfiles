@@ -45,6 +45,7 @@ Dotfiles（`make ln-dotfiles` -> `~/.{file}`，清单省略 `.` 前缀）：
 
 - `tmux-im.sh` - 输入法边框同步（三件套完备）
 - `tmux-fzf.sh` - fzf 文件选择器（三件套完备）
+- `tmux-open.sh` - 按住 Option 点击打开路径或 URL（三件套完备）
 - `tmux-window-name.sh` - 窗口名称生成（三件套完备）
 - `worktree.sh` - git worktree 初始化（无 spec / 测试）
 
@@ -72,6 +73,7 @@ tmux 插件（由 tpm 管理，位于 `~/.tmux/plugins/tpm`）：
 - `automatic-rename-format`: 调用 `tmux-window-name.sh #{pane_pid} #{window_panes}`
 - `C-a` binding: 运行 `tmux-im.sh prefix #{pane_id}` 后进入 prefix 模式
 - `prefix + C-f`: 在 popup 中启动 `tmux-fzf.sh`
+- `M-MouseDown1Pane`（按住 Option 点击）: 点击处的文字与链接经 `@tmux-open-*` 选项传给 `tmux-open.sh`
 - `pane-focus-in` hook: 运行 `tmux-im.sh focus-in #{pane_id}`
 - `pane-mode-changed` hook: 运行 `tmux-im.sh mode-changed #{pane_id} #{pane_mode}`
 
