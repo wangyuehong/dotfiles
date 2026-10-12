@@ -55,7 +55,15 @@ setup() {
 	export TMUX_IM_LOG="$BATS_TEST_DIRNAME/.tmux-im-test.log"
 	truncate -s 0 "$TMUX_IM_LOG" 2>/dev/null || true
 	source "${BATS_TEST_DIRNAME}/tmux-im.sh"
-	macism() { echo "${MOCK_IM:-$IM_ABC}"; }
+	# Like macism, prints the input method only when queried; switch calls are recorded in MACISM_CALLS
+	MACISM_CALLS="$BATS_TEST_TMPDIR/macism-calls"
+	macism() {
+		if (($# == 0)); then
+			echo "${MOCK_IM:-$IM_ABC}"
+		else
+			echo "$*" >>"$MACISM_CALLS"
+		fi
+	}
 	export -f macism
 	tmux new-session -d -s "$TEST_SESSION" 2>/dev/null || true
 }
@@ -138,6 +146,60 @@ teardown() {
 	local pane=$(get_pane)
 	MOCK_IM="$IM_ABC"
 	cmd_prefix "$pane"
+}
+
+# === Integration tests: popup ===
+
+@test "AC-0030-0010: popup switches to English and resets the border" {
+	local pane=$(get_pane)
+	set_opt "$pane" @im-color "$COLOR_RED"
+	MOCK_IM="$IM_RIME"
+	run cmd_popup "$pane"
+	[ "$status" -eq 0 ]
+	# run-shell shows any output in view mode, so the subcommand must print nothing
+	[ -z "$output" ]
+	[ "$(cat "$MACISM_CALLS")" = "$IM_ABC 0" ]
+	[ -z "$(get_opt "$pane" @im-color)" ]
+}
+
+@test "AC-0030-0010: clicking another pane resets the active pane's border" {
+	local active=$(get_pane) clicked
+	clicked=$(tmux split-window -d -P -F '#{pane_id}' -t "$TEST_SESSION")
+	set_opt "$active" @im-color "$COLOR_RED"
+	set_opt "$clicked" @im-color "$COLOR_RED"
+	MOCK_IM="$IM_RIME"
+	run main popup "$clicked"
+	[ "$status" -eq 0 ]
+	[ "$(cat "$MACISM_CALLS")" = "$IM_ABC 0" ]
+	[ -z "$(get_opt "$active" @im-color)" ]
+	[ "$(get_opt "$clicked" @im-color)" = "$COLOR_RED" ]
+}
+
+@test "AC-0030-0020: popup keeps English" {
+	local pane=$(get_pane)
+	MOCK_IM="$IM_ABC"
+	run main popup "$pane"
+	[ "$status" -eq 0 ]
+	[ -z "$output" ]
+	[ ! -e "$MACISM_CALLS" ]
+}
+
+@test "AC-0030-0030: closing the popup keeps the current input method" {
+	local pane=$(get_pane)
+	MOCK_IM="$IM_RIME"
+	cmd_popup "$pane"
+	# Closing the popup focuses the active pane again, the clicked one here, which runs the focus-in hook
+	MOCK_IM="$IM_ABC"
+	run main focus-in "$pane"
+	[ "$status" -eq 0 ]
+	[ "$(cat "$MACISM_CALLS")" = "$IM_ABC 0" ]
+	[ -z "$(get_opt "$pane" @im-color)" ]
+	# Switched to Chinese inside the popup: the border follows, nothing switches back
+	MOCK_IM="$IM_RIME"
+	run main focus-in "$pane"
+	[ "$status" -eq 0 ]
+	[ "$(cat "$MACISM_CALLS")" = "$IM_ABC 0" ]
+	[ "$(get_opt "$pane" @im-color)" = "$COLOR_RED" ]
 }
 
 # === Integration tests: focus-in ===

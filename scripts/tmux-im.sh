@@ -6,6 +6,7 @@
 #
 # Called by:
 #   - tmux hooks (focus-in, mode-changed, prefix)
+#   - tmux-open.sh (popup) before a popup opens
 #   - Hammerspoon (sync) when input method changes in terminal
 #
 # Hammerspoon is single-threaded and uses hs.execute() synchronously,
@@ -141,6 +142,19 @@ cmd_prefix() {
 	fi
 }
 
+# pane_id is the clicked pane. Only the active pane's border shows @im-color and the click
+# leaves the active pane unchanged, so the border update goes to the active pane of its window.
+cmd_popup() {
+	local pane_id="$1" active
+	active=$(tmux list-panes -t "$pane_id" -f '#{pane_active}' -F '#{pane_id}')
+	save_and_switch_to_english "$active"
+	if [[ $SWITCHED -eq 1 ]]; then
+		log "popup: pane=$pane_id active=$active | im=$(short_im "$SAVED_IM") | switch to ABC"
+	else
+		log "popup: pane=$pane_id active=$active | im=ABC | no switch"
+	fi
+}
+
 # Hammerspoon handler
 cmd_sync() {
 	local source_id
@@ -164,12 +178,14 @@ Usage:
   tmux-im.sh focus-in <pane_id>
   tmux-im.sh mode-changed <pane_id> [mode]
   tmux-im.sh prefix <pane_id>
+  tmux-im.sh popup <pane_id>
   tmux-im.sh sync
 
 Commands:
   focus-in      Sync border color when pane gains focus (tmux hook)
   mode-changed  Handle copy-mode enter/exit (tmux hook)
-  prefix        Save IM and switch to English before prefix mode (tmux hook)
+  prefix        Switch to English before prefix mode (tmux hook)
+  popup         Switch to English before a popup opens over the pane (tmux-open.sh)
   sync          Sync current IM and border color (Hammerspoon)
 
 Environment:
@@ -198,6 +214,10 @@ main() {
 		prefix)
 			[[ $# -lt 1 ]] && { echo "error: prefix requires <pane_id>" >&2; exit 1; }
 			cmd_prefix "$1"
+			;;
+		popup)
+			[[ $# -lt 1 ]] && { echo "error: popup requires <pane_id>" >&2; exit 1; }
+			cmd_popup "$1"
 			;;
 		sync)
 			cmd_sync

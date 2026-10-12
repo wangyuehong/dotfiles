@@ -79,15 +79,17 @@ tmux 插件（由 tpm 管理，位于 `~/.tmux/plugins/tpm`）：
 - `automatic-rename-format`: 调用 `tmux-window-name.sh #{pane_pid} #{window_panes}`
 - `C-a` binding: 运行 `tmux-im.sh prefix #{pane_id}` 后进入 prefix 模式
 - `prefix + C-f`: 在 popup 中启动 `tmux-fzf.sh`
-- `M-MouseDown1Pane`（按住 Option 点击）: 点击处的文字与链接经 `@tmux-open-*` 选项传给 `tmux-open.sh`
+- `M-MouseDown1Pane` 等按住 Option 的按下: 把点击处的 pane、文字与链接记入 `@tmux-open-*` 选项，进入 `tmux-open` 按键表
+- `tmux-open` 表中按住 Option 的松开: 把记下的选项传给 `tmux-open.sh`
 - `pane-focus-in` hook: 运行 `tmux-im.sh focus-in #{pane_id}`
 - `pane-mode-changed` hook: 运行 `tmux-im.sh mode-changed #{pane_id} #{pane_mode}`
 
 `tmux-im.sh` 子命令：
 
 - `focus-in`：切换 pane 时同步边框颜色到当前输入法
-- `mode-changed`：进入 copy-mode 时切换到英文，退出时恢复
-- `prefix`：进入 prefix 模式前保存输入法并切换到英文
+- `mode-changed`：进入 copy-mode 时切换到英文，退出时同步边框颜色
+- `prefix`：进入 prefix 模式前切换到英文
+- `popup`：`tmux-open.sh` 弹出 popup 前切换到英文
 - `sync`：由 Hammerspoon 在系统输入法变更时调用
 
 边框颜色反映输入法状态：红色 = 中文（Rime）、蓝色 = 日语（Google 日本語入力）。
