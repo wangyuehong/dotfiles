@@ -182,7 +182,9 @@ present_popup() {
 		title="~${title#"$HOME"}"
 	fi
 	popup_title "$title"
-	tmux display-popup -c "$client" -t "$pane" -w 90% -h 90% -T "$REPLY" -E "${VIEWER_ARGV[@]}" 2>/dev/null || rc=$?
+	# TMUX_POPUP=1 tells the viewer it runs in a popup that closes when it exits.
+	tmux display-popup -c "$client" -t "$pane" -w 90% -h 90% -T "$REPLY" -e TMUX_POPUP=1 \
+		-E "${VIEWER_ARGV[@]}" 2>/dev/null || rc=$?
 	# The switch only helps typing, so its failure does not stop the popup. The notice waits for the popup
 	# to close: while a notice shows, tmux drops all input, including keys meant for the popup.
 	((im_rc == 0)) || notify "$client" "input method switch failed (exit $im_rc)"

@@ -32,7 +32,7 @@ click() {
 
 # Assert the popup ran emacsclient with exactly these arguments after "-t -a false".
 viewer_args_are() {
-	diff <(printf '%s\n' emacsclient -t -a false "$@") <(tail -n +12 "$POPUP")
+	diff <(printf '%s\n' emacsclient -t -a false "$@") <(sed '1,/^-E$/d' "$POPUP")
 }
 
 # Print the value the popup got for option $1, among the options before -E.
@@ -248,7 +248,7 @@ setup() {
 @test "AC-0010-0080: popup on the clicking client runs emacsclient on its tty" {
 	click "src/a.go:12:3" 0
 	[ "$status" -eq 0 ]
-	diff <(printf '%s\n' -c "$CLIENT" -t "$PANE" -w 90% -h 90% -T "$WORK/src/a.go" \
+	diff <(printf '%s\n' -c "$CLIENT" -t "$PANE" -w 90% -h 90% -T "$WORK/src/a.go" -e TMUX_POPUP=1 \
 		-E emacsclient -t -a false +12:3 "$WORK/src/a.go") "$POPUP"
 	not_called "select-window\|select-pane\|^open "
 }
@@ -386,7 +386,7 @@ setup() {
 	viewer_stub() { VIEWER_ARGV=(stubview "$@"); }
 	choose_viewer() { REPLY=stub; }
 	main "$CLIENT" "$PANE" "$WORK" 0 "src/a.go:12" ""
-	diff <(printf '%s\n' stubview "$WORK/src/a.go" 12 "") <(tail -n +12 "$POPUP")
+	diff <(printf '%s\n' stubview "$WORK/src/a.go" 12 "") <(sed '1,/^-E$/d' "$POPUP")
 }
 
 # === Usage ===
