@@ -118,8 +118,8 @@ repo_root() {
 resolve_path() {
 	local p="$1" cwd="$2" root
 	case "$p" in
-	"~") REPLY="$HOME" ;;
-	"~/"*) REPLY="$HOME/${p#\~/}" ;;
+	\~) REPLY="$HOME" ;;
+	\~/*) REPLY="$HOME/${p#\~/}" ;;
 	/*) REPLY="$p" ;;
 	:/*)
 		root=$(repo_root "$cwd")

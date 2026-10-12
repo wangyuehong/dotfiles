@@ -139,13 +139,14 @@ teardown() {
 	local pane=$(get_pane)
 	MOCK_IM="$IM_RIME"
 	cmd_prefix "$pane"
-	# Note: actual macism switch verified by code path (macism "$DEFAULT_IM")
+	[ "$(cat "$MACISM_CALLS")" = "$IM_ABC 0" ]
 }
 
 @test "AC-0010-0050: prefix keeps English" {
 	local pane=$(get_pane)
 	MOCK_IM="$IM_ABC"
 	cmd_prefix "$pane"
+	[ ! -e "$MACISM_CALLS" ]
 }
 
 # === Integration tests: popup ===
@@ -217,7 +218,7 @@ teardown() {
 	local pane=$(get_pane)
 	MOCK_IM="$IM_RIME"
 	cmd_mode_changed "$pane" "copy-mode"
-	# Note: actual macism switch to English verified by code path
+	[ "$(cat "$MACISM_CALLS")" = "$IM_ABC 0" ]
 	[ -z "$(get_opt "$pane" @im-color)" ]
 }
 

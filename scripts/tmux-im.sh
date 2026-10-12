@@ -5,7 +5,7 @@
 #   @im-color     - Border color for tmux format #{@im-color}
 #
 # Called by:
-#   - tmux hooks (focus-in, mode-changed, prefix)
+#   - tmux hooks (focus-in, mode-changed) and the C-a binding (prefix)
 #   - tmux-open.sh (popup) before a popup opens
 #   - Hammerspoon (sync) when input method changes in terminal
 #
@@ -39,11 +39,9 @@ get_current_im() {
 	macism
 }
 
-# Switch IM, log only when actual switch happens
+# Switch IM from current (as the caller just queried it) to target, log only when actual switch happens
 switch_im() {
-	local target="$1"
-	local current
-	current=$(get_current_im)
+	local current="$1" target="$2"
 	if [[ "$current" == "$target" ]]; then
 		return 0
 	fi
@@ -61,7 +59,7 @@ save_and_switch_to_english() {
 	local pane_id="$1"
 	SAVED_IM=$(get_current_im)
 	if [[ "$SAVED_IM" != "$DEFAULT_IM" ]]; then
-		switch_im "$DEFAULT_IM"
+		switch_im "$SAVED_IM" "$DEFAULT_IM"
 		SWITCHED=1
 	else
 		SWITCHED=0
@@ -103,7 +101,7 @@ get_im_color() {
 	esac
 }
 
-# tmux hook handlers
+# Handlers for tmux hooks, the C-a binding and tmux-open.sh
 
 cmd_focus_in() {
 	local pane_id="$1"
@@ -184,7 +182,7 @@ Usage:
 Commands:
   focus-in      Sync border color when pane gains focus (tmux hook)
   mode-changed  Handle copy-mode enter/exit (tmux hook)
-  prefix        Switch to English before prefix mode (tmux hook)
+  prefix        Switch to English before prefix mode (C-a binding)
   popup         Switch to English before a popup opens over the pane (tmux-open.sh)
   sync          Sync current IM and border color (Hammerspoon)
 
