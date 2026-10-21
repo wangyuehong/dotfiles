@@ -1,5 +1,5 @@
 alias e='emacs -nw'
-alias cc='claude --effort high --autocompact 500k --settings '\''{"ultracode":true}'\'''
+alias cc='CLAUDE_CODE_IDLE_COMPACT_MIN_TOKENS=350000 claude --effort high --autocompact 500k'
 alias cc2='CLAUDE_CODE_DISABLE_1M_CONTEXT=1 claude'
 alias ec='emacsclient -t'
 alias n='nvim'
