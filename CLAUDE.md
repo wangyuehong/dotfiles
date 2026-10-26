@@ -13,7 +13,7 @@ make setup          # 创建目录、安装 Homebrew 包、符号链接 dotfiles
 更新依赖：
 
 ```bash
-make                # 全量更新：oh-my-zsh、插件、Homebrew、tmux 插件、Go 工具
+make                # 全量更新：链接 dotfiles 和脚本、oh-my-zsh、插件、Homebrew、tmux 插件、Go 工具
 make brew-up        # 更新 Homebrew formulae 和 cask，自动确认
 make go-tools       # 仅更新 Go 工具
 make py-tools       # 仅更新 Python 工具
@@ -166,16 +166,16 @@ Mock 机制：
 
 新增脚本时：
 
-- `ln-scripts` target: 添加到 `for` 循环的脚本列表
+- `SCRIPTS` 变量: 添加脚本文件名
 - `test` target: 添加新的 `.bats` 文件路径
 
 新增 dotfile 时：
 
-- `ln-dotfiles` target: 添加到 `for` 循环的文件列表
+- `DOTFILES` 变量: 添加省略 `.` 前缀的文件名
 
 新增配置文件（`~/.config/` 目标）时：
 
-- `ln-dotfiles` target: 添加 `ln -sf` 行
+- `CONFIG_LINKS` 变量: 添加 `源:目标` 对
 - `setup` target: 添加 `mkdir -p` 创建目标目录
 
 新增 Homebrew 包时：
@@ -186,6 +186,7 @@ Mock 机制：
 
 - 始终编辑仓库中的源文件，禁止直接修改 `~/` 下的符号链接目标
 - 部分文件链接时改名：`ghostty.toml` -> `config`、`mise.toml` -> `config.toml`
+- `make`（`all`）每次都运行 `ln-dotfiles` 与 `ln-scripts`；链接目标处已是普通文件或目录时不覆盖，处理完其余链接后列出这些路径并报错停下。这时把要保留的改动并回仓库的源文件（本机特有的放进「本地覆盖」一节的 local 文件），用 `trash` 移走它再重跑
 - `worktree.sh` 无 sourcing guard，不可被 source
 - `tmux-im.bats` 会创建和销毁临时 tmux session，其余测试文件不依赖 tmux server
 

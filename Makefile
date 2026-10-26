@@ -10,6 +10,16 @@ MAKEFLAGS += --no-print-directory
 
 CURR_DIR:=$(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 
+# $(call link,源:目标 ...)：跳过已正确的链接；目标处已是普通文件或目录时不覆盖本机改动，处理完其余链接后一并报错
+link = conflicts=""; \
+	for pair in $(1); do \
+	  IFS=: read -r src dst <<< "$$pair"; \
+	  if [ "$$(readlink "$$dst")" = "$$src" ]; then continue; fi; \
+	  if [ -e "$$dst" ] && [ ! -L "$$dst" ]; then conflicts="$$conflicts $$dst"; continue; fi; \
+	  echo "ln -sfn $$src $$dst" && ln -sfn "$$src" "$$dst" || exit 1; \
+	done; \
+	if [ -n "$$conflicts" ]; then echo "not a symlink, refusing to overwrite:$$conflicts" >&2; exit 1; fi
+
 .PHONY: help
 help: ## 列出所有可用目标
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-20s\033[0m %s\n", $$1, $$2}'
@@ -40,27 +50,29 @@ upclone-all: ## 克隆或更新 oh-my-zsh、tpm 等外部仓库
 	@$(MAKE) upclone github_repo=tmux-plugins/tpm.git dir=~/.tmux/plugins/tpm
 	@ln -sf ~/.oh-my-zsh/custom/themes/spaceship-prompt/spaceship.zsh-theme ~/.oh-my-zsh/custom/themes/spaceship.zsh-theme
 
+DOTFILES := aliases bash_profile zprofile ctags gitconfig gitignore psqlrc tigrc tmux.conf vimrc \
+	zshrc myclirc ripgreprc editorconfig
+CONFIG_LINKS := $(CURR_DIR)/direnv.toml:$(HOME)/.config/direnv/direnv.toml \
+	$(CURR_DIR)/direnvrc:$(HOME)/.config/direnv/direnvrc \
+	$(CURR_DIR)/ghostty.toml:$(HOME)/.config/ghostty/config \
+	$(CURR_DIR)/mise.toml:$(HOME)/.config/mise/config.toml
+
 .PHONY: ln-dotfiles
 ln-dotfiles: ## 符号链接 dotfiles 到 ~/ 与 ~/.config/
-	@for file in aliases bash_profile zprofile ctags gitconfig gitignore psqlrc tigrc tmux.conf vimrc \
-		zshrc myclirc ripgreprc editorconfig; do \
-	  echo "ln -sf $(CURR_DIR)/.$$file ~/.$$file" && ln -sf $(CURR_DIR)/.$$file ~/.$$file; \
-	done;
-	ln -sf $(CURR_DIR)/direnv.toml ~/.config/direnv/direnv.toml
-	ln -sf $(CURR_DIR)/direnvrc ~/.config/direnv/direnvrc
-	ln -sf $(CURR_DIR)/ghostty.toml ~/.config/ghostty/config
-	ln -sf $(CURR_DIR)/mise.toml ~/.config/mise/config.toml
+	@$(call link,$(foreach f,$(DOTFILES),$(CURR_DIR)/.$(f):$(HOME)/.$(f)) $(CONFIG_LINKS))
+
+SCRIPTS := worktree.sh tmux-fzf.sh tmux-im.sh tmux-open.sh tmux-window-name.sh
 
 .PHONY: ln-scripts
 ln-scripts: ## 符号链接 scripts/ 下指定脚本到 ~/bin/
-	@for script in worktree.sh tmux-fzf.sh tmux-im.sh tmux-open.sh tmux-window-name.sh; do \
-		chmod +x $(CURR_DIR)/scripts/$$script && \
-		ln -sf $(CURR_DIR)/scripts/$$script ~/bin/$$script; \
-	done
+	@chmod +x $(addprefix $(CURR_DIR)/scripts/,$(SCRIPTS))
+	@$(call link,$(foreach s,$(SCRIPTS),$(CURR_DIR)/scripts/$(s):$(HOME)/bin/$(s)))
 
 
 .PHONY: all
-all: ## 全量更新：oh-my-zsh、Homebrew、tmux 插件、Go 工具
+all: ## 全量更新：链接 dotfiles 和脚本、oh-my-zsh、Homebrew、tmux 插件、Go 工具
+	@$(MAKE) ln-dotfiles
+	@$(MAKE) ln-scripts
 	@$(MAKE) upclone-all
 	@$(MAKE) brew-up
 	@~/.tmux/plugins/tpm/bin/update_plugins all
