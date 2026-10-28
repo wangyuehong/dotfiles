@@ -86,7 +86,7 @@ setup: ## 首次安装：创建目录、安装 Homebrew 包、链接 dotfiles �
 	@mkdir -p ~/.config/ghostty
 	@mkdir -p ~/.config/mise
 	@brew install -q coreutils mise tmux zsh fd fzf ripgrep tig git jq aspell z yq direnv universal-ctags tmux-mem-cpu-load trash bats-core
-	@brew install --cask -q --force font-maple-mono-normal-nl-nf-cn font-sauce-code-pro-nerd-font
+	@brew install --cask -q --force font-maple-mono-normal-nl-nf-cn font-sauce-code-pro-nerd-font kitty
 	@brew tap laishulu/homebrew && brew install -q macism
 	@$(MAKE) ln-dotfiles
 	@$(MAKE) ln-scripts
