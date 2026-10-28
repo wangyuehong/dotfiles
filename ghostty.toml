@@ -8,7 +8,7 @@ shell-integration = zsh
 theme = srcery
 
 background-opacity = 0.95
-background-blur-radius = 10
+background-blur = 10
 
 font-family = Maple Mono Normal NL NF CN
 font-family = SauceCodePro Nerd Font Mono
