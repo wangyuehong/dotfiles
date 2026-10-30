@@ -10,12 +10,13 @@ MAKEFLAGS += --no-print-directory
 
 CURR_DIR:=$(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 
-# $(call link,源:目标 ...)：跳过已正确的链接；目标处已是普通文件或目录时不覆盖本机改动，处理完其余链接后一并报错
+# $(call link,源:目标 ...)：跳过已正确的链接；缺少的父目录先创建；目标处已是普通文件或目录时不覆盖本机改动，处理完其余链接后一并报错
 link = conflicts=""; \
 	for pair in $(1); do \
 	  IFS=: read -r src dst <<< "$$pair"; \
 	  if [ "$$(readlink "$$dst")" = "$$src" ]; then continue; fi; \
 	  if [ -e "$$dst" ] && [ ! -L "$$dst" ]; then conflicts="$$conflicts $$dst"; continue; fi; \
+	  mkdir -p "$$(dirname "$$dst")" || exit 1; \
 	  echo "ln -sfn $$src $$dst" && ln -sfn "$$src" "$$dst" || exit 1; \
 	done; \
 	if [ -n "$$conflicts" ]; then echo "not a symlink, refusing to overwrite:$$conflicts" >&2; exit 1; fi
@@ -88,11 +89,7 @@ all: ## 全量更新：链接 dotfiles 和脚本、oh-my-zsh、Homebrew、tmux �
 .PHONY: setup
 setup: ## 首次安装：创建目录、安装 Homebrew 包、链接 dotfiles 和脚本
 	@$(MAKE) home-dirs
-	@mkdir -p ~/.config/direnv
 	@mkdir -p ~/.config/tmux
-	@mkdir -p ~/.config/ghostty
-	@mkdir -p ~/.config/mise
-	@mkdir -p ~/.config/rex
 	@brew install -q coreutils mise tmux zsh fd fzf ripgrep tig git jq aspell z yq direnv universal-ctags tmux-mem-cpu-load trash bats-core
 	@brew install --cask -q --force font-maple-mono-normal-nl-nf-cn font-sauce-code-pro-nerd-font kitty
 	@brew tap laishulu/homebrew && brew install -q macism

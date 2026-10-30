@@ -176,8 +176,7 @@ Mock 机制：
 
 新增配置文件（`~/.config/` 目标）时：
 
-- `CONFIG_LINKS` 变量: 添加 `源:目标` 对
-- `setup` target: 添加 `mkdir -p` 创建目标目录
+- `CONFIG_LINKS` 变量: 添加 `源:目标` 对（链接时自动创建目标目录）
 
 新增 Homebrew 包时：
 
