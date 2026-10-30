@@ -55,7 +55,8 @@ DOTFILES := aliases bash_profile zprofile ctags gitconfig gitignore psqlrc tigrc
 CONFIG_LINKS := $(CURR_DIR)/direnv.toml:$(HOME)/.config/direnv/direnv.toml \
 	$(CURR_DIR)/direnvrc:$(HOME)/.config/direnv/direnvrc \
 	$(CURR_DIR)/ghostty.toml:$(HOME)/.config/ghostty/config \
-	$(CURR_DIR)/mise.toml:$(HOME)/.config/mise/config.toml
+	$(CURR_DIR)/mise.toml:$(HOME)/.config/mise/config.toml \
+	$(CURR_DIR)/rex.lua:$(HOME)/.config/rex/init.lua
 
 .PHONY: ln-dotfiles
 ln-dotfiles: ## 符号链接 dotfiles 到 ~/ 与 ~/.config/
@@ -85,6 +86,7 @@ setup: ## 首次安装：创建目录、安装 Homebrew 包、链接 dotfiles �
 	@mkdir -p ~/.config/tmux
 	@mkdir -p ~/.config/ghostty
 	@mkdir -p ~/.config/mise
+	@mkdir -p ~/.config/rex
 	@brew install -q coreutils mise tmux zsh fd fzf ripgrep tig git jq aspell z yq direnv universal-ctags tmux-mem-cpu-load trash bats-core
 	@brew install --cask -q --force font-maple-mono-normal-nl-nf-cn font-sauce-code-pro-nerd-font kitty
 	@brew tap laishulu/homebrew && brew install -q macism
