@@ -69,11 +69,17 @@ ln-scripts: ## 符号链接 scripts/ 下指定脚本到 ~/bin/
 	@chmod +x $(addprefix $(CURR_DIR)/scripts/,$(SCRIPTS))
 	@$(call link,$(foreach s,$(SCRIPTS),$(CURR_DIR)/scripts/$(s):$(HOME)/bin/$(s)))
 
+# Rex 的界面设置存在系统偏好里，无法链接；与 ghostty.toml 的 macos-option-as-alt、copy-on-select 一致
+.PHONY: rex-defaults
+rex-defaults: ## 写入 Rex 的界面设置：Option 当 Alt、选中即复制
+	@defaults write com.superlogical.rex Workspace.terminalOptionKeyBehavior -string actsAsAlt
+	@defaults write com.superlogical.rex Workspace.terminalCopyOnSelect -bool true
 
 .PHONY: all
 all: ## 全量更新：链接 dotfiles 和脚本、oh-my-zsh、Homebrew、tmux 插件、Go 工具
 	@$(MAKE) ln-dotfiles
 	@$(MAKE) ln-scripts
+	@$(MAKE) rex-defaults
 	@$(MAKE) upclone-all
 	@$(MAKE) brew-up
 	@~/.tmux/plugins/tpm/bin/update_plugins all

@@ -1,4 +1,4 @@
--- Option 当 Alt、选中即复制、字号与备用字体是 Rex 的界面设置（系统偏好），不在本文件
+-- Option 当 Alt、选中即复制是 Rex 的界面设置（系统偏好），由 make rex-defaults 写入
 
 local terminal = "com.superlogical.terminal"
 
