@@ -1,0 +1,10 @@
+onboarding = false
+[ui]
+agent_panel_sort = "priority"
+
+[theme]
+name = "solarized-light"
+auto_switch = false
+
+[ui.toast]
+delivery = "herdr"

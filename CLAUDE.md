@@ -42,6 +42,7 @@ Dotfiles（`make ln-dotfiles` -> `~/.{file}`，清单省略 `.` 前缀）：
 - `direnv.toml` -> `~/.config/direnv/direnv.toml`
 - `direnvrc` -> `~/.config/direnv/direnvrc`
 - `ghostty.toml` -> `~/.config/ghostty/config`
+- `herdr.toml` -> `~/.config/herdr/config.toml`
 - `mise.toml` -> `~/.config/mise/config.toml`
 - `rex.lua` -> `~/.config/rex/init.lua`
 
@@ -185,7 +186,7 @@ Mock 机制：
 ## 注意事项
 
 - 始终编辑仓库中的源文件，禁止直接修改 `~/` 下的符号链接目标
-- 部分文件链接时改名：`ghostty.toml` -> `config`、`mise.toml` -> `config.toml`、`rex.lua` -> `init.lua`
+- 部分文件链接时改名：`ghostty.toml` -> `config`、`herdr.toml` -> `config.toml`、`mise.toml` -> `config.toml`、`rex.lua` -> `init.lua`
 - `make`（`all`）每次都运行 `ln-dotfiles` 与 `ln-scripts`；链接目标处已是普通文件或目录时不覆盖，处理完其余链接后列出这些路径并报错停下。这时把要保留的改动并回仓库的源文件（本机特有的放进「本地覆盖」一节的 local 文件），用 `trash` 移走它再重跑
 - `worktree.sh` 无 sourcing guard，不可被 source
 - `tmux-im.bats` 会创建和销毁临时 tmux session，其余测试文件不依赖 tmux server
