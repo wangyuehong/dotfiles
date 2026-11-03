@@ -11,3 +11,10 @@ delivery = "herdr"
 
 [experimental]
 kitty_graphics = true
+
+[keys]
+prefix = "ctrl+s"
+new_tab = "prefix+c"
+split_vertical = "prefix+\\"
+split_horizontal = "prefix+minus"
+copy_mode = "prefix+esc"
