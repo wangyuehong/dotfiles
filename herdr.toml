@@ -13,7 +13,7 @@ delivery = "herdr"
 kitty_graphics = true
 
 [keys]
-prefix = "ctrl+s"
+prefix = "ctrl+q"
 new_tab = "prefix+c"
 split_vertical = "prefix+\\"
 split_horizontal = "prefix+minus"
