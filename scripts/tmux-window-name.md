@@ -50,7 +50,7 @@
 
 ### 补充说明
 
-- 使用 tmux `automatic-rename-format` 配置调用此脚本：`#(tmux-window-name.sh #{pane_pid} #{window_panes})`
+- 使用 tmux `automatic-rename-format` 配置调用此脚本：`#(tmux-window-name.sh #{pane_pid} #{n:#{P:#{?@agent-bar,,x}}})`（pane 数不计 my-agents-bar 的侧边栏）
 - 解释器检测支持：node、nodejs、python、python3、ruby、perl
 - 可通过环境变量 `INTERPRETERS` 自定义解释器正则
 - 可通过环境变量 `MULTI_PANE_INDICATOR` 自定义多 pane 标识（默认 `▪`）

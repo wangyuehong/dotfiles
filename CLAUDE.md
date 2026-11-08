@@ -56,6 +56,14 @@ Dotfiles（`make ln-dotfiles` -> `~/.{file}`，清单省略 `.` 前缀）：
 
 ### 外部依赖
 
+agent 侧边栏（来自 my-agents 仓库的 `my-agents-bar`，装在 `~/bin`）：`.tmux.conf` 的
+`window-linked`、`window-resized`、`pane-bell`、`pane-focus-in`、`session-window-changed`、
+`client-session-changed`、`client-attached` hook 与 `prefix + o`、`MouseDown1Pane`、`MouseDragEnd1Border` 调用它；
+`my-agents-bar` 不在 PATH 时这些接线静默跳过，`prefix + o` 退回 tmux 默认。
+侧边栏在 window 左侧，宽度默认 36；拖动边框后记住新宽度并同步所有侧边栏，
+`set -g @agent-bar-width 40` 可改默认宽度。
+侧边栏边框标题默认为空；设置 `set -g @agent-bar-title '...'` 可显示标题。
+
 oh-my-zsh 生态（通过 `make upclone-all` 克隆）：
 
 - `~/.oh-my-zsh` - 基础框架
@@ -78,7 +86,7 @@ tmux 插件（由 tpm 管理，位于 `~/.tmux/plugins/tpm`）：
 
 `.tmux.conf` 通过 hook 和按键绑定调用 `scripts/` 下的脚本：
 
-- `automatic-rename-format`: 调用 `tmux-window-name.sh #{pane_pid} #{window_panes}`
+- `automatic-rename-format`: 调用 `tmux-window-name.sh #{pane_pid} #{n:#{P:#{?@agent-bar,,x}}}`（pane 数不计侧边栏）
 - `C-a` binding: 运行 `tmux-im.sh prefix #{pane_id}` 后进入 prefix 模式
 - `prefix + C-f`: 在 popup 中启动 `tmux-fzf.sh`
 - `M-MouseDown1Pane` 等按住 Option 的按下: 把点击处的 pane、文字与链接记入 `@tmux-open-*` 选项，进入 `tmux-open` 按键表
