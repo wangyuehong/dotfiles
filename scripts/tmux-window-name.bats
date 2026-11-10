@@ -160,6 +160,12 @@ claude_pane() {
     [ "$output" = "claude" ]
 }
 
+@test "AC-0010-0080: an agent name that looks like an echo option" {
+    claude_pane claude
+    run main 1000 1 -n
+    [ "$output" = "-n" ]
+}
+
 @test "AC-0010-0080: a left-over agent name does not apply to a shell" {
     claude_pane zsh
     run main 1000 1 fix-login
@@ -177,11 +183,28 @@ claude_pane() {
     [ "$output" = "zthcp-468" ]
 }
 
-@test "AC-0010-0075: the shell in front shows the shell" {
+@test "AC-0010-0075: the shell in front without children shows the shell" {
     get_foreground() { return 0; }
+    get_child() { return 0; }
     get_comm() { echo zsh; }
     run main 1000 1 fix-login
     [ "$output" = "zsh" ]
+}
+
+@test "AC-0010-0075: a shell without job control in front shows its child" {
+    command -v tmux >/dev/null || skip "no tmux"
+    local socket="bats-wn-jc-$$"
+    tmux -L "$socket" -f /dev/null new-session -d -x 80 -y 20 "cd /tmp; sleep 302; true"
+    local shell_pid
+    shell_pid=$(tmux -L "$socket" display -p '#{pane_pid}')
+    local name=""
+    for _ in $(seq 1 20); do
+        name=$(main "$shell_pid")
+        [[ "$name" == "sleep" ]] && break
+        sleep 0.25
+    done
+    tmux -L "$socket" kill-server
+    [ "$name" = "sleep" ]
 }
 
 @test "get_foreground: empty for a process that leads its terminal's foreground or has none" {

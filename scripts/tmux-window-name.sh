@@ -18,6 +18,8 @@ get_child() {
 # Get the foreground process of a pane: the leader of the foreground process
 # group of the shell's terminal; empty when the shell itself is in front.
 # The first child is not it: zsh plugins keep workers on other terminals.
+# A shell without job control (`cmd1; cmd2` given to new-window) stays the
+# group leader, so main then falls back to the first child.
 get_foreground() {
     local tpgid
     tpgid=$(ps -o tpgid= -p "$1" 2>/dev/null)
@@ -56,6 +58,7 @@ main() {
     # Find the target process
     local child_pid name
     child_pid=$(get_foreground "$pane_pid")
+    [[ -z "$child_pid" ]] && child_pid=$(get_child "$pane_pid")
     if [[ -n "$child_pid" ]]; then
         name=$(get_comm "$child_pid")
         [[ -z "$name" ]] && name="$shell_name"
@@ -81,9 +84,9 @@ main() {
 
     # Add multi-pane indicator
     if [[ "$panes" -gt 1 ]]; then
-        echo "${MULTI_PANE_INDICATOR}${result}"
+        printf '%s\n' "${MULTI_PANE_INDICATOR}${result}"
     else
-        echo "$result"
+        printf '%s\n' "$result"
     fi
 }
 

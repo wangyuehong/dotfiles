@@ -53,7 +53,8 @@
 - Given: pane 的 shell 有多个子进程，如 zsh 插件在另一个终端上的 worker 与前台运行的 claude
 - When: 调用 tmux-window-name.sh
 - Then: 返回前台进程的名称（如 "claude"），即 shell 所在终端前台进程组的组长
-- And: shell 自身在前台时返回 shell 名称
+- And: shell 自身是前台进程组组长时取第一个子进程，如 `new-window "cmd1; cmd2"` 中没有作业控制的 shell；
+  没有子进程时返回 shell 名称
 
 #### AC-0010-0080: Claude Code 显示会话名
 
