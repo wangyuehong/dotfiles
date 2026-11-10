@@ -15,6 +15,17 @@ get_child() {
     ps -eo pid=,ppid= 2>/dev/null | awk -v ppid="$1" '$2 == ppid {print $1; exit}'
 }
 
+# Get the foreground process of a pane: the leader of the foreground process
+# group of the shell's terminal; empty when the shell itself is in front.
+# The first child is not it: zsh plugins keep workers on other terminals.
+get_foreground() {
+    local tpgid
+    tpgid=$(ps -o tpgid= -p "$1" 2>/dev/null)
+    tpgid="${tpgid// /}"
+    [[ "$tpgid" =~ ^[0-9]+$ && "$tpgid" -gt 0 && "$tpgid" != "$1" ]] && echo "$tpgid"
+    return 0
+}
+
 # Interpreters: show child process name instead
 INTERPRETERS="${INTERPRETERS:-^(node|nodejs|python|python3|ruby|perl)$}"
 
@@ -44,7 +55,7 @@ main() {
 
     # Find the target process
     local child_pid name
-    child_pid=$(get_child "$pane_pid")
+    child_pid=$(get_foreground "$pane_pid")
     if [[ -n "$child_pid" ]]; then
         name=$(get_comm "$child_pid")
         [[ -z "$name" ]] && name="$shell_name"

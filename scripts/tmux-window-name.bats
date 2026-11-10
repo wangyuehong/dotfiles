@@ -135,7 +135,7 @@ setup() {
 
 # claude_pane makes main resolve the program name to $1.
 claude_pane() {
-    eval "get_child() { [[ \$1 == 1000 ]] && echo 1001; }"
+    eval "get_foreground() { [[ \$1 == 1000 ]] && echo 1001; }"
     eval "get_comm() { case \$1 in 1000) echo zsh ;; 1001) echo $1 ;; esac; }"
 }
 
@@ -164,4 +164,50 @@ claude_pane() {
     claude_pane zsh
     run main 1000 1 fix-login
     [ "$output" = "zsh" ]
+}
+
+# === Integration tests: foreground process ===
+
+@test "AC-0010-0075: the foreground process wins over another child" {
+    # 1001 is a zsh worker on another terminal, the first child; 1002 is in front.
+    get_child() { [[ $1 == 1000 ]] && echo 1001; }
+    get_foreground() { [[ $1 == 1000 ]] && echo 1002; }
+    get_comm() { case $1 in 1000|1001) echo zsh ;; 1002) echo claude ;; esac; }
+    run main 1000 1 zthcp-468
+    [ "$output" = "zthcp-468" ]
+}
+
+@test "AC-0010-0075: the shell in front shows the shell" {
+    get_foreground() { return 0; }
+    get_comm() { echo zsh; }
+    run main 1000 1 fix-login
+    [ "$output" = "zsh" ]
+}
+
+@test "get_foreground: empty for a process that leads its terminal's foreground or has none" {
+    run get_foreground 999999999
+    [ "$status" -eq 0 ]
+    [ -z "$output" ]
+}
+
+@test "get_foreground: a pane's foreground process in a private tmux server" {
+    command -v tmux >/dev/null || skip "no tmux"
+    local socket="bats-wn-$$"
+    tmux -L "$socket" -f /dev/null new-session -d -x 80 -y 20 "zsh -f"
+    local shell_pid fg="" first=""
+    shell_pid=$(tmux -L "$socket" display -p '#{pane_pid}')
+    # A child on another terminal, started first, like a zsh plugin worker.
+    tmux -L "$socket" send-keys "script -q /dev/null sleep 300 >/dev/null 2>&1 &! sleep 1; sleep 301" Enter
+    for _ in $(seq 1 40); do
+        fg=$(get_foreground "$shell_pid")
+        [[ -n "$fg" && "$(ps -o args= -p "$fg")" == "sleep 301" ]] && break
+        sleep 0.25
+    done
+    local fg_args first_args
+    fg_args=$(ps -o args= -p "$fg" 2>/dev/null)
+    first=$(get_child "$shell_pid")
+    first_args=$(ps -o args= -p "$first" 2>/dev/null)
+    tmux -L "$socket" kill-server
+    [ "$fg_args" = "sleep 301" ]
+    [ "$first_args" != "sleep 301" ] # the first child is the worker
 }

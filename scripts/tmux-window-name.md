@@ -48,6 +48,13 @@
 - When: 调用 tmux-window-name.sh
 - Then: 在名称前添加 `▪` 标识（如 "▪zsh"）
 
+#### AC-0010-0075: 取前台进程，不取其他子进程
+
+- Given: pane 的 shell 有多个子进程，如 zsh 插件在另一个终端上的 worker 与前台运行的 claude
+- When: 调用 tmux-window-name.sh
+- Then: 返回前台进程的名称（如 "claude"），即 shell 所在终端前台进程组的组长
+- And: shell 自身在前台时返回 shell 名称
+
 #### AC-0010-0080: Claude Code 显示会话名
 
 - Given: 解析出的程序名与第 3 个参数如下表
