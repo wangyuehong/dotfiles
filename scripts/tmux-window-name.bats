@@ -175,8 +175,8 @@ claude_pane() {
 # === Integration tests: foreground process ===
 
 @test "AC-0010-0075: the foreground process wins over another child" {
-    # 1001 is a zsh worker on another terminal, the first child; 1002 is in front.
-    get_child() { [[ $1 == 1000 ]] && echo 1001; }
+    # 1001 is a zsh worker in the shell's group fallback; 1002 is in front.
+    get_group_child() { [[ $1 == 1000 ]] && echo 1001; }
     get_foreground() { [[ $1 == 1000 ]] && echo 1002; }
     get_comm() { case $1 in 1000|1001) echo zsh ;; 1002) echo claude ;; esac; }
     run main 1000 1 zthcp-468
@@ -185,7 +185,7 @@ claude_pane() {
 
 @test "AC-0010-0075: the shell in front without children shows the shell" {
     get_foreground() { return 0; }
-    get_child() { return 0; }
+    get_group_child() { return 0; }
     get_comm() { echo zsh; }
     run main 1000 1 fix-login
     [ "$output" = "zsh" ]
@@ -207,10 +207,42 @@ claude_pane() {
     [ "$name" = "sleep" ]
 }
 
-@test "get_foreground: empty for a process that leads its terminal's foreground or has none" {
+@test "get_foreground: empty for a process that does not exist" {
     run get_foreground 999999999
     [ "$status" -eq 0 ]
     [ -z "$output" ]
+}
+
+@test "get_foreground: empty for a process without a terminal (tpgid 0)" {
+    [ "$(ps -o tpgid= -p 1 | tr -d ' ')" = "0" ] || skip "pid 1 has a terminal"
+    run get_foreground 1
+    [ "$status" -eq 0 ]
+    [ -z "$output" ]
+}
+
+@test "AC-0010-0075: an interactive shell at its prompt with a background job shows the shell" {
+    command -v tmux >/dev/null || skip "no tmux"
+    local socket="bats-wn-bg-$$"
+    tmux -L "$socket" -f /dev/null new-session -d -x 80 -y 20 "zsh -f"
+    local shell_pid
+    shell_pid=$(tmux -L "$socket" display -p '#{pane_pid}')
+    tmux -L "$socket" send-keys "sleep 303 &" Enter
+    local job="" name=""
+    for _ in $(seq 1 20); do
+        job=$(get_child "$shell_pid")
+        [[ -n "$job" ]] && break
+        sleep 0.25
+    done
+    for _ in $(seq 1 20); do # back at the prompt: the shell leads the foreground
+        [[ -z "$(get_foreground "$shell_pid")" ]] && break
+        sleep 0.25
+    done
+    name=$(main "$shell_pid")
+    local job_args
+    job_args=$(ps -o args= -p "$job" 2>/dev/null)
+    tmux -L "$socket" kill-server
+    [ "$job_args" = "sleep 303" ]
+    [ "$name" = "zsh" ]
 }
 
 @test "get_foreground: a pane's foreground process in a private tmux server" {
