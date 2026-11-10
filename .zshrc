@@ -54,6 +54,16 @@ setopt hist_verify               # show before executing history expansion
 HISTSIZE=100000
 SAVEHIST=100000
 
+# 首个 prompt 前没有命令输出，不需要 prompt_sp；而 tmux 新 window 的 pane 会在 zsh 启动时
+# 被 my-agents-bar 侧边栏挤窄，按旧宽度填的空格折行，残留一行 `%`。首条命令执行前再打开
+unsetopt prompt_sp
+_enable_prompt_sp() {
+    setopt prompt_sp
+    add-zsh-hook -d preexec _enable_prompt_sp
+}
+autoload -Uz add-zsh-hook
+add-zsh-hook preexec _enable_prompt_sp
+
 # set path
 # [[ "$PATH" == *"/usr/local/sbin"* ]] || export PATH=$PATH:/usr/local/sbin
 [[ "$PATH" == *"$HOME/bin"* ]] || export PATH=$HOME/bin:$PATH
