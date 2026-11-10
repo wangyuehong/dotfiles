@@ -58,8 +58,8 @@ Dotfiles（`make ln-dotfiles` -> `~/.{file}`，清单省略 `.` 前缀）：
 
 agent 侧边栏（来自 my-agents 仓库的 `my-agents-bar`，装在 `~/bin`）：`.tmux.conf` 的
 `window-linked`、`window-resized`、`pane-bell`、`pane-focus-in`、`session-window-changed`、
-`client-session-changed`、`client-attached` hook 与 `prefix + o`、`MouseDown1Pane`、`MouseDragEnd1Border` 调用它；
-`my-agents-bar` 不在 PATH 时这些接线静默跳过，`prefix + o` 退回 tmux 默认。
+`client-session-changed`、`client-attached` hook 与 `prefix + o`、`prefix + e`（agent 选择 popup）、`MouseDown1Pane`、`MouseDragEnd1Border` 调用它；
+`my-agents-bar` 不在 PATH 时这些接线静默跳过，`prefix + o` 退回 tmux 默认，`prefix + e` 什么也不做。
 侧边栏在 window 左侧，宽度默认 36；拖动边框后记住新宽度并同步所有侧边栏，
 `set -g @agent-bar-width 40` 可改默认宽度。
 侧边栏边框标题默认为空；设置 `set -g @agent-bar-title '...'` 可显示标题。
