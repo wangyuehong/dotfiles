@@ -86,7 +86,7 @@ tmux 插件（由 tpm 管理，位于 `~/.tmux/plugins/tpm`）：
 
 `.tmux.conf` 通过 hook 和按键绑定调用 `scripts/` 下的脚本：
 
-- `automatic-rename-format`: 调用 `tmux-window-name.sh #{pane_pid} #{n:#{P:#{?@agent-bar,,x}}}`（pane 数不计侧边栏）
+- `automatic-rename-format`: 调用 `tmux-window-name.sh #{pane_pid} #{n:#{P:#{?@agent-bar,,x}}} #{q:@agent-name}`（pane 数不计侧边栏；`@agent-name` 是 my-agents-bar 给 Claude Code pane 的会话名）
 - `C-a` binding: 运行 `tmux-im.sh prefix #{pane_id}` 后进入 prefix 模式
 - `prefix + C-f`: 在 popup 中启动 `tmux-fzf.sh`
 - `M-MouseDown1Pane` 等按住 Option 的按下: 把点击处的 pane、文字与链接记入 `@tmux-open-*` 选项，进入 `tmux-open` 按键表

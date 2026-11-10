@@ -48,9 +48,25 @@
 - When: 调用 tmux-window-name.sh
 - Then: 在名称前添加 `▪` 标识（如 "▪zsh"）
 
+#### AC-0010-0080: Claude Code 显示会话名
+
+- Given: 解析出的程序名与第 3 个参数如下表
+- When: 调用 tmux-window-name.sh
+- Then: 返回如下表；多 pane 时照常加 `▪`
+- Examples:
+
+| 程序名 | 第 3 个参数 | 返回 |
+|--------|-------------|------|
+| `claude` | `fix-login` | `fix-login` |
+| `claude` | 空或缺失 | `claude` |
+| `zsh` | `fix-login`（Claude Code 退出后残留） | `zsh` |
+
 ### 补充说明
 
-- 使用 tmux `automatic-rename-format` 配置调用此脚本：`#(tmux-window-name.sh #{pane_pid} #{n:#{P:#{?@agent-bar,,x}}})`（pane 数不计 my-agents-bar 的侧边栏）
+- 使用 tmux `automatic-rename-format` 配置调用此脚本：`#(tmux-window-name.sh #{pane_pid} #{n:#{P:#{?@agent-bar,,x}}} #{q:@agent-name})`
+  - pane 数不计 my-agents-bar 的侧边栏
+  - `@agent-name` 是 my-agents-bar 给 Claude Code pane 写的会话名；`#{q:}` 转义空格与 shell 特殊字符
+  - 只在程序名为 `claude` 时采用：my-agents-bar 的侧边栏不在时，Claude Code 退出后选项可能残留
 - 解释器检测支持：node、nodejs、python、python3、ruby、perl
 - 可通过环境变量 `INTERPRETERS` 自定义解释器正则
 - 可通过环境变量 `MULTI_PANE_INDICATOR` 自定义多 pane 标识（默认 `▪`）

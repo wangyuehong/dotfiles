@@ -130,3 +130,38 @@ setup() {
     [ "$status" -eq 0 ]
     [[ "$output" == +* ]]
 }
+
+# === Integration tests: agent session name ===
+
+# claude_pane makes main resolve the program name to $1.
+claude_pane() {
+    eval "get_child() { [[ \$1 == 1000 ]] && echo 1001; }"
+    eval "get_comm() { case \$1 in 1000) echo zsh ;; 1001) echo $1 ;; esac; }"
+}
+
+@test "AC-0010-0080: claude with an agent name shows the name" {
+    claude_pane claude
+    run main 1000 1 fix-login
+    [ "$status" -eq 0 ]
+    [ "$output" = "fix-login" ]
+}
+
+@test "AC-0010-0080: claude with an agent name in a multi-pane window" {
+    claude_pane claude
+    run main 1000 2 fix-login
+    [ "$output" = "${DEFAULT_INDICATOR}fix-login" ]
+}
+
+@test "AC-0010-0080: claude without an agent name stays claude" {
+    claude_pane claude
+    run main 1000 1
+    [ "$output" = "claude" ]
+    run main 1000 1 ""
+    [ "$output" = "claude" ]
+}
+
+@test "AC-0010-0080: a left-over agent name does not apply to a shell" {
+    claude_pane zsh
+    run main 1000 1 fix-login
+    [ "$output" = "zsh" ]
+}

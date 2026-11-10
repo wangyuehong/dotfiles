@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 # Get friendly window name for tmux
-# Usage: tmux-window-name.sh <pane_pid> [panes]
+# Usage: tmux-window-name.sh <pane_pid> [panes] [agent_name]
 
 # Get command name (basename only) for a PID
 get_comm() {
@@ -34,6 +34,7 @@ MULTI_PANE_INDICATOR="${MULTI_PANE_INDICATOR:-▪}"
 main() {
     local pane_pid="$1"
     local panes="${2:-1}"
+    local agent_name="${3:-}"
     [[ -z "$pane_pid" ]] && return 1
 
     # Get shell name as fallback
@@ -63,6 +64,9 @@ main() {
 
     local result
     result=$(friendly_name "$name")
+    # A Claude Code pane shows the session name my-agents-bar gives it; the
+    # program name gates a name left over after the agent exited
+    [[ "$result" == "claude" && -n "$agent_name" ]] && result="$agent_name"
 
     # Add multi-pane indicator
     if [[ "$panes" -gt 1 ]]; then
