@@ -82,6 +82,17 @@ setup() {
 			fi
 			return "${MOCK_POPUP_RC:-0}"
 			;;
+		display-message)
+			# -p -t <pane> <format>: the clicked pane is in @1, the browser pane in MOCK_BWIN.
+			if [[ "$2" == -p ]]; then
+				case "$5" in
+				'#{pane_tty}') echo /dev/ttys009 ;;
+				'#{window_id}')
+					if [[ "$4" == "${MOCK_BPANE:-}" ]]; then echo "${MOCK_BWIN:-@1}"; else echo @1; fi
+					;;
+				esac
+			fi
+			;;
 		show)
 			case "$3" in
 			@tmux-open-pane) printf '%s\n' "${MOCK_PANE:-}" ;;
@@ -103,6 +114,15 @@ setup() {
 	printf '%s\n' '#!/usr/bin/env bash' 'echo "tmux-im.sh $*" >>"$CALLS"' \
 		'[ "${MOCK_IM_RC:-0}" = 0 ] || echo "im failed" >&2' 'exit "${MOCK_IM_RC:-0}"' >"$MOCK_BIN/tmux-im.sh"
 	chmod +x "$MOCK_BIN/tmux-im.sh"
+	# ps lists processes only for the clicked pane's tty without /dev/; MOCK_PS_STAT and MOCK_PS_COMM make its line.
+	printf '%s\n' '#!/usr/bin/env bash' '[ "$1 $2" = "-t ttys009" ] || exit 0' \
+		'echo "${MOCK_PS_STAT:-S+}   ${MOCK_PS_COMM:-zsh}"' >"$MOCK_BIN/ps"
+	# terminal-browser ls prints MOCK_TB_LS; calls of subcommand MOCK_TB_FAIL (any when unset) exit MOCK_TB_RC.
+	export NO_BROWSERS='{"browsers":[]}'
+	printf '%s\n' '#!/usr/bin/env bash' 'echo "terminal-browser $*" >>"$CALLS"' \
+		'[ "$1" = ls ] && echo "${MOCK_TB_LS:-$NO_BROWSERS}"' \
+		'[ -z "${MOCK_TB_FAIL:-}" ] || [ "$1" = "$MOCK_TB_FAIL" ] || exit 0' 'exit "${MOCK_TB_RC:-0}"' >"$MOCK_BIN/terminal-browser"
+	chmod +x "$MOCK_BIN/ps" "$MOCK_BIN/terminal-browser"
 	export PATH="$MOCK_BIN:$PATH"
 	[ "$(command -v tmux-im.sh)" = "$MOCK_BIN/tmux-im.sh" ]
 }
@@ -361,6 +381,156 @@ setup() {
 	[ "$status" -eq 0 ]
 	[ "$(grep -c "display-message" "$CALLS")" -eq 1 ]
 	[ "$(sed -n '/display-popup/,$p' "$CALLS" | grep -cx "$NOTIFY input method switch failed (exit 3)")" -eq 1 ]
+}
+
+# === Side browser in a Claude Code pane ===
+
+# terminal-browser ls --json with one browser, key 7-1, in pane %9.
+one_browser() {
+	export MOCK_BPANE='%9' MOCK_TB_LS='{"browsers":[{"key":"7-1","pane":{"tab":"work:@1","pane":"%9"}}]}'
+}
+
+@test "AC-0020-0010: http URL text in a Claude Code pane opens in a new side browser" {
+	export MOCK_PS_COMM=claude
+	click "docs at https://example.com/a now" 12
+	[ "$status" -eq 0 ]
+	grep -qx "tmux split-window -h -l 50% -t $PANE terminal-browser open https://example.com/a" "$CALLS"
+	not_called "^open \|display-message -c"
+}
+
+@test "AC-0020-0010: https hyperlink and a full program path count as Claude Code" {
+	export MOCK_PS_COMM=/opt/bin/claude
+	click "the label" 5 "HTTPS://example.com"
+	grep -q "terminal-browser open HTTPS://example.com\$" "$CALLS"
+	not_called "^open "
+}
+
+@test "AC-0020-0010: HTML path and file link open in the browser, other paths in the popup" {
+	export MOCK_PS_COMM=claude
+	touch "$WORK/r.html" "$WORK/R.HTM"
+	click "see r.html" 5
+	grep -q "terminal-browser open $WORK/r.html\$" "$CALLS"
+	click "x" 0 "file://$WORK/R.HTM"
+	grep -q "terminal-browser open $WORK/R.HTM\$" "$CALLS"
+	click "src/a.go" 0
+	viewer_args_are "$WORK/src/a.go"
+}
+
+@test "AC-0020-0010: a program path with spaces counts as Claude Code" {
+	export MOCK_PS_COMM='/Users/x/My Tools/claude'
+	click "x" 0 "https://example.com"
+	grep -q "terminal-browser open https://example.com\$" "$CALLS"
+}
+
+@test "AC-0020-0010: a background claude or a program only named like it is no Claude Code pane" {
+	export MOCK_PS_STAT=S MOCK_PS_COMM=claude
+	click "x" 0 "https://example.com"
+	export MOCK_PS_STAT=S+ MOCK_PS_COMM=xclaude
+	click "x" 0 "https://example.com"
+	export MOCK_PS_COMM=claude-foo
+	click "x" 0 "https://example.com"
+	[ "$(grep -cx "open https://example.com" "$CALLS")" -eq 3 ]
+	not_called "terminal-browser"
+}
+
+@test "AC-0020-0010: HTML directory, missing HTML and HTML with a line in a Claude Code pane" {
+	export MOCK_PS_COMM=claude
+	mkdir "$WORK/d.html"
+	touch "$WORK/r.html"
+	click "d.html" 0
+	viewer_args_are "$WORK/d.html"
+	click "none.html" 0
+	grep -qx "$NOTIFY not found: $WORK/none.html" "$CALLS"
+	click "r.html:12" 0
+	grep -q "terminal-browser open $WORK/r.html\$" "$CALLS"
+}
+
+@test "AC-0020-0010: other schemes in a Claude Code pane go to the system opener" {
+	export MOCK_PS_COMM=claude
+	click "open vscode://file/a.go now" 7
+	grep -qx "open vscode://file/a.go" "$CALLS"
+	not_called "terminal-browser"
+}
+
+@test "AC-0020-0010: outside a Claude Code pane URLs and HTML keep US-0010" {
+	touch "$WORK/r.html"
+	click "the label" 5 "https://example.com"
+	grep -qx "open https://example.com" "$CALLS"
+	click "r.html" 0
+	viewer_args_are "$WORK/r.html"
+	not_called "terminal-browser"
+}
+
+@test "AC-0020-0030: browser in the clicked window gets a new tab and the focus" {
+	export MOCK_PS_COMM=claude
+	one_browser
+	click "x" 0 "https://example.com"
+	[ "$status" -eq 0 ]
+	diff <(grep -v "display-message -p\|terminal-browser ls" "$CALLS") \
+		<(printf '%s\n' "tmux select-pane -t %9" "terminal-browser new-tab --browser 7-1 https://example.com")
+}
+
+@test "AC-0020-0030: a browser in the clicked window wins over one listed before it" {
+	export MOCK_PS_COMM=claude MOCK_BPANE='%9' MOCK_BWIN=@1
+	export MOCK_TB_LS='{"browsers":[{"key":"5-1","pane":{"pane":"%5"}},{"key":"7-1","pane":{"pane":"%9"}}]}'
+	tmux() {
+		echo "tmux $*" >>"$CALLS"
+		[[ "$1 $2" == "display-message -p" ]] || return 0
+		[[ "$5" == '#{pane_tty}' ]] && { echo /dev/ttys009; return 0; }
+		case "$4" in %5) echo @2 ;; *) echo @1 ;; esac
+	}
+	export -f tmux
+	click "x" 0 "https://example.com"
+	grep -qx "terminal-browser new-tab --browser 7-1 https://example.com" "$CALLS"
+	not_called "join-pane"
+}
+
+@test "AC-0020-0040: browser in another window moves beside the clicked pane" {
+	export MOCK_PS_COMM=claude MOCK_BWIN=@2
+	one_browser
+	click "x" 0 "https://example.com"
+	diff <(grep -v "display-message -p\|terminal-browser ls" "$CALLS") \
+		<(printf '%s\n' "tmux join-pane -h -l 50% -s %9 -t $PANE" "tmux select-pane -t %9" \
+			"terminal-browser new-tab --browser 7-1 https://example.com")
+}
+
+@test "AC-0020-0050: failing browser listing is reported" {
+	export MOCK_PS_COMM=claude MOCK_TB_RC=4
+	click "x" 0 "https://example.com"
+	[ "$status" -eq 0 ]
+	grep -qx "$NOTIFY open failed (exit 4)" "$CALLS"
+	not_called "split-window"
+}
+
+@test "AC-0020-0050: failing new tab is reported" {
+	export MOCK_PS_COMM=claude MOCK_TB_RC=6 MOCK_TB_FAIL=new-tab
+	one_browser
+	click "x" 0 "https://example.com"
+	[ "$status" -eq 0 ]
+	grep -qx "$NOTIFY open failed (exit 6)" "$CALLS"
+}
+
+@test "AC-0020-0050: failing pane move is reported without a new tab" {
+	export MOCK_PS_COMM=claude
+	one_browser
+	tmux() {
+		echo "tmux $*" >>"$CALLS"
+		case "$1" in
+		join-pane) return 7 ;;
+		display-message)
+			if [[ "$5" == '#{pane_tty}' ]]; then
+				echo /dev/ttys009
+			elif [[ "$2" == -p ]]; then
+				case "$4" in %9) echo @2 ;; *) echo @1 ;; esac
+			fi
+			;;
+		esac
+		return 0
+	}
+	export -f tmux
+	click "x" 0 "https://example.com"
+	grep -qx "$NOTIFY open failed (exit 7)" "$CALLS"
+	not_called "new-tab\|select-pane"
 }
 
 # === Extension points ===

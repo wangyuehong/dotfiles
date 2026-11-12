@@ -3,6 +3,7 @@ set -euo pipefail
 
 # Open the path or URL under the mouse: URLs go to the system opener,
 # paths open in a viewer inside a popup on the clicking client.
+# In a Claude Code pane, http(s) URLs and HTML files open in the side terminal-browser instead.
 #
 # Called from a tmux mouse binding, which collects the click context:
 #   tmux-open.sh <client_name> <pane_id> <pane_current_path> <mouse_x> <mouse_line> <mouse_hyperlink>
@@ -11,7 +12,7 @@ set -euo pipefail
 #   target    the hyperlink, or token_at on the line under the mouse
 #   classify  a scheme other than file:// makes a URL, anything else is a path
 #   resolve   split_location, file_url_path and resolve_path give an absolute path, line and column
-#   act       a URL goes to open, a path to the presenter named by choose_presenter
+#   act       a URL goes to open or the browser, a path to the presenter named by choose_presenter
 #   present   present_<name> <client> <pane> <path> <line> <col> runs the viewer named by choose_viewer
 #             in a tty until the user is done; returns 0 when finished or dismissed, non-zero on failure
 #   view      viewer_<name> <path> <line> <col> sets VIEWER_ARGV to a foreground command that holds
@@ -144,9 +145,53 @@ notify() {
 	tmux display-message -c "$1" -N -C -l -d "$NOTIFY_MS" "tmux-open: $2"
 }
 
-# Name of the presenter into REPLY.
+# True when a foreground process of pane is Claude Code, whose program name is claude.
+is_claude_pane() {
+	local tty
+	tty=$(tmux display-message -p -t "$1" '#{pane_tty}') || return
+	# comm is the rest of the line after stat, so a program path with spaces stays whole.
+	ps -t "${tty#/dev/}" -o stat=,comm= |
+		awk '$1 ~ /\+/ { sub(/^[ \t]*[^ \t]+[ \t]+/, ""); if ($0 ~ /(^|\/)claude$/) found = 1 } END { exit !found }'
+}
+
+# Name of the presenter for path, clicked in pane, into REPLY.
 choose_presenter() {
+	local pane="$1" path="$2"
 	REPLY=popup
+	if [[ -f "$path" && "$path" =~ \.[hH][tT][mM][lL]?$ ]] && is_claude_pane "$pane"; then
+		REPLY=browser
+	fi
+}
+
+# Side terminal-browser showing target (a URL or an absolute path); line and col are unused.
+# Reuses a browser in the clicked pane's window, else moves one from another window beside the pane,
+# else splits a new one off to the right of the pane.
+# The browser pane ends up focused: tmux hands the terminal's replies to the browser's image queries
+# to the focused pane, so an unfocused browser stays blank and its replies are typed into another pane.
+present_browser() {
+	local pane="$2" target="$3" window list k p key="" bpane="" bwindow=""
+	window=$(tmux display-message -p -t "$pane" '#{window_id}') || return
+	list=$(terminal-browser ls --all --json 2>/dev/null | jq -r '.browsers[] | "\(.key)\t\(.pane.pane)"') || return
+	while IFS=$'\t' read -r k p; do
+		[[ -n "$k" ]] || continue
+		local w
+		w=$(tmux display-message -p -t "$p" '#{window_id}' 2>/dev/null) || continue
+		if [[ -z "$key" || "$w" == "$window" ]]; then
+			key="$k" bpane="$p" bwindow="$w"
+		fi
+		[[ "$w" == "$window" ]] && break
+	done <<<"$list"
+
+	if [[ -z "$key" ]]; then
+		tmux split-window -h -l 50% -t "$pane" terminal-browser open "$target" || return
+		return 0
+	fi
+	if [[ "$bwindow" != "$window" ]]; then
+		tmux join-pane -h -l 50% -s "$bpane" -t "$pane" || return
+	fi
+	# Without -Z select-pane also undoes a zoom that hides the browser.
+	tmux select-pane -t "$bpane" || return
+	terminal-browser new-tab --browser "$key" "$target" >/dev/null 2>&1 || return
 }
 
 # Name of the viewer into REPLY.
@@ -218,7 +263,13 @@ main() {
 		return 0
 	fi
 	if [[ "$target" != file://* && "$target" =~ ^[a-zA-Z][a-zA-Z0-9+.-]*:// ]]; then
-		open "$target"
+		if [[ "$target" =~ ^[hH][tT][tT][pP][sS]?:// ]] && is_claude_pane "$pane"; then
+			local rc=0
+			present_browser "$client" "$pane" "$target" "" "" || rc=$?
+			((rc == 0)) || notify "$client" "open failed (exit $rc)"
+		else
+			open "$target"
+		fi
 		return 0
 	fi
 
@@ -241,7 +292,7 @@ main() {
 		notify "$client" "not found: ${abs:-$path}"
 		return 0
 	fi
-	choose_presenter
+	choose_presenter "$pane" "$abs"
 	local presenter="$REPLY" rc=0
 	"present_$presenter" "$client" "$pane" "$abs" "$line" "$col" || rc=$?
 	((rc == 0)) || notify "$client" "open failed (exit $rc)"

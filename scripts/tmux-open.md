@@ -8,6 +8,8 @@
 
 URL 交给系统默认程序打开（`http` 与 `https` 即默认浏览器）。
 
+在 Claude Code 的 pane 中，网页与本地 HTML 改在侧边浏览器打开，见 US-0020。
+
 ### 验收标准
 
 #### AC-0010-0010: 带 OSC 8 链接的文字
@@ -37,7 +39,7 @@ URL 交给系统默认程序打开（`http` 与 `https` 即默认浏览器）。
 
 #### AC-0010-0050: 打开 URL
 
-- Given: 目标以任意 `协议名://` 开头（如 `https://`、`vscode://`），且不是 `file://`
+- Given: 目标以任意 `协议名://` 开头（如 `https://`、`vscode://`），且不是 `file://`；不属于 US-0020 的情形
 - When: 用户按住 Option 点击
 - Then: URL 交给系统默认程序打开，不弹出 popup
 
@@ -113,6 +115,7 @@ URL 交给系统默认程序打开（`http` 与 `https` 即默认浏览器）。
 
 ### 补充说明
 
+- 在 Claude Code 的 pane 中点击 `http`、`https` 与本地 HTML 时按 US-0020，不按本 US
 - 状态栏提示停留 2 秒，期间的按键与鼠标操作都不生效
 - 按下鼠标后移到别处再松开，打开的是按下处的目标，中途经过 pane 边框或状态栏也一样
 - 以下情形不打开：在状态栏或 pane 边框上松开；拖进右侧的 pane 后松开，这时那个 pane 收到松开
@@ -128,3 +131,69 @@ URL 交给系统默认程序打开（`http` 与 `https` 即默认浏览器）。
 - 点击的文件已在 Emacs 中打开且有未保存的修改时，`:q` 询问是否保存，`ZZ` 直接保存
 - 目标是目录时，Emacs 中事先打开的同一目录的 dired buffer 也会在关闭 popup 后被删除
 - 用 tmux 的 popup 菜单把 popup 转成 pane 时，Emacs 留在新 pane 中，状态栏没有提示
+
+## US-0020: Claude Code 的 pane 中在侧边浏览器打开
+
+作为在 Claude Code 中查看网页与 HTML 产出的开发者，我希望在 Claude Code 的 pane 中按住 Option 点击网页链接或本地 HTML，就在旁边的 terminal-browser 中打开，以便不离开终端查看。
+
+### Background
+
+- Claude Code 的 pane：前台进程中有程序名为 `claude` 的进程
+- 侧边浏览器：`terminal-browser` 的浏览器实例，在 tmux 的一个 pane 中运行
+- 系统默认浏览器的入口由 Claude Code 保留：在其 pane 中不按 Option 单击链接
+- 打开后焦点在浏览器（决定）
+  - 浏览器向终端查询图片状态，tmux 把终端的回复交给有焦点的 pane
+  - 焦点留在别的 pane 时，回复作为文字输入那个 pane，浏览器收不到回复而黑屏
+
+### 验收标准
+
+#### AC-0020-0010: 打开的目标
+
+- Given: 被点击的 pane 是 Claude Code 的 pane
+- When: 用户按住 Option 点击下列目标
+- Then: 在侧边浏览器打开；其余目标按 US-0010 打开
+
+| 目标 | 浏览器打开的地址 |
+|------|------------------|
+| `http://`、`https://` 开头的 URL，协议名不分大小写 | URL 原文 |
+| 扩展名为 `.html`、`.htm`（不分大小写）的已存在文件，含 `file://` 链接（决定） | 按 AC-0010-0060 解析出的绝对路径 |
+
+#### AC-0020-0020: 没有浏览器时新开
+
+- Given: 没有运行中的侧边浏览器
+- When: 用户按 AC-0020-0010 点击
+- Then: 被点击的 pane 右侧分出宽 50% 的 pane，其中的浏览器显示目标，焦点在新 pane
+
+#### AC-0020-0030: 复用同一 window 的浏览器
+
+- Given: 被点击的 pane 所在 window 中有侧边浏览器
+- When: 用户按 AC-0020-0010 点击
+- Then: 该浏览器新开一个标签页显示目标，焦点在浏览器的 pane，不新建 pane
+  - 被点击的 pane 处于 zoom 时先取消 zoom
+
+#### AC-0020-0040: 恢复别处的浏览器
+
+- Given: 被点击的 pane 所在 window 中没有侧边浏览器，别的 window 中有，如用 `break-pane` 移走
+- When: 用户按 AC-0020-0010 点击
+- Then: 该浏览器的 pane 移到被点击的 pane 右侧，宽 50%，新开一个标签页显示目标，焦点在浏览器的 pane
+
+#### AC-0020-0050: 打开失败
+
+- Given: 列出浏览器、移动浏览器的 pane 或新开标签页失败，如 `terminal-browser` 未安装
+- When: 用户按 AC-0020-0010 点击
+- Then: 状态栏提示 `open failed (exit <退出码>)`
+
+### 补充说明
+
+- 有多个侧边浏览器时，同一 window 中的优先，其次取 `terminal-browser ls` 列出的第一个
+- 「别的 window」含别的 tmux session 的 window，那里的浏览器也会被移过来（决定）
+- 新分出的 pane 中浏览器启动失败时，pane 随即关闭，状态栏没有提示
+- 链接目标以 `;` 结尾时，tmux 把它当作命令分隔符，浏览器打开的地址少了末尾的 `;`
+
+## 决定清单
+
+| 位置 | 事项 | 决定 |
+|------|------|------|
+| US-0020 Background | 打开后的焦点 | 焦点在浏览器，不回到被点击的 pane |
+| AC-0020-0010 | `file://` 链接指向的 HTML | 与路径文字同样在浏览器打开 |
+| US-0020 补充说明 | 别的 session 中的浏览器 | 与别的 window 同样移过来 |
