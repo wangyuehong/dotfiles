@@ -58,7 +58,8 @@ CONFIG_LINKS := $(CURR_DIR)/direnv.toml:$(HOME)/.config/direnv/direnv.toml \
 	$(CURR_DIR)/ghostty.toml:$(HOME)/.config/ghostty/config \
 	$(CURR_DIR)/herdr.toml:$(HOME)/.config/herdr/config.toml \
 	$(CURR_DIR)/mise.toml:$(HOME)/.config/mise/config.toml \
-	$(CURR_DIR)/rex.lua:$(HOME)/.config/rex/init.lua
+	$(CURR_DIR)/rex.lua:$(HOME)/.config/rex/init.lua \
+	$(CURR_DIR)/terminal-browser.json:$(HOME)/.config/terminal-browser/settings.json
 
 .PHONY: ln-dotfiles
 ln-dotfiles: ## 符号链接 dotfiles 到 ~/ 与 ~/.config/
