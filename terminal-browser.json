@@ -1,3 +1,4 @@
 {
-  "render.presenter": "full"
+  "render.presenter": "full",
+  "render.transport": "shared"
 }

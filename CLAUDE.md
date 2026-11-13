@@ -47,6 +47,7 @@ Dotfiles（`make ln-dotfiles` -> `~/.{file}`，清单省略 `.` 前缀）：
 - `rex.lua` -> `~/.config/rex/init.lua`
 - `terminal-browser.json` -> `~/.config/terminal-browser/settings.json`
   - `render.presenter` 为 `full`：tmux 中的默认 `auto` 让浏览器黑屏或闪烁
+  - `render.transport` 为 `shared`：不依赖 `auto` 的探测，只在本机用；经 ssh 时共享内存不可用
 
 脚本（`make ln-scripts` -> `~/bin/`）：
 
