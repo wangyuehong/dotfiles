@@ -1,4 +1,6 @@
 {
   "render.presenter": "full",
+  "telemetry.usage": "off",
+  "telemetry.crashReports": "off",
   "render.transport": "shared"
 }
